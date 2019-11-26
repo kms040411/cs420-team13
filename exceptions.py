@@ -1,0 +1,2 @@
+class ScopeTypeError(Exception):
+    pass

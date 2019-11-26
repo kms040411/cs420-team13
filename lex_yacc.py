@@ -654,6 +654,9 @@ def p_expression(p):
 def p_error(p):
 	print("Syntax error in input!")
 
+def parse(text):
+	parser = yacc.yacc()
+	return parser.parse(text)
 
 def main():
 	if(__name__ == '__main__'):
