@@ -1,5 +1,20 @@
 from exceptions import *
 
+class Global_Data_Structure():
+    def __init__(self):
+        self.function_table = Function_table()
+        self.global_symbol_table = Global_Symbol_table()
+        self.scope_stack = Scope_stack()
+        self.current_line = 0
+        return
+    
+    def set_current_line(self, linenum):
+        self.current_line = linenum
+        return
+    
+    def get_current_line(self):
+        return self.current_line
+
 class Function_table():
     def __init__(self):
         self.map = dict()
@@ -39,6 +54,7 @@ class Function_table_entry():
 class Symbol_table():
     def __init__(self):
         self.map = dict()
+        return
     
     def insert(self, name, sym_type):
         if self.map[name] is not None:
@@ -52,29 +68,37 @@ class Symbol_table():
     def set_value(self, name, linenum, value):
         return self.map[name].set_value(linenum, value)
     
+    def get_history(self, name):
+        return self.map[name].get_history()
+    
     def get_type(self, name):
         return self.map[name].get_type
 
 class Symbol_table_entry():
     def __init__(self, sym_type):
         self.sym_type = sym_type
-        self.histroy = History()
+        self.history = History()
+        return
     
     def get_value(self):
-        return self.histroy.get_recent()
+        return self.history.get_recent()
     
     def set_value(self, linenum, value):
         '''
             @TODO: Need to check type of 'value'
         '''
-        return self.histroy.insert(linenum, value)
+        return self.history.insert(linenum, value)
     
     def get_type(self):
         return self.sym_type
+    
+    def get_history(self):
+        return self.history.get_all()
 
 class Global_Symbol_table(Symbol_table):
     def __init__(self):
         super().__init__()
+        return
 
 class History():
     def __init__(self):
@@ -83,7 +107,7 @@ class History():
     
     def insert(self, linenum, value):
         length = len(self.list)
-        if self.list[length - 1][0] is linenum:
+        if self.list[length - 1][0] == linenum:
             return False
         else:
             self.list.append((linenum, value))
@@ -99,11 +123,13 @@ class History():
 class Scope_stack():
     def __init__(self):
         self.stack = list()
+        return
     
     def push(self, scope_type, linenum):
         # linenum : if scope_type is "For", linenum means the line number where for loop starts
         #           if scope_type is "Function", linenum means the line number where the function returns
         self.stack.append(scope_type, linenum)
+        return
     
     def pop(self):
         return self.stack.pop()
@@ -111,10 +137,15 @@ class Scope_stack():
     # @private
     def __top(self):
         length = len(self.stack)
+        if (length == 0):
+            return None
         return self.stack[length - 1]
     
     def get_symbol_table(self):
-        return self.__top().get_symbol_table()
+        top = self.__top()
+        if top is None:
+            return None
+        return top.get_symbol_table()
     
     def get_start_point(self):
         if self.__top().scope_type != "For":
@@ -127,6 +158,7 @@ class Scope_stack_entry():
         self.scope_type = scope_type
         self.linenum = linenum
         self.symbol_table = Symbol_table()
+        return
     
-    def get_symbol_table()
+    def get_symbol_table():
         return self.symbol_table
