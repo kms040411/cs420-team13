@@ -58,7 +58,7 @@ def __execute(linenum : int):
 # @private
 def __print(var : str, data_structure):
     scope_stack = data_structure.scope_stack
-    symbol_table = scope_stack.get_symbol_table()
+    symbol_table = scope_stack.find_table_from_variable(var)
     if symbol_table is None:
         print("Cannot find value")
         return
@@ -72,7 +72,7 @@ def __print(var : str, data_structure):
 # @private
 def __trace(var : str, data_structure):
     scope_stack = data_structure.scope_stack
-    symbol_table = scope_stack.get_symbol_table()
+    symbol_table = scope_stack.find_table_from_variable(var)
     if symbol_table is None:
         print("Cannot find value")
         return

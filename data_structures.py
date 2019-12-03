@@ -128,7 +128,7 @@ class Scope_stack():
     def push(self, scope_type, linenum):
         # linenum : if scope_type is "For", linenum means the line number where for loop starts
         #           if scope_type is "Function", linenum means the line number where the function returns
-        self.stack.append(scope_type, linenum)
+        self.stack.append(Scope_stack_entry(scope_type, linenum))
         return
     
     def pop(self):
@@ -152,6 +152,25 @@ class Scope_stack():
             raise ScopeTypeError
         else:
             return self.__top().linenum
+    
+    '''
+        find_table_from_variable(name):
+        returns symbol table that contains given variable
+    '''
+    def find_table_from_variable(self, name: str):
+        index = len(self.stack) - 1
+        while (index >= 0):
+            symbol_table = self.stack[index].get_symbol_table()
+            result = symbol_table.get_value(name)
+            if result is not None:
+                return symbol_table
+            else:
+                if (self.stack[index].scope_type == "For"):
+                    index = index - 1
+                    continue
+                else:
+                    return None
+        return None
 
 class Scope_stack_entry():
     def __init__(self, scope_type, linenum):
