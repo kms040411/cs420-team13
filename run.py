@@ -16,10 +16,15 @@ def run(optimized_tree):
 
     start_line = -1
     for func in optimized_tree.content:
+        if func.type == AST_TYPE.FUNCTION:
+            if not func.content.params:  #parameter empty
+                data_structure.function_table.insert(func.content.name, func, func.content.return_type, [])
+            else:
+                data_structure.function_table.insert(func.content.name, func, func.content.return_type, list(func.content.params[0:-1][0]))
+
         if func.content.name == "main":
             start_line = func.start_lineno
             search_stack.append((func, False, False))
-            break
     if start_line == -1:
         print("There is no main function")
 
