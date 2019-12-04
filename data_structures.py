@@ -22,7 +22,7 @@ class Function_table():
         return
 
     def insert(self, name, ast, return_type, argument_types):
-        if self.map[name] is not None:
+        if name in self.map:
             return False
         else:
             self.map[name] = Function_table_entry(ast, return_type, argument_types)
