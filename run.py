@@ -18,9 +18,11 @@ def run(optimized_tree):
     for func in optimized_tree.content:
         if func.type == AST_TYPE.FUNCTION:
             if not func.content.params:  #parameter empty
-                data_structure.function_table.insert(func.content.name, func, func.content.return_type, [])
+                if not data_structure.function_table.insert(func.content.name, func, func.content.return_type, []):
+                    print('redefinition of', func.content.name)
             else:
-                data_structure.function_table.insert(func.content.name, func, func.content.return_type, list(func.content.params[0:-1][0]))
+                if not data_structure.function_table.insert(func.content.name, func, func.content.return_type, list(func.content.params[0:-1][0])):
+                    print('redefinition of', func.content.name)
 
         if func.content.name == "main":
             start_line = func.start_lineno
