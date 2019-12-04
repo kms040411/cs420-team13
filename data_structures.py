@@ -5,6 +5,7 @@ class Global_Data_Structure():
         self.function_table = Function_table()
         self.global_symbol_table = Global_Symbol_table()
         self.scope_stack = Scope_stack()
+        self.memory = VariableTable()
         self.current_line = 0
         return
     
@@ -162,3 +163,26 @@ class Scope_stack_entry():
     
     def get_symbol_table():
         return self.symbol_table
+
+class VariableTable():
+    def __init__(self):
+        self.tables = [(dict(), None, None)]
+        self.present = 0
+
+    def new_scope_in(self):
+        self.tables.append([dict(), self.present, self.present])
+        self.present = len(self.tables) - 1
+
+    def new_scope_out(self):
+        self.tables.append([dict(), 0, self.present])
+        self.present = len(self.tables) - 1
+
+    def delete_scope(self):
+        (_, _, next_scope) = self.tables.pop()
+        self.present = next_scope
+
+    def add_variable(self, name, value):
+        self.tables[self.present][0][name] = value
+
+    def get_variable(self, name):
+        return self.tables[self.present][0][name]

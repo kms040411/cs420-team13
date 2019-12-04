@@ -6,4 +6,4 @@ def optimize(tree):
     '''
         @TODO: Implement optimize()
     '''
-    pass
+    return tree
