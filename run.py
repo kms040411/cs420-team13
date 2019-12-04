@@ -14,8 +14,10 @@ def run(optimized_tree):
         @TODO: implement run()
     '''
 
+
     start_line = -1
     for func in optimized_tree.content:
+        #put functions in function table
         if func.type == AST_TYPE.FUNCTION:
             if not func.content.params:  #parameter empty
                 if not data_structure.function_table.insert(func.content.name, func, func.content.return_type, []):
