@@ -163,7 +163,7 @@ class Scope_stack_entry():
         self.symbol_table = Symbol_table()
         return
     
-    def get_symbol_table():
+    def get_symbol_table(self):
         return self.symbol_table
 
 class VariableTable():

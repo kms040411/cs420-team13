@@ -20,10 +20,10 @@ def run(optimized_tree):
         #put functions in function table
         if func.type == AST_TYPE.FUNCTION:
             if not func.content.params:  #parameter empty
-                if not data_structure.function_table.insert(func.content.name, func, func.content.return_type, []):
+                if not data_structure.function_table.insert(func.content.name, func.content.body, func.content.return_type, []):
                     print('Error: redefinition of', func.content.name)
             else:
-                if not data_structure.function_table.insert(func.content.name, func, func.content.return_type, list(func.content.params[0:-1][0])):
+                if not data_structure.function_table.insert(func.content.name, func.content.body, func.content.return_type, func.content.params):
                     print('Error: redefinition of', func.content.name)
 
         if func.content.name == "main":
