@@ -7,6 +7,7 @@ class Global_Data_Structure():
         self.scope_stack = Scope_stack()
         self.memory = VariableTable()
         self.loop_table = LoopTable()
+        self.return_table = ReturnTable()
         self.current_line = 0
         return
     
@@ -199,6 +200,9 @@ class VariableTable():
     def get_array(self, name, index):
         return self.get_history(name)[index]
 
+    def get_array_ptr(self, name):
+        return self.get_history(name)
+
     def get_history(self, name):
         present_scope = self.present
         while present_scope != None:
@@ -221,8 +225,15 @@ class LoopTable():
         return not self.table[-1][3]
 
     def loop_start(self):
-        term, update, body, _ = self.table[-1]
-        self.table[-1] = (term, update, body, True)
+        term, update, body, _, second = self.table[-1]
+        self.table[-1] = (term, update, body, True, second)
+
+    def loop_second(self):
+        return self.table[-1][4]
+
+    def loop_start_update(self):
+        term, update, body, first, _ = self.table[-1]
+        self.table[-1] = (term, update, body, first, True)
 
     def loop_end(self):
         self.table.pop()
@@ -235,3 +246,8 @@ class LoopTable():
 
     def loop_body(self):
         return self.table[-1][2]
+
+class ReturnTable():
+    def __init__(self):
+        self.table = []
+        self.is_function_call = False
