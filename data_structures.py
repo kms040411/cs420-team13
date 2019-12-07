@@ -207,7 +207,6 @@ class VariableTable():
         return self.get_history(name)[index]
 
     def get_array_ptr(self, name):
-        print(name)
         return self.get_history(name)
 
     def get_history(self, name):

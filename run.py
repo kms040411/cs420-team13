@@ -79,15 +79,16 @@ def __next(num_line : int):
 def __execute():
     tree = search_stack[-1][0]
     present_lineno = data_structure.get_current_line()
+
+    print('present line number : ' + str(present_lineno))
     
     while (True):
         if (tree.start_lineno != present_lineno and not (tree.start_lineno <= present_lineno and present_lineno <= tree.end_lineno)):
             present_lineno = tree.start_lineno
-            print(data_structure.memory.present)
             break
 
-        print(tree.start_lineno, tree.end_lineno, tree.type)
-        print(tree.content, tree.left, tree.right)
+        #print(tree.start_lineno, tree.end_lineno, tree.type)
+        #print(tree.content, tree.left, tree.right)
 
         if not search_stack[-1][3]:
             if tree.type != AST_TYPE.LOOP_INIT:
@@ -99,7 +100,6 @@ def __execute():
                 for variable_type, name in tree.content:
                     if type(variable_type) == arr_type:
                         dims = calculate_expr(variable_type.dims[0])
-                        print('dims', dims)
                         data_structure.memory.add_array(name, dims, present_lineno)
                     else:
                         data_structure.memory.add_variable(name, None, present_lineno)
@@ -109,7 +109,6 @@ def __execute():
                 if type(name) == tuple:
                     index = calculate_expr(name[0][0])
                     name = name[1]
-                    print('test', index, name, value)
                     data_structure.memory.assign_array(name, index, value)
                 else:
                     data_structure.memory.add_variable(name, value, present_lineno)
