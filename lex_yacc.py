@@ -338,6 +338,7 @@ def p_semi_statement(p):
 	'''semi_statement : var_declaration
 					  | var_assignment
 					  | function_app
+					  | expression
 					  | return_expr'''
 	if __debug__ == False:
 		print('SEMI_STATEMENT')
@@ -635,7 +636,7 @@ def p_expression(p):
 			  	  | expression GREATER expression
 		  		  | LPAREN expression RPAREN
 		  		  | MINUS expression
-		  		  | expression DOUBLEPLUS
+		  		  | id_ptr_or_array DOUBLEPLUS
 		  		  | id_ptr_or_array
 		  		  | function_app
 		  		  | var_assignment
