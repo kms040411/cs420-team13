@@ -23,13 +23,13 @@ if __name__ == "__main__":
     #text = get_input.get_input(filename)
     text = get_input.get_input("test")
 
-    optimized = optimize.optimize(text)
+    tree = lex_yacc.parse(text)
 
-    tree = lex_yacc.parse(optimized)
+    optimized = optimize.optimize(tree)
 
     print(tree.start_lineno, tree.end_lineno, tree.content[1].content.body.left.left.end_lineno)
     dsf(tree.content[1])
 
-    run.run(tree)
+    run.run(optimized)
     
     print("End of interpreter")
