@@ -209,9 +209,12 @@ def calculate_expr(ast):
                 return left < right
             elif ast.content == '>':
                 return left > right 
-        elif ast.content == '++_left' or ast.content == '++_right':
-            name = ast.left.content
-            data_structure.memory.add_variable(name, calculate_expr(ast.left) + 1, data_structure.get_current_line())
+        elif ast.content.startswith('++'):
+            name = ast.left.content.content
+            old_val = calculate_expr(ast.left)
+            new_val = old_val + 1
+            data_structure.memory.add_variable(name, new_val, data_structure.get_current_line())
+            return new_val if ast.content == '++_left' else old_val
         elif type(ast.content) == AST:
             return calculate_expr(ast.content)
         else:
