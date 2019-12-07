@@ -200,14 +200,13 @@ def calculate_expr(ast):
         search_stack.append((func, False, False, False))
         data_structure.set_current_line(func.start_lineno)
 
-        print('arguments', ast.content.arguments)
+        print('arguments', calculate_expr(ast.content.arguments[0]))
         variable = []
         variable_ptr = []
         for variable_type, name in tree.content.params:
             if variable_type[0] == '*':
                 pass
             else:
-                
                 pass
             print(variable_type, name)
         data_structure.memory.new_scope_out()
