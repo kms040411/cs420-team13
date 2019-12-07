@@ -272,14 +272,17 @@ def __stop_search():
     
 def __stop_elif_else():
     tree = search_stack[-2][0]
+    #can eliminate dead code
     search_stack[-2] = (tree, True, True, True)
 
 def __stop_behind_elif_else():
     tree = search_stack[-1][0]
-    search_stack[-1] = (tree, False, True, True)
+    #for dead code elimination
+    tree.right = None
 
 def __next_elif():
     tree = search_stack[-1][0]
+    #can eliminate dead code
     search_stack[-1] = (tree, True, False, True)
 
 # @private
