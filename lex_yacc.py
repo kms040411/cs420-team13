@@ -390,7 +390,7 @@ def p_elif_else(p):
 	if(len(p) == 2):
 		p[0] = None
 	elif(len(p) == 3):
-		p[0] = AST(p.lineno(1), p[2].end_lineno, True, AST_TYPE.ELIF_ELSE)		
+		p[0] = AST(p.lineno(1), p[2].end_lineno, True, AST_TYPE.ELIF_ELSE, p[2])		
 	else:
 		if(p[7] != None):
 			p[0] = AST(p.lineno(1), p[7].end_lineno, p[4], AST_TYPE.ELIF_ELSE, p[6], p[7])
