@@ -559,7 +559,7 @@ def p_var_and_assign(p):
 def p_return_expr(p):
 	'''return_expr : RETURN expression
 				   | RETURN'''
-	if(len(p) == 2):
+	if(len(p) == 3):
 		p[0] = AST(p.lineno(1), p[2].end_lineno, 'return', AST_TYPE.RETURN, p[2])
 	else:
 		p[0] = AST(p.lineno(1), p.lineno(1), 'return', AST_TYPE.RETURN)
