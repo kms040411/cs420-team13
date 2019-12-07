@@ -637,6 +637,7 @@ def p_expression(p):
 		  		  | LPAREN expression RPAREN
 		  		  | MINUS expression
 		  		  | id_ptr_or_array DOUBLEPLUS
+		  		  | DOUBLEPLUS id_ptr_or_array
 		  		  | id_ptr_or_array
 		  		  | function_app
 		  		  | var_assignment
@@ -649,9 +650,12 @@ def p_expression(p):
 			p[0] = AST(p[1].start_lineno, p[3].end_lineno, p[2], AST_TYPE.EXPR, p[1], p[3])
 	elif(len(p) == 3):
 		if(type(p[2]) == AST):
-			p[0] = AST(p.lineno(1), p[2].end_lineno, p[1], AST_TYPE.EXPR, p[2])
+			if(p[2].type == AST_TYPE.EXPR):
+				p[0] = AST(p.lineno(1), p[2].end_lineno, p[1], AST_TYPE.EXPR, p[2])
+			else:
+				p[0] = AST(p.lineno(1), p[2].end_lineno, '++_left', AST_TYPE.EXPR, p[2])				
 		else:
-			p[0] = AST(p[1].start_lineno, p.lineno(2), p[2], AST_TYPE.EXPR, p[1])			
+			p[0] = AST(p[1].start_lineno, p.lineno(2), '++_right', AST_TYPE.EXPR, p[1])			
 	else:
 		if(type(p[1]) == AST):
 			p[0] = AST(p[1].start_lineno, p[1].start_lineno, p[1], AST_TYPE.EXPR)
