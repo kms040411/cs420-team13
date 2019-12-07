@@ -556,8 +556,12 @@ def p_var_and_assign(p):
 		print(p[0])
 
 def p_return_expr(p):
-	'''return_expr : RETURN expression'''
-	p[0] = AST(p.lineno(1), p[2].end_lineno, 'return', AST_TYPE.RETURN, p[2])
+	'''return_expr : RETURN expression
+				   | RETURN'''
+	if(len(p) == 2):
+		p[0] = AST(p.lineno(1), p[2].end_lineno, 'return', AST_TYPE.RETURN, p[2])
+	else:
+		p[0] = AST(p.lineno(1), p.lineno(1), 'return', AST_TYPE.RETURN)
 
 def p_function_app(p):
 	'''function_app : PRINTF LPAREN STRING print_formats RPAREN
@@ -602,10 +606,10 @@ def p_arguments(p):
 		print('ARGUMENTS')
 	
 	if(len(p) == 4):
-		p[0] = AST(p[1].start_lineno, p[3].start_lineno, [p[1].get()] + p[3].get(), AST_TYPE.ARGS)
+		p[0] = AST(p[1].start_lineno, p[3].start_lineno, [p[1]] + p[3].get(), AST_TYPE.ARGS)
 	else:
 		if(p[1] != None):
-			p[0] = AST(p[1].start_lineno, p[1].end_lineno, [p[1].get()], AST_TYPE.ARGS)
+			p[0] = AST(p[1].start_lineno, p[1].end_lineno, [p[1]], AST_TYPE.ARGS)
 		else:
 			p[0] = None
 
@@ -633,6 +637,8 @@ def p_expression(p):
 		  		  | MINUS expression
 		  		  | expression DOUBLEPLUS
 		  		  | id_ptr_or_array
+		  		  | function_app
+		  		  | var_assignment
 			  	  | INT_VAL
 			  	  | FLOAT_VAL'''
 	if(len(p) == 4):
@@ -647,7 +653,7 @@ def p_expression(p):
 			p[0] = AST(p[1].start_lineno, p.lineno(2), p[2], AST_TYPE.EXPR, p[1])			
 	else:
 		if(type(p[1]) == AST):
-			p[0] = AST(p[1].start_lineno, p[1].start_lineno, p[1], AST_TYPE.EXPR)			
+			p[0] = AST(p[1].start_lineno, p[1].start_lineno, p[1], AST_TYPE.EXPR)
 		else:
 			p[0] = AST(p.lineno(1), p.lineno(1), p[1], AST_TYPE.EXPR)
 
