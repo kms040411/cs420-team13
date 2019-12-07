@@ -36,6 +36,9 @@ class Function_table():
     
     def get_ast(self, name):
         return self.__get(name)[0]
+
+    def get_params(self, name):
+        return self.__get(name)[2]
     
     def get_types(self, name):
         '''
@@ -191,6 +194,9 @@ class VariableTable():
     def add_array(self, name, dims, lineno):
         self.tables[self.present][0][name] = [None] * dims
 
+    def add_array_ptr(self, name, ptr):
+        self.tables[self.present][0][name] = ptr
+
     def assign_array(self, name, index, value):
         self.get_history(name)[index] = value
         
@@ -201,6 +207,7 @@ class VariableTable():
         return self.get_history(name)[index]
 
     def get_array_ptr(self, name):
+        print(name)
         return self.get_history(name)
 
     def get_history(self, name):
@@ -250,4 +257,6 @@ class LoopTable():
 class ReturnTable():
     def __init__(self):
         self.table = []
+        self.return_value = []
         self.is_function_call = False
+        self.value_returned = False
