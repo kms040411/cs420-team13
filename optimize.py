@@ -127,21 +127,44 @@ def find_start_end(line_table, start_linenum):
     start = 0
     end = 0
     bracket = 0
+    #ignore_right = False
+    #if "}" in line_table.return_line(current_line).text:
+    #    ignore_right = True
+
     while(True):
         current_text = line_table.return_line(current_line).text
         if bracket == 0:
-            line_table.return_line(current_line).mark()         # Mark Before "{" Line and "{" Line
+            line_table.return_line(current_line).mark()         # Mark Before-"{" Line and "{" Line
+        for i in current_text:
+            if i == "{":
+                if bracket == 0:
+                    start = current_line
+                bracket += 1
+            if i == "}":
+                if bracket == 0:
+                    continue
+                if bracket == 1:
+                    end = current_line
+                    line_table.return_line(current_line).mark()     # Mark "}" Line
+                    return (start + 1, end)
+                bracket -= 1
+        '''
         if "{" in current_text:
             if bracket == 0:
                 start = current_line
             bracket = bracket + 1
         if "}" in current_text:
+            if ignore_right:
+                current_line = current_line + 1
+                ignore_right = False
+                continue
             if bracket == 1:
                 end = current_line
                 line_table.return_line(current_line).mark()     # Mark "}" Line
                 return (start + 1, end)
             else:
                 bracket = bracket - 1
+        '''
         current_line = current_line + 1
 
 def sweep(line_table, code_list):

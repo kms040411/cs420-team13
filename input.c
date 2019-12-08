@@ -18,12 +18,22 @@ int main(void) {
 		mark[i] = i * 30;
 		sum = sum + mark[i];
 		average = avg(i + 1, mark);
-		if (average > 40) {
+		if (average > 40){
 			printf("%f\n", average);
-		}
-		else {
+			return 7;
+		} else if (average > 50)
+		
+		{	
+			3 + 2;
+			return 3;
+			4 + 8;
+		} else {
+			return 7;
 			3 + 5;
 		}
 		sum = 5;
 	}
+	7+2;
+	return 4;
+	6 + 4;
 }
