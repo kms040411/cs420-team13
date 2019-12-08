@@ -110,11 +110,17 @@ def optimize(tree, tabs = 0, tab = True, end = True, semi = True):
 		print(' = ', end = '')
 		print(tree.get()[1].get_str_expr(), end = '')
 	elif(tree.type == lex_yacc.AST_TYPE.FUN_APP):
-		pass
+		print(tree.get_str_expr(), end = '')		
 	elif(tree.type == lex_yacc.AST_TYPE.EXPR):
 		print(tree.get_str_expr(), end = '')
 	elif(tree.type == lex_yacc.AST_TYPE.RETURN):
-		pass
+		print('return ', end = '')
+		optimize(tree.left)
+	elif(tree.type == lex_yacc.AST_TYPE.WHILE):
+		print('while(', end = '')
+		optimize(tree.get().term_expr)
+		print(')', end = '')
+		optimize(tree.get().body, tabs)
 	elif(tree.type == lex_yacc.AST_TYPE.FOR):
 	# class loop():
 	# 	def __init__(self, init_expr, term_expr, update_expr, body):

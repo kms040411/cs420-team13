@@ -31,6 +31,7 @@ class AST_TYPE(Enum):
 	EXPR = auto()
 	RETURN = auto()
 	FOR = auto()
+	WHILE = auto()
 
 class ptr_type():
 	def __init__(self, type, depth):
@@ -92,6 +93,21 @@ class AST():
 				elif(self.type == AST_TYPE.PTR_VAR):
 					ret_str = '*' * self.get()[0]
 					ret_str += self.get()[1]
+					return ret_str
+				elif(self.type == AST_TYPE.FUN_APP):
+					fun = self.get()
+					ret_str = fun.fname
+					ret_str += '('
+					for i in range(len(fun.arguments)):
+						arg = fun.arguments[i]
+						if(type(arg) == AST):
+							ret_str += arg.get_str_expr()
+						else:
+							ret_str += arg
+						if(i != len(fun.arguments) - 1):
+							ret_str += ', '
+
+					ret_str += ')'
 					return ret_str
 				else:			
 					return str(self.get())
@@ -577,30 +593,26 @@ def p_function_app(p):
 			p[0] = AST(p.lineno(1), p.lineno(4), fun_app(p[1], []), AST_TYPE.FUN_APP)
 	else:
 		if(p[4] != None):
-			p[0] = AST(p.lineno(1), p.lineno(5), fun_app('PRINTF', [p[3]] + p[4].get()), AST_TYPE.FUN_APP)
+			p[0] = AST(p.lineno(1), p.lineno(5), fun_app('printf', [p[3]] + p[4].get()), AST_TYPE.FUN_APP)
 		else:
-			p[0] = AST(p.lineno(1), p.lineno(5), fun_app('PRINTF', [p[3]]), AST_TYPE.FUN_APP)
+			p[0] = AST(p.lineno(1), p.lineno(5), fun_app('printf', [p[3]]), AST_TYPE.FUN_APP)
 
 	if __debug__ == False:
 		print(p[0])
 
 def p_print_formats(p):
 	'''print_formats : COMMA expression print_formats
-					 | expression
 					 | empty'''
 	if __debug__ == False:
 		print('PRINTF_FORMATS')
 	
 	if(len(p) == 4):
 		if(p[3] != None):
-			p[0] = AST(p.lineno(1), p[3].end_lineno, [p[2].get()] + p[3].get(), AST_TYPE.PRINT_FORMATS)
+			p[0] = AST(p.lineno(1), p[3].end_lineno, [p[2]] + p[3].get(), AST_TYPE.PRINT_FORMATS)
 		else:
-			p[0] = AST(p.lineno(1), p[2].end_lineno, [p[2].get()], AST_TYPE.PRINT_FORMATS)			
+			p[0] = AST(p.lineno(1), p[2].end_lineno, [p[2]], AST_TYPE.PRINT_FORMATS)			
 	else:
-		if(p[1] != None):
-			p[0] = AST(p[1].start_lineno, p[1].end_lineno, [p[1].get()], AST_TYPE.PRINT_FORMATS)
-		else:
-			p[0] = None
+		p[0] = None
 
 	if __debug__ == False:
 		print(p[0])
