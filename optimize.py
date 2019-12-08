@@ -137,7 +137,7 @@ def find_start_end(line_table, start_linenum):
             if bracket == 1:
                 end = current_line
                 line_table.return_line(current_line).mark()     # Mark "}" Line
-                return (start, end)
+                return (start + 1, end)
             else:
                 bracket = bracket - 1
         current_line = current_line + 1
