@@ -82,9 +82,19 @@ class AST():
 	def get_str_expr(self):
 		if(self.left == None):
 			if(type(self.get()) == AST):
-				return str(self.get().get())
+				return self.get().get_str_expr()
 			else:
-				return str(self.get())
+				if(self.type == AST_TYPE.ARR_VAR):
+					ret_str = self.get()[1]
+					for dim in self.get()[0]:
+						ret_str += '[' + dim.get_str_expr() + ']'
+					return ret_str
+				elif(self.type == AST_TYPE.PTR_VAR):
+					ret_str = '*' * self.get()[0]
+					ret_str += self.get()[1]
+					return ret_str
+				else:			
+					return str(self.get())
 		elif(self.left != None and self.right == None):
 			if(self.get() == '()'):
 				return '(' + self.left.get_str_expr() + ')'
@@ -374,7 +384,8 @@ def p_non_semi_statement(p):
 	if __debug__ == False:
 		print('NON_SEMI_STATEMENT')
 
-	p[0] = p[1]
+	p[0] = AST(p[1].start_lineno, p[1].end_lineno, 'NON_SEMI_STATEMENT', AST_TYPE.NON_SEMI_STATEMENT, p[1])
+
 
 	if __debug__ == False:
 		print(p[0])
@@ -461,7 +472,7 @@ def p_loop_init(p):
 		print('LOOP_INIT')
 
 	if(len(p) == 3):
-		p[0] = AST(p[1].start_lineno, p[2].end_lineno, (p[1].get(), p[2].get()), AST_TYPE.LOOP_INIT)
+		p[0] = AST(p[1].start_lineno, p[2].end_lineno, (p[1], p[2]), AST_TYPE.LOOP_INIT)
 	else:
 		p[0] = AST(p[1].start_lineno, p[1].end_lineno, p[1], AST_TYPE.LOOP_INIT)
 
