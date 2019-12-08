@@ -8,7 +8,6 @@ class Global_Data_Structure():
         self.memory = VariableTable()
         self.loop_table = LoopTable()
         self.return_table = ReturnTable()
-        self.branch_table = BranchTable()
         self.current_line = 0
         return
     
@@ -260,8 +259,3 @@ class ReturnTable():
         self.return_value = []
         self.is_function_call = False
         self.value_returned = False
-
-#for elif_else
-class BranchTable():
-    def __init__(self):
-        self.loc_of_else = []

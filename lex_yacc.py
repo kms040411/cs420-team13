@@ -16,11 +16,11 @@ class AST_TYPE(Enum):
 	COND = auto()
 	IF = auto()
 	ELIF_ELSE = auto()
-	ELIF = auto()
-	ELSE = auto()
 	FUN_APP = auto()
 	ARGS = auto()
 	VAR_AND_ASSIGN = auto()
+	SEMI_STATEMENT  = auto()
+	NON_SEMI_STATEMENT = auto()
 	ASSIGN = auto()
 	LOOP_INIT = auto()
 	PRINT_FORMATS = auto()
@@ -68,7 +68,6 @@ class AST():
 
 	def copy_AST(start_lineno, end_lineno, old_AST):
 		return AST(start_lineno, end_lineno, old_AST.content, old_AST.type, old_AST.left, old_AST.right)
-
 	def get(self):
 		return self.content
 
@@ -278,7 +277,7 @@ def p_array_decs(p):
 	'''array_decs : SQ_LBRACKET expression SQ_RBRACKET array_decs
 				  | SQ_LBRACKET expression SQ_RBRACKET'''
 	if(len(p) == 5):
-		p[0] = AST(p.lineno(1), p.endlineno(4), [p[2]] + p[4].get(), AST_TYPE.ARRAY_DECS)
+		p[0] = AST(p.lineno(1), p[4].end_lineno, [p[2]] + p[4].get(), AST_TYPE.ARRAY_DECS)
 	else:
 		p[0] = AST(p.lineno(1), p.lineno(3), [p[2]], AST_TYPE.ARRAY_DECS)
 	
@@ -382,54 +381,24 @@ def p_if(p):
 		print(p[0])
 
 def p_elif_else(p):
-	'''elif_else : elif else'''
+	'''elif_else : ELSE IF LPAREN expression RPAREN block elif_else
+				 | ELSE block
+				 | empty'''
 	if __debug__ == False:
 		print('ELIF_ELSE')
 	
-	if(p[1] == None and p[2] == None):
-		p[0] = None
-	elif(p[1] == None and p[2] != None):
-		p[0] = AST(p[2].start_lineno, p[2].end_lineno, 'elif_else', AST_TYPE.ELIF_ELSE, p[2])		
-	elif(p[1] != None and p[2] == None):
-		p[0] = AST(p[1].start_lineno, p[1].end_lineno, 'elif_else', AST_TYPE.ELIF_ELSE, p[1])
-	elif(p[1] != None and p[2] != None):
-		p[0] = AST(p[1].start_lineno, p[2].end_lineno, 'elif_else', AST_TYPE.ELIF_ELSE, p[1], p[2])
-
-	if __debug__ == False:
-		print(p[0])
-
-
-def p_elif(p):
-	'''elif : ELSE IF LPAREN expression RPAREN block elif
-			| empty'''
-	if __debug__ == False:
-		print('ELIF')
-	
 	if(len(p) == 2):
 		p[0] = None
+	elif(len(p) == 3):
+		p[0] = AST(p.lineno(1), p[2].end_lineno, True, AST_TYPE.ELIF_ELSE, p[2])		
 	else:
 		if(p[7] != None):
-			p[0] = AST(p.lineno(1), p[7].end_lineno, p[4], AST_TYPE.ELIF, p[6], p[7])
+			p[0] = AST(p.lineno(1), p[7].end_lineno, p[4], AST_TYPE.ELIF_ELSE, p[6], p[7])
 		else:
-			p[0] = AST(p.lineno(1), p[6].end_lineno, p[4], AST_TYPE.ELIF, p[6])			
-
+			p[0] = AST(p.lineno(1), p[6].end_lineno, p[4], AST_TYPE.ELIF_ELSE, p[6])
+			
 	if __debug__ == False:
 		print(p[0])
-
-def p_else(p):
-	'''else : ELSE block
-			| empty'''
-	if __debug__ == False:
-		print('ELSE')
-	
-	if(len(p) == 2):
-		p[0] = None
-	else:
-		p[0] = AST(p.lineno(1), p[2].end_lineno, 'else', AST_TYPE.ELSE, p[2])
-
-	if __debug__ == False:
-		print(p[0])
-
 
 def p_for(p):
 	'''for : FOR LPAREN loop_init_or_empty SEMI semi_statement_or_empty SEMI semi_statement_or_empty RPAREN block'''
@@ -500,8 +469,8 @@ def p_var_declaration(p):
 	for i in range(len(content)):
 		if(content[i].type == AST_TYPE.ASSIGN):
 			# var dec with assign
-			var_AST = content[i][0]
-			expr = content[i][1]
+			var_AST = content[i].get()[0]
+			expr = content[i].get()[1]
 			if(var_AST.type == AST_TYPE.ARR_VAR):
 				cur_type_id = (arr_type(p[1].get(), var_AST.get()[0]), var_AST.get()[1])
 				vars_and_assigns.append((cur_type_id, expr))
@@ -643,6 +612,9 @@ def p_expression(p):
 		  		  | var_assignment
 			  	  | INT_VAL
 			  	  | FLOAT_VAL'''
+	if __debug__ == False:
+		print('EXPRESSION')
+
 	if(len(p) == 4):
 		if(p[1] == '('):
 			p[0] = AST.copy_AST(p.lineno(1), p.lineno(3), p[2])
@@ -661,6 +633,9 @@ def p_expression(p):
 			p[0] = AST(p[1].start_lineno, p[1].start_lineno, p[1], AST_TYPE.EXPR)
 		else:
 			p[0] = AST(p.lineno(1), p.lineno(1), p[1], AST_TYPE.EXPR)
+
+	if __debug__ == False:
+		print(p[0])
 
 def p_error(p):
 	print("Syntax error in input!")

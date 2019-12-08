@@ -136,15 +136,16 @@ def __execute():
                 else:
                     __stop_elif_else()
             elif tree.type == AST_TYPE.ELIF_ELSE:
-                data_structure.branch_table.loc_of_else.append(len(search_stack)-1)
-            elif tree.type == AST_TYPE.ELIF:
                 data_structure.memory.new_scope_in()
-                if not calculate_expr(tree.content):
-                    __next_elif()
-                else:
-                    __stop_behind_elif_else()
-            elif tree.type == AST_TYPE.ELSE:
-                pass
+                #elif case
+                if not (tree.content == True):
+                    #condition False
+                    if not calculate_expr(tree.content):
+                        __next_elif()
+                    #condition True
+                    else:
+                        __stop_behind_elif_else()
+                #else case: just go left without any action
 
             elif tree.type == AST_TYPE.EXPR:
                 calculate_expr(tree)
@@ -274,17 +275,17 @@ def __stop_search():
     
 def __stop_elif_else():
     tree = search_stack[-2][0]
+    #can eliminate dead code
     search_stack[-2] = (tree, True, True, True)
 
 def __stop_behind_elif_else():
     tree = search_stack[-1][0]
-    search_stack[-1] = (tree, False, True, True)
-    index = data_structure.branch_table.loc_of_else.pop()
-    tree = search_stack[index][0]
-    search_stack[index] = (tree, True, True, True)
+    #for dead code elimination
+    tree.right = None
 
 def __next_elif():
     tree = search_stack[-1][0]
+    #can eliminate dead code
     search_stack[-1] = (tree, True, False, True)
 
 # @private
