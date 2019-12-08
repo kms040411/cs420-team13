@@ -4,7 +4,7 @@ import lex_yacc
     optimize(tree):
     Optimize the given tree and return optimized tree.
 '''
-def optimize(tree, tabs = 0, tab = True, end = True, semi = True):
+def optimize(tree, tabs = 0, tab = True, end = True, semi = True, out_file = open('optimized.c', 'w')):
 	if(tree.type == lex_yacc.AST_TYPE.PROGRAM):
 		for func in tree.content:
 			optimize(func)
@@ -28,7 +28,7 @@ def optimize(tree, tabs = 0, tab = True, end = True, semi = True):
 				print(param_type + ' ' + param_name, end = '')
 			if(i != len(func.params) - 1):
 				print(',', end = '')
-		print(')')
+		print(')', end = '')
 		optimize(func.body, tabs)
 	elif(tree.type == lex_yacc.AST_TYPE.BLOCK):
 		print('{')
@@ -136,6 +136,7 @@ def optimize(tree, tabs = 0, tab = True, end = True, semi = True):
 				print('\t' * tabs, end = '')
 			print('else if(', end = '')
 			optimize(tree.get())
+			print(')', end = '')
 			optimize(tree.left, tabs)
 			optimize(tree.right, tabs)
 	elif(tree.type == lex_yacc.AST_TYPE.WHILE):
@@ -168,7 +169,6 @@ def optimize(tree, tabs = 0, tab = True, end = True, semi = True):
 		print(')', end = '')
 
 		optimize(loop.body, tabs)
-
 	elif(tree.type == lex_yacc.AST_TYPE.LOOP_INIT):
 		if(type(tree.get()) == lex_yacc.AST):
 			optimize(tree.get(), tabs, False, False)
@@ -184,7 +184,9 @@ def optimize(tree, tabs = 0, tab = True, end = True, semi = True):
 		print(tree.get(), end = '')
 	else:
 		pass
-
-
-
 	return tree
+
+def optimize_init(tree):
+	f = open('optimized.c', 'w')
+	optimize(tree, out_file = f)
+	close()

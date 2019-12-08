@@ -21,15 +21,17 @@ if __name__ == "__main__":
     #data_structure = data_structures.Global_Data_Structure()
 
     #text = get_input.get_input(filename)
-    text = get_input.get_input("test")
+    text = get_input.get_input('input.c')
 
     tree = lex_yacc.parse(text)
 
     #print(tree.start_lineno, tree.end_lineno, tree.content[1].content.body.left.left.end_lineno)
     #dsf(tree.content[1])
 
-    optimized = optimize.optimize(tree)
+    optimize.optimize_init(tree)
 
+    text = get_input.get_input('optimized.c')
+    optimized = lex_yacc.parse(text)
     #run.run(optimized)
     run.run(optimized)
     
