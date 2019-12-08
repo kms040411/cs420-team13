@@ -691,7 +691,7 @@ def p_error(p):
 
 def parse(text):
 	parser = yacc.yacc()
-	lexer.lineno = 0
+	lexer.lineno = 1
 	return parser.parse(text)
 
 
