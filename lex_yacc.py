@@ -691,7 +691,9 @@ def p_error(p):
 
 def parse(text):
 	parser = yacc.yacc()
+	lexer.lineno = 0
 	return parser.parse(text)
+
 
 def main():
 	if(__name__ == '__main__'):
