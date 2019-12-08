@@ -22,8 +22,7 @@ int main(void) {
 			printf("%f\n", average);
 		}
 		else {
-			return 5;
-			return 7;
+			3 + 5;
 		}
 		sum = 5;
 	}
