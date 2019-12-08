@@ -206,7 +206,10 @@ def calculate_expr(ast):
             elif ast.content == '*':
                 return left * right
             elif ast.content == '/':
-                return left // right
+                if type(left) == float or type(right) == float:
+                    return left / right
+                else:
+                    return left // right
             elif ast.content == '<':
                 return left < right
             elif ast.content == '>':
