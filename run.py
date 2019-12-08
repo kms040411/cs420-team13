@@ -195,42 +195,61 @@ def __execute():
     return
 
 def calculate_expr(ast):
+    '''expression : expression PLUS expression
+				  | expression MINUS expression
+			 	  | expression MULTIPLY expression
+			  	  | expression DIVIDE expression
+			  	  | expression LESS expression
+			  	  | expression GREATER expression
+		  		  | LPAREN expression RPAREN
+		  		  | MINUS expression
+		  		  | id_ptr_or_array DOUBLEPLUS
+		  		  | DOUBLEPLUS id_ptr_or_array
+		  		  | id_ptr_or_array
+		  		  | function_app
+		  		  | var_assignment
+			  	  | INT_VAL
+			  	  | FLOAT_VAL'''
     if ast.type == AST_TYPE.EXPR:
         if ast.content in ['+', '-', '*', '/', '<', '>']:
             left = calculate_expr(ast.left)
+            if ast.content == '-' and ast.right is None: # e = -e
+                return -left
             right = calculate_expr(ast.right)
-            if ast.content == '+':
+            if ast.content == '+': # e = e + e
                 return left + right
-            elif ast.content == '-':
+            elif ast.content == '-': # e = e - e
                 return left - right
-            elif ast.content == '*':
+            elif ast.content == '*': # e = e * e
                 return left * right
-            elif ast.content == '/':
+            elif ast.content == '/': # e = e / e
                 if type(left) == float or type(right) == float:
                     return left / right
                 else:
                     return left // right
-            elif ast.content == '<':
-                return left < right
-            elif ast.content == '>':
+            elif ast.content == '<': # e = e < e
+                return left < right 
+            elif ast.content == '>': # e = e > e
                 return left > right 
-        elif ast.content == '++_left' or ast.content == '++_right':
+        elif ast.content == '++_left' or ast.content == '++_right': # e = ++id | id++
             name = ast.left.content.content
             old_val = calculate_expr(ast.left)
             new_val = old_val + 1
             data_structure.memory.add_variable(name, new_val, data_structure.get_current_line())
             return new_val if ast.content == '++_left' else old_val
-        elif type(ast.content) == AST:
+        elif ast.content == '()': # e = (e)
+            return calculate_expr(ast.left)
+        elif type(ast.content) == AST: # e = id_ptr_or_array | function_app | var_assignment
             return calculate_expr(ast.content)
-        else:
+        else: # e = INT_VAL | FLOAT_VAL
             return ast.content
-    elif ast.type == AST_TYPE.ID:
+    elif ast.type == AST_TYPE.ID: # id_ptr_or_array = id
         return data_structure.memory.get_variable(ast.content)
-    elif ast.type == AST_TYPE.ARR_VAR:
+    elif ast.type == AST_TYPE.ARR_VAR: #id_ptr_or_array = id array_decs
         index = calculate_expr(ast.content[0][0])
         name = ast.content[1]
         return data_structure.memory.get_array(name, index)
-    elif ast.type == AST_TYPE.FUN_APP:
+    elif ast.type == AST_TYPE.FUN_APP: # function_app
         if data_structure.return_table.value_returned:
             data_structure.return_table.value_returned = False
             return data_structure.return_table.return_value.pop()
