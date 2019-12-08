@@ -210,7 +210,7 @@ def calculate_expr(ast):
                 return left < right
             elif ast.content == '>':
                 return left > right 
-        elif ast.content.startswith('++'):
+        elif type(ast.content) == str and ast.content.startswith('++'):
             name = ast.left.content.content
             old_val = calculate_expr(ast.left)
             new_val = old_val + 1
