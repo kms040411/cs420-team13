@@ -106,8 +106,9 @@ def __execute():
             elif tree.type == AST_TYPE.ASSIGN:
                 name = tree.content[0].content
                 value = calculate_expr(tree.content[1])
+                #print(name, value)
                 if type(name) == tuple:
-                    index = calculate_expr(name[0][0])
+                    index = 0 if type(name[0]) == int else calculate_expr(name[0][0]) #pointer
                     name = name[1]
                     data_structure.memory.assign_array(name, index, value)
                 else:
@@ -210,7 +211,7 @@ def calculate_expr(ast):
                 return left < right
             elif ast.content == '>':
                 return left > right 
-        elif type(ast.content) == str and ast.content.startswith('++'):
+        elif ast.content == '++_left' or ast.content == '++_right':
             name = ast.left.content.content
             old_val = calculate_expr(ast.left)
             new_val = old_val + 1
