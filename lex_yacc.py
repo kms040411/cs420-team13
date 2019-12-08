@@ -73,11 +73,31 @@ class AST():
 
 	def __repr__(self):
 		if(self.left == None):
-			return(("line #%d :" % self.start_lineno) + " " + str(self.type) + " " + str(self.get()))
+				return (("line #%d :" % self.start_lineno) + " " + str(self.type) + " " + str(self.get()))
 		elif(self.left != None and self.right == None):
-			return(("line #%d :" % self.start_lineno) + " " + str(self.type) + " " + str(self.left.get()) + " " + str(self.get()))
+				return (("line #%d :" % self.start_lineno) + " " + str(self.type) + " " + str(self.left.get()) + " " + str(self.get()))
 		else:
-			return(("line #%d :" % self.start_lineno) + " " + str(self.type) + " " + str(self.left.get()) + " " + str(self.get()) + " " + str(self.right.get()))			
+			return (("line #%d :" % self.start_lineno) + " " + str(self.type) + " " + str(self.left.get()) + " " + str(self.get()) + " " + str(self.right.get()))			
+
+	def get_str_expr(self):
+		if(self.left == None):
+			if(type(self.get()) == AST):
+				return str(self.get().get())
+			else:
+				return str(self.get())
+		elif(self.left != None and self.right == None):
+			if(self.get() == '()'):
+				return '(' + self.left.get_str_expr() + ')'
+			elif(self.get() == '-'):
+				return '-' + self.left.get_str_expr()
+			elif(self.get() == '++_left'):
+				return '++' + self.left.get_str_expr()
+			elif(self.get() == '++_right'):
+				return self.left.get_str_expr() + '++'
+			else:
+				return self.left.get_str_expr() + " " + str(self.get())
+		else:
+			return self.left.get_str_expr() + " " + str(self.get()) + " " + self.right.get_str_expr()
 class c_function():
 	def __init__(self, function_name, return_type, params, body):
 		self.name = function_name
@@ -342,7 +362,7 @@ def p_semi_statement(p):
 	if __debug__ == False:
 		print('SEMI_STATEMENT')
 
-	p[0] = p[1]
+	p[0] = AST(p[1].start_lineno, p[1].end_lineno, 'SEMI_STATEMENT', AST_TYPE.SEMI_STATEMENT, p[1])
 
 	if __debug__ == False:
 		print(p[0])
@@ -390,13 +410,13 @@ def p_elif_else(p):
 	if(len(p) == 2):
 		p[0] = None
 	elif(len(p) == 3):
-		p[0] = AST(p.lineno(1), p[2].end_lineno, True, AST_TYPE.ELIF_ELSE, p[2])		
+		p[0] = AST(p.lineno(1), p[2].end_lineno, True, AST_TYPE.ELIF_ELSE)		
 	else:
 		if(p[7] != None):
 			p[0] = AST(p.lineno(1), p[7].end_lineno, p[4], AST_TYPE.ELIF_ELSE, p[6], p[7])
 		else:
 			p[0] = AST(p.lineno(1), p[6].end_lineno, p[4], AST_TYPE.ELIF_ELSE, p[6])
-			
+
 	if __debug__ == False:
 		print(p[0])
 
@@ -478,7 +498,7 @@ def p_var_declaration(p):
 				cur_type_id = (ptr_type(p[1].get(), var_AST.get()[0]), var_AST.get()[1])
 				vars_and_assigns.append((cur_type_id, expr))
 			elif(var_AST.type == AST_TYPE.ID):
-				cur_type_id = (p[1].get(), var_AST.get()[1])
+				cur_type_id = (p[1].get(), var_AST.get())
 				vars_and_assigns.append((cur_type_id, expr))
 		else:
 			# var dec without assign
@@ -540,9 +560,15 @@ def p_function_app(p):
 		print('FUNCTION_APP')
 
 	if(len(p) == 5):
-		p[0] = AST(p.lineno(1), p.lineno(4), fun_app(p[1], p[3].get()), AST_TYPE.FUN_APP)
+		if(p[3] != None):
+			p[0] = AST(p.lineno(1), p.lineno(4), fun_app(p[1], p[3].get()), AST_TYPE.FUN_APP)
+		else:
+			p[0] = AST(p.lineno(1), p.lineno(4), fun_app(p[1], []), AST_TYPE.FUN_APP)
 	else:
-		p[0] = AST(p.lineno(1), p.lineno(3), fun_app('PRINTF', [p[3]] + p[4].get()), AST_TYPE.FUN_APP)
+		if(p[4] != None):
+			p[0] = AST(p.lineno(1), p.lineno(5), fun_app('PRINTF', [p[3]] + p[4].get()), AST_TYPE.FUN_APP)
+		else:
+			p[0] = AST(p.lineno(1), p.lineno(5), fun_app('PRINTF', [p[3]]), AST_TYPE.FUN_APP)
 
 	if __debug__ == False:
 		print(p[0])
@@ -617,7 +643,7 @@ def p_expression(p):
 
 	if(len(p) == 4):
 		if(p[1] == '('):
-			p[0] = AST.copy_AST(p.lineno(1), p.lineno(3), p[2])
+			p[0] = AST(p.lineno(1), p.lineno(3), '()', AST_TYPE.EXPR, p[2])
 		else:
 			p[0] = AST(p[1].start_lineno, p[3].end_lineno, p[2], AST_TYPE.EXPR, p[1], p[3])
 	elif(len(p) == 3):
