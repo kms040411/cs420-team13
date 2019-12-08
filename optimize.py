@@ -7,8 +7,8 @@ def optimize(text):
         @TODO: Implement optimize()
     '''
     result = dead_code_elimination(text)
-    print(result)
     result = loop_unrolling(result)
+    print(result)
     return result
 
 def dead_code_elimination(text):
@@ -48,7 +48,7 @@ def mark(code_list):
     return line_table
 
 def read_and_mark(line_table, start_linenum, end_linenum, func, prev_status = True):
-    print("read from " + str(start_linenum) + " to " + str(end_linenum))
+    #print("read from " + str(start_linenum) + " to " + str(end_linenum))
     if func is True:
         current_linenum = start_linenum
         # Mark current line
@@ -68,10 +68,10 @@ def read_and_mark(line_table, start_linenum, end_linenum, func, prev_status = Tr
             # Mark current line
             line_table.return_line(current_line).mark()
 
-            print(split_all(current_text))
+            #print(split_all(current_text))
             # Check line if there is "for"
             if "for" in split_all(current_text):
-                print("for found")
+                #print("for found")
                 (start, end) = find_start_end(line_table, current_line)
                 # Read inside For Loop
                 read_and_mark(line_table, start, end, False)
@@ -81,7 +81,7 @@ def read_and_mark(line_table, start_linenum, end_linenum, func, prev_status = Tr
             
             # Check line if there is "else if"
             elif "else if" in current_text and "if" in split_all(current_text) and "else" in split_all(current_text):
-                print("else if found")
+                #print("else if found")
                 (start, end) = find_start_end(line_table, current_line)
                 # Read inside else if block
                 prev_result = read_and_mark(line_table, start, end, False)
@@ -92,7 +92,7 @@ def read_and_mark(line_table, start_linenum, end_linenum, func, prev_status = Tr
 
             # Check line if there is "if"
             elif "if" in split_all(current_text):
-                print("if found")
+                #print("if found")
                 (start, end) = find_start_end(line_table, current_line)
                 # Read inside if block
                 prev_result = read_and_mark(line_table, start, end, False)
@@ -103,7 +103,7 @@ def read_and_mark(line_table, start_linenum, end_linenum, func, prev_status = Tr
 
             # check line if there is "else"
             elif "else" in split_all(current_text):
-                print("else found")
+                #print("else found")
                 (start, end) = find_start_end(line_table, current_line)
                 # Read inside else block
                 read_and_mark(line_table, start, end_linenum, False)
@@ -114,7 +114,7 @@ def read_and_mark(line_table, start_linenum, end_linenum, func, prev_status = Tr
 
             # Check line if there is "return"
             elif "return" in split_all(current_text):
-                print("return found")
+                #print("return found")
                 return False # Don't Proceed After Return
 
             else:
@@ -127,9 +127,6 @@ def find_start_end(line_table, start_linenum):
     start = 0
     end = 0
     bracket = 0
-    #ignore_right = False
-    #if "}" in line_table.return_line(current_line).text:
-    #    ignore_right = True
 
     while(True):
         current_text = line_table.return_line(current_line).text
@@ -148,23 +145,6 @@ def find_start_end(line_table, start_linenum):
                     line_table.return_line(current_line).mark()     # Mark "}" Line
                     return (start + 1, end)
                 bracket -= 1
-        '''
-        if "{" in current_text:
-            if bracket == 0:
-                start = current_line
-            bracket = bracket + 1
-        if "}" in current_text:
-            if ignore_right:
-                current_line = current_line + 1
-                ignore_right = False
-                continue
-            if bracket == 1:
-                end = current_line
-                line_table.return_line(current_line).mark()     # Mark "}" Line
-                return (start + 1, end)
-            else:
-                bracket = bracket - 1
-        '''
         current_line = current_line + 1
 
 def sweep(line_table, code_list):
@@ -203,4 +183,4 @@ def split_all(text):
     return result7
 
 def loop_unrolling(text):
-    pass
+    return text
