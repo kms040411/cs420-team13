@@ -25,11 +25,11 @@ if __name__ == "__main__":
 
     tree = lex_yacc.parse(text)
 
-    optimized = optimize.optimize(tree)
+    optimized = optimize.optimize(text)
 
     print(tree.start_lineno, tree.end_lineno, tree.content[1].content.body.left.left.end_lineno)
     dsf(tree.content[1])
 
-    run.run(optimized)
+    run.run(tree)
     
     print("End of interpreter")

@@ -14,7 +14,6 @@ def run(optimized_tree):
         @TODO: implement run()
     '''
 
-
     start_line = -1
     for func in optimized_tree.content:
         #put functions in function table
@@ -66,7 +65,7 @@ def run(optimized_tree):
 def __next(num_line : int):
     current_linenum = data_structure.get_current_line()
     if (num_line == 0):
-        data_structure.set_current_line(__execute(current_linenum))
+        data_structure.set_current_line(__execute())
     else:
         for i in range(num_line):
             __execute()
