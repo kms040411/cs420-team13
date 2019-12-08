@@ -166,6 +166,7 @@ def __execute():
 
             if data_structure.return_table.is_function_call:
                 data_structure.return_table.is_function_call = False
+                print(data_structure.memory.present)
                 return
                            
         else:
@@ -210,8 +211,10 @@ def calculate_expr(ast):
                 return left < right
             elif ast.content == '>':
                 return left > right 
+        elif ast.content == '()':
+            return calculate_expr(ast.left)
         elif type(ast.content) == str and ast.content.startswith('++'):
-            name = ast.left.content.content
+            name = ast.left.content
             old_val = calculate_expr(ast.left)
             new_val = old_val + 1
             data_structure.memory.add_variable(name, new_val, data_structure.get_current_line())
@@ -226,6 +229,8 @@ def calculate_expr(ast):
         index = calculate_expr(ast.content[0][0])
         name = ast.content[1]
         return data_structure.memory.get_array(name, index)
+    elif ast.type == AST_TYPE.SEMI_STATEMENT:
+        return calculate_expr(ast.left)
     elif ast.type == AST_TYPE.FUN_APP:
         if data_structure.return_table.value_returned:
             data_structure.return_table.value_returned = False
