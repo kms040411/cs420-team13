@@ -110,11 +110,39 @@ def optimize(tree, tabs = 0, tab = True, end = True, semi = True):
 		print(' = ', end = '')
 		print(tree.get()[1].get_str_expr(), end = '')
 	elif(tree.type == lex_yacc.AST_TYPE.FUN_APP):
-		pass
+		print(tree.get_str_expr(), end = '')		
 	elif(tree.type == lex_yacc.AST_TYPE.EXPR):
 		print(tree.get_str_expr(), end = '')
 	elif(tree.type == lex_yacc.AST_TYPE.RETURN):
-		pass
+		print('return ', end = '')
+		optimize(tree.left)
+	elif(tree.type == lex_yacc.AST_TYPE.COND):
+		optimize(tree.left, tabs)
+		if(tree.right != None):
+			optimize(tree.right, tabs)
+	elif(tree.type == lex_yacc.AST_TYPE.IF):
+		print('if(', end = '')
+		optimize(tree.get())
+		print(')', end = '')
+		optimize(tree.left, tabs)
+	elif(tree.type == lex_yacc.AST_TYPE.ELIF_ELSE):
+		if(tree.get() == True):
+			if(tab):
+				print('\t' * tabs, end = '')
+			print('else', end = '')
+			optimize(tree.left, tabs)
+		else:
+			if(tab):
+				print('\t' * tabs, end = '')
+			print('else if(', end = '')
+			optimize(tree.get())
+			optimize(tree.left, tabs)
+			optimize(tree.right, tabs)
+	elif(tree.type == lex_yacc.AST_TYPE.WHILE):
+		print('while(', end = '')
+		optimize(tree.get().term_expr)
+		print(')', end = '')
+		optimize(tree.get().body, tabs)
 	elif(tree.type == lex_yacc.AST_TYPE.FOR):
 	# class loop():
 	# 	def __init__(self, init_expr, term_expr, update_expr, body):
