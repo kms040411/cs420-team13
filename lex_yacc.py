@@ -31,6 +31,7 @@ class AST_TYPE(Enum):
 	EXPR = auto()
 	RETURN = auto()
 	FOR = auto()
+	WHILE = auto()
 
 class ptr_type():
 	def __init__(self, type, depth):
@@ -82,9 +83,34 @@ class AST():
 	def get_str_expr(self):
 		if(self.left == None):
 			if(type(self.get()) == AST):
-				return str(self.get().get())
+				return self.get().get_str_expr()
 			else:
-				return str(self.get())
+				if(self.type == AST_TYPE.ARR_VAR):
+					ret_str = self.get()[1]
+					for dim in self.get()[0]:
+						ret_str += '[' + dim.get_str_expr() + ']'
+					return ret_str
+				elif(self.type == AST_TYPE.PTR_VAR):
+					ret_str = '*' * self.get()[0]
+					ret_str += self.get()[1]
+					return ret_str
+				elif(self.type == AST_TYPE.FUN_APP):
+					fun = self.get()
+					ret_str = fun.fname
+					ret_str += '('
+					for i in range(len(fun.arguments)):
+						arg = fun.arguments[i]
+						if(type(arg) == AST):
+							ret_str += arg.get_str_expr()
+						else:
+							ret_str += arg
+						if(i != len(fun.arguments) - 1):
+							ret_str += ', '
+
+					ret_str += ')'
+					return ret_str
+				else:			
+					return str(self.get())
 		elif(self.left != None and self.right == None):
 			if(self.get() == '()'):
 				return '(' + self.left.get_str_expr() + ')'
@@ -374,7 +400,8 @@ def p_non_semi_statement(p):
 	if __debug__ == False:
 		print('NON_SEMI_STATEMENT')
 
-	p[0] = p[1]
+	p[0] = AST(p[1].start_lineno, p[1].end_lineno, 'NON_SEMI_STATEMENT', AST_TYPE.NON_SEMI_STATEMENT, p[1])
+
 
 	if __debug__ == False:
 		print(p[0])
@@ -410,7 +437,7 @@ def p_elif_else(p):
 	if(len(p) == 2):
 		p[0] = None
 	elif(len(p) == 3):
-		p[0] = AST(p.lineno(1), p[2].end_lineno, True, AST_TYPE.ELIF_ELSE)		
+		p[0] = AST(p.lineno(1), p[2].end_lineno, True, AST_TYPE.ELIF_ELSE, p[2])		
 	else:
 		if(p[7] != None):
 			p[0] = AST(p.lineno(1), p[7].end_lineno, p[4], AST_TYPE.ELIF_ELSE, p[6], p[7])
@@ -461,7 +488,7 @@ def p_loop_init(p):
 		print('LOOP_INIT')
 
 	if(len(p) == 3):
-		p[0] = AST(p[1].start_lineno, p[2].end_lineno, (p[1].get(), p[2].get()), AST_TYPE.LOOP_INIT)
+		p[0] = AST(p[1].start_lineno, p[2].end_lineno, (p[1], p[2]), AST_TYPE.LOOP_INIT)
 	else:
 		p[0] = AST(p[1].start_lineno, p[1].end_lineno, p[1], AST_TYPE.LOOP_INIT)
 
@@ -566,30 +593,26 @@ def p_function_app(p):
 			p[0] = AST(p.lineno(1), p.lineno(4), fun_app(p[1], []), AST_TYPE.FUN_APP)
 	else:
 		if(p[4] != None):
-			p[0] = AST(p.lineno(1), p.lineno(5), fun_app('PRINTF', [p[3]] + p[4].get()), AST_TYPE.FUN_APP)
+			p[0] = AST(p.lineno(1), p.lineno(5), fun_app('printf', [p[3]] + p[4].get()), AST_TYPE.FUN_APP)
 		else:
-			p[0] = AST(p.lineno(1), p.lineno(5), fun_app('PRINTF', [p[3]]), AST_TYPE.FUN_APP)
+			p[0] = AST(p.lineno(1), p.lineno(5), fun_app('printf', [p[3]]), AST_TYPE.FUN_APP)
 
 	if __debug__ == False:
 		print(p[0])
 
 def p_print_formats(p):
 	'''print_formats : COMMA expression print_formats
-					 | expression
 					 | empty'''
 	if __debug__ == False:
 		print('PRINTF_FORMATS')
 	
 	if(len(p) == 4):
 		if(p[3] != None):
-			p[0] = AST(p.lineno(1), p[3].end_lineno, [p[2].get()] + p[3].get(), AST_TYPE.PRINT_FORMATS)
+			p[0] = AST(p.lineno(1), p[3].end_lineno, [p[2]] + p[3].get(), AST_TYPE.PRINT_FORMATS)
 		else:
-			p[0] = AST(p.lineno(1), p[2].end_lineno, [p[2].get()], AST_TYPE.PRINT_FORMATS)			
+			p[0] = AST(p.lineno(1), p[2].end_lineno, [p[2]], AST_TYPE.PRINT_FORMATS)			
 	else:
-		if(p[1] != None):
-			p[0] = AST(p[1].start_lineno, p[1].end_lineno, [p[1].get()], AST_TYPE.PRINT_FORMATS)
-		else:
-			p[0] = None
+		p[0] = None
 
 	if __debug__ == False:
 		print(p[0])
@@ -668,7 +691,9 @@ def p_error(p):
 
 def parse(text):
 	parser = yacc.yacc()
+	lexer.lineno = 0
 	return parser.parse(text)
+
 
 def main():
 	if(__name__ == '__main__'):

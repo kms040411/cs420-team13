@@ -65,54 +65,53 @@ Rule 55    return_expr -> RETURN
 Rule 56    function_app -> PRINTF LPAREN STRING print_formats RPAREN
 Rule 57    function_app -> ID LPAREN arguments RPAREN
 Rule 58    print_formats -> COMMA expression print_formats
-Rule 59    print_formats -> expression
-Rule 60    print_formats -> empty
-Rule 61    arguments -> expression COMMA arguments
-Rule 62    arguments -> expression
-Rule 63    arguments -> empty
-Rule 64    empty -> <empty>
-Rule 65    expression -> expression PLUS expression
-Rule 66    expression -> expression MINUS expression
-Rule 67    expression -> expression MULTIPLY expression
-Rule 68    expression -> expression DIVIDE expression
-Rule 69    expression -> expression LESS expression
-Rule 70    expression -> expression GREATER expression
-Rule 71    expression -> LPAREN expression RPAREN
-Rule 72    expression -> MINUS expression
-Rule 73    expression -> id_ptr_or_array DOUBLEPLUS
-Rule 74    expression -> DOUBLEPLUS id_ptr_or_array
-Rule 75    expression -> id_ptr_or_array
-Rule 76    expression -> function_app
-Rule 77    expression -> var_assignment
-Rule 78    expression -> INT_VAL
-Rule 79    expression -> FLOAT_VAL
+Rule 59    print_formats -> empty
+Rule 60    arguments -> expression COMMA arguments
+Rule 61    arguments -> expression
+Rule 62    arguments -> empty
+Rule 63    empty -> <empty>
+Rule 64    expression -> expression PLUS expression
+Rule 65    expression -> expression MINUS expression
+Rule 66    expression -> expression MULTIPLY expression
+Rule 67    expression -> expression DIVIDE expression
+Rule 68    expression -> expression LESS expression
+Rule 69    expression -> expression GREATER expression
+Rule 70    expression -> LPAREN expression RPAREN
+Rule 71    expression -> MINUS expression
+Rule 72    expression -> id_ptr_or_array DOUBLEPLUS
+Rule 73    expression -> DOUBLEPLUS id_ptr_or_array
+Rule 74    expression -> id_ptr_or_array
+Rule 75    expression -> function_app
+Rule 76    expression -> var_assignment
+Rule 77    expression -> INT_VAL
+Rule 78    expression -> FLOAT_VAL
 
 Terminals, with rules where they appear
 
-COMMA                : 8 50 52 58 61
-DIVIDE               : 68
-DOUBLEPLUS           : 73 74
+COMMA                : 8 50 52 58 60
+DIVIDE               : 67
+DOUBLEPLUS           : 72 73
 ELSE                 : 34 35
 EQ                   : 48 49
 FLOAT                : 5
-FLOAT_VAL            : 79
+FLOAT_VAL            : 78
 FOR                  : 37
-GREATER              : 70
+GREATER              : 69
 ID                   : 6 57
 IF                   : 33 34
 INT                  : 4
-INT_VAL              : 78
+INT_VAL              : 77
 LBRACE               : 18
-LESS                 : 69
-LPAREN               : 7 33 34 37 46 56 57 71
-MINUS                : 66 72
-MULTIPLY             : 16 17 67
-PLUS                 : 65
+LESS                 : 68
+LPAREN               : 7 33 34 37 46 56 57 70
+MINUS                : 65 71
+MULTIPLY             : 16 17 66
+PLUS                 : 64
 PRINTF               : 56
 PTR_AMP              : 
 RBRACE               : 18
 RETURN               : 54 55
-RPAREN               : 7 33 34 37 46 56 57 71
+RPAREN               : 7 33 34 37 46 56 57 70
 SEMI                 : 21 37 37
 SQ_LBRACKET          : 14 15
 SQ_RBRACKET          : 14 15
@@ -123,19 +122,19 @@ error                :
 
 Nonterminals, with rules where they appear
 
-arguments            : 57 61
+arguments            : 57 60
 array_decs           : 12 14
 block                : 3 33 34 35 37 46
 conditional          : 29
 declarations         : 7 8
 elif_else            : 32 34
-empty                : 23 36 40 43 60 63
-expression           : 14 15 27 33 34 39 42 46 48 54 58 59 61 62 65 65 66 66 67 67 68 68 69 69 70 70 71 72
+empty                : 23 36 40 43 59 62
+expression           : 14 15 27 33 34 39 42 46 48 54 58 60 61 64 64 65 65 66 66 67 67 68 68 69 69 70 71
 for                  : 30
 function             : 1 2
-function_app         : 26 49 76
+function_app         : 26 49 75
 id                   : 3 11 12 13
-id_ptr_or_array      : 8 9 48 49 52 53 73 74 75
+id_ptr_or_array      : 8 9 48 49 52 53 72 73 74
 if                   : 32
 loop_init            : 38
 loop_init_or_empty   : 37
@@ -149,7 +148,7 @@ semi_statement_or_empty : 37 37
 statements           : 18 21 22
 type                 : 3 8 9 44 47
 var_and_assign       : 47 50 52
-var_assignment       : 25 44 50 51 77
+var_assignment       : 25 44 50 51 76
 var_declaration      : 24
 variable_declaration : 3
 while                : 31
@@ -256,10 +255,6 @@ state 8
     GREATER         reduce using rule 6 (id -> ID .)
     SQ_RBRACKET     reduce using rule 6 (id -> ID .)
     DOUBLEPLUS      reduce using rule 6 (id -> ID .)
-    INT_VAL         reduce using rule 6 (id -> ID .)
-    FLOAT_VAL       reduce using rule 6 (id -> ID .)
-    PRINTF          reduce using rule 6 (id -> ID .)
-    ID              reduce using rule 6 (id -> ID .)
 
 
 state 9
@@ -312,27 +307,27 @@ state 12
     (29) non_semi_statement -> . conditional
     (30) non_semi_statement -> . for
     (31) non_semi_statement -> . while
-    (64) empty -> .
+    (63) empty -> .
     (47) var_declaration -> . type var_and_assign
     (48) var_assignment -> . id_ptr_or_array EQ expression
     (49) var_assignment -> . id_ptr_or_array EQ function_app
     (56) function_app -> . PRINTF LPAREN STRING print_formats RPAREN
     (57) function_app -> . ID LPAREN arguments RPAREN
-    (65) expression -> . expression PLUS expression
-    (66) expression -> . expression MINUS expression
-    (67) expression -> . expression MULTIPLY expression
-    (68) expression -> . expression DIVIDE expression
-    (69) expression -> . expression LESS expression
-    (70) expression -> . expression GREATER expression
-    (71) expression -> . LPAREN expression RPAREN
-    (72) expression -> . MINUS expression
-    (73) expression -> . id_ptr_or_array DOUBLEPLUS
-    (74) expression -> . DOUBLEPLUS id_ptr_or_array
-    (75) expression -> . id_ptr_or_array
-    (76) expression -> . function_app
-    (77) expression -> . var_assignment
-    (78) expression -> . INT_VAL
-    (79) expression -> . FLOAT_VAL
+    (64) expression -> . expression PLUS expression
+    (65) expression -> . expression MINUS expression
+    (66) expression -> . expression MULTIPLY expression
+    (67) expression -> . expression DIVIDE expression
+    (68) expression -> . expression LESS expression
+    (69) expression -> . expression GREATER expression
+    (70) expression -> . LPAREN expression RPAREN
+    (71) expression -> . MINUS expression
+    (72) expression -> . id_ptr_or_array DOUBLEPLUS
+    (73) expression -> . DOUBLEPLUS id_ptr_or_array
+    (74) expression -> . id_ptr_or_array
+    (75) expression -> . function_app
+    (76) expression -> . var_assignment
+    (77) expression -> . INT_VAL
+    (78) expression -> . FLOAT_VAL
     (54) return_expr -> . RETURN expression
     (55) return_expr -> . RETURN
     (32) conditional -> . if elif_else
@@ -348,7 +343,7 @@ state 12
     (16) ptrs -> . MULTIPLY ptrs
     (17) ptrs -> . MULTIPLY
 
-    RBRACE          reduce using rule 64 (empty -> .)
+    RBRACE          reduce using rule 63 (empty -> .)
     PRINTF          shift and go to state 30
     ID              shift and go to state 32
     LPAREN          shift and go to state 31
@@ -447,27 +442,27 @@ state 18
     (29) non_semi_statement -> . conditional
     (30) non_semi_statement -> . for
     (31) non_semi_statement -> . while
-    (64) empty -> .
+    (63) empty -> .
     (47) var_declaration -> . type var_and_assign
     (48) var_assignment -> . id_ptr_or_array EQ expression
     (49) var_assignment -> . id_ptr_or_array EQ function_app
     (56) function_app -> . PRINTF LPAREN STRING print_formats RPAREN
     (57) function_app -> . ID LPAREN arguments RPAREN
-    (65) expression -> . expression PLUS expression
-    (66) expression -> . expression MINUS expression
-    (67) expression -> . expression MULTIPLY expression
-    (68) expression -> . expression DIVIDE expression
-    (69) expression -> . expression LESS expression
-    (70) expression -> . expression GREATER expression
-    (71) expression -> . LPAREN expression RPAREN
-    (72) expression -> . MINUS expression
-    (73) expression -> . id_ptr_or_array DOUBLEPLUS
-    (74) expression -> . DOUBLEPLUS id_ptr_or_array
-    (75) expression -> . id_ptr_or_array
-    (76) expression -> . function_app
-    (77) expression -> . var_assignment
-    (78) expression -> . INT_VAL
-    (79) expression -> . FLOAT_VAL
+    (64) expression -> . expression PLUS expression
+    (65) expression -> . expression MINUS expression
+    (66) expression -> . expression MULTIPLY expression
+    (67) expression -> . expression DIVIDE expression
+    (68) expression -> . expression LESS expression
+    (69) expression -> . expression GREATER expression
+    (70) expression -> . LPAREN expression RPAREN
+    (71) expression -> . MINUS expression
+    (72) expression -> . id_ptr_or_array DOUBLEPLUS
+    (73) expression -> . DOUBLEPLUS id_ptr_or_array
+    (74) expression -> . id_ptr_or_array
+    (75) expression -> . function_app
+    (76) expression -> . var_assignment
+    (77) expression -> . INT_VAL
+    (78) expression -> . FLOAT_VAL
     (54) return_expr -> . RETURN expression
     (55) return_expr -> . RETURN
     (32) conditional -> . if elif_else
@@ -500,7 +495,7 @@ state 18
     IF              shift and go to state 44
     MULTIPLY        shift and go to state 34
 
-  ! RBRACE          [ reduce using rule 64 (empty -> .) ]
+  ! RBRACE          [ reduce using rule 63 (empty -> .) ]
 
     non_semi_statement             shift and go to state 18
     statements                     shift and go to state 49
@@ -539,7 +534,7 @@ state 20
 state 21
 
     (25) semi_statement -> var_assignment .
-    (77) expression -> var_assignment .
+    (76) expression -> var_assignment .
 
   ! reduce/reduce conflict for SEMI resolved using rule 25 (semi_statement -> var_assignment .)
   ! reduce/reduce conflict for RBRACE resolved using rule 25 (semi_statement -> var_assignment .)
@@ -547,22 +542,22 @@ state 21
     SEMI            reduce using rule 25 (semi_statement -> var_assignment .)
     RBRACE          reduce using rule 25 (semi_statement -> var_assignment .)
     RPAREN          reduce using rule 25 (semi_statement -> var_assignment .)
-    PLUS            reduce using rule 77 (expression -> var_assignment .)
-    MINUS           reduce using rule 77 (expression -> var_assignment .)
-    MULTIPLY        reduce using rule 77 (expression -> var_assignment .)
-    DIVIDE          reduce using rule 77 (expression -> var_assignment .)
-    LESS            reduce using rule 77 (expression -> var_assignment .)
-    GREATER         reduce using rule 77 (expression -> var_assignment .)
+    PLUS            reduce using rule 76 (expression -> var_assignment .)
+    MINUS           reduce using rule 76 (expression -> var_assignment .)
+    MULTIPLY        reduce using rule 76 (expression -> var_assignment .)
+    DIVIDE          reduce using rule 76 (expression -> var_assignment .)
+    LESS            reduce using rule 76 (expression -> var_assignment .)
+    GREATER         reduce using rule 76 (expression -> var_assignment .)
 
-  ! SEMI            [ reduce using rule 77 (expression -> var_assignment .) ]
-  ! RBRACE          [ reduce using rule 77 (expression -> var_assignment .) ]
-  ! RPAREN          [ reduce using rule 77 (expression -> var_assignment .) ]
+  ! SEMI            [ reduce using rule 76 (expression -> var_assignment .) ]
+  ! RBRACE          [ reduce using rule 76 (expression -> var_assignment .) ]
+  ! RPAREN          [ reduce using rule 76 (expression -> var_assignment .) ]
 
 
 state 22
 
     (26) semi_statement -> function_app .
-    (76) expression -> function_app .
+    (75) expression -> function_app .
 
   ! reduce/reduce conflict for SEMI resolved using rule 26 (semi_statement -> function_app .)
   ! reduce/reduce conflict for RBRACE resolved using rule 26 (semi_statement -> function_app .)
@@ -570,27 +565,27 @@ state 22
     SEMI            reduce using rule 26 (semi_statement -> function_app .)
     RBRACE          reduce using rule 26 (semi_statement -> function_app .)
     RPAREN          reduce using rule 26 (semi_statement -> function_app .)
-    PLUS            reduce using rule 76 (expression -> function_app .)
-    MINUS           reduce using rule 76 (expression -> function_app .)
-    MULTIPLY        reduce using rule 76 (expression -> function_app .)
-    DIVIDE          reduce using rule 76 (expression -> function_app .)
-    LESS            reduce using rule 76 (expression -> function_app .)
-    GREATER         reduce using rule 76 (expression -> function_app .)
+    PLUS            reduce using rule 75 (expression -> function_app .)
+    MINUS           reduce using rule 75 (expression -> function_app .)
+    MULTIPLY        reduce using rule 75 (expression -> function_app .)
+    DIVIDE          reduce using rule 75 (expression -> function_app .)
+    LESS            reduce using rule 75 (expression -> function_app .)
+    GREATER         reduce using rule 75 (expression -> function_app .)
 
-  ! SEMI            [ reduce using rule 76 (expression -> function_app .) ]
-  ! RBRACE          [ reduce using rule 76 (expression -> function_app .) ]
-  ! RPAREN          [ reduce using rule 76 (expression -> function_app .) ]
+  ! SEMI            [ reduce using rule 75 (expression -> function_app .) ]
+  ! RBRACE          [ reduce using rule 75 (expression -> function_app .) ]
+  ! RPAREN          [ reduce using rule 75 (expression -> function_app .) ]
 
 
 state 23
 
     (27) semi_statement -> expression .
-    (65) expression -> expression . PLUS expression
-    (66) expression -> expression . MINUS expression
-    (67) expression -> expression . MULTIPLY expression
-    (68) expression -> expression . DIVIDE expression
-    (69) expression -> expression . LESS expression
-    (70) expression -> expression . GREATER expression
+    (64) expression -> expression . PLUS expression
+    (65) expression -> expression . MINUS expression
+    (66) expression -> expression . MULTIPLY expression
+    (67) expression -> expression . DIVIDE expression
+    (68) expression -> expression . LESS expression
+    (69) expression -> expression . GREATER expression
 
     SEMI            reduce using rule 27 (semi_statement -> expression .)
     RBRACE          reduce using rule 27 (semi_statement -> expression .)
@@ -703,19 +698,19 @@ state 29
 
     (48) var_assignment -> id_ptr_or_array . EQ expression
     (49) var_assignment -> id_ptr_or_array . EQ function_app
-    (73) expression -> id_ptr_or_array . DOUBLEPLUS
-    (75) expression -> id_ptr_or_array .
+    (72) expression -> id_ptr_or_array . DOUBLEPLUS
+    (74) expression -> id_ptr_or_array .
 
     EQ              shift and go to state 59
     DOUBLEPLUS      shift and go to state 60
-    PLUS            reduce using rule 75 (expression -> id_ptr_or_array .)
-    MINUS           reduce using rule 75 (expression -> id_ptr_or_array .)
-    MULTIPLY        reduce using rule 75 (expression -> id_ptr_or_array .)
-    DIVIDE          reduce using rule 75 (expression -> id_ptr_or_array .)
-    LESS            reduce using rule 75 (expression -> id_ptr_or_array .)
-    GREATER         reduce using rule 75 (expression -> id_ptr_or_array .)
-    SEMI            reduce using rule 75 (expression -> id_ptr_or_array .)
-    RBRACE          reduce using rule 75 (expression -> id_ptr_or_array .)
+    PLUS            reduce using rule 74 (expression -> id_ptr_or_array .)
+    MINUS           reduce using rule 74 (expression -> id_ptr_or_array .)
+    MULTIPLY        reduce using rule 74 (expression -> id_ptr_or_array .)
+    DIVIDE          reduce using rule 74 (expression -> id_ptr_or_array .)
+    LESS            reduce using rule 74 (expression -> id_ptr_or_array .)
+    GREATER         reduce using rule 74 (expression -> id_ptr_or_array .)
+    SEMI            reduce using rule 74 (expression -> id_ptr_or_array .)
+    RBRACE          reduce using rule 74 (expression -> id_ptr_or_array .)
 
 
 state 30
@@ -727,22 +722,22 @@ state 30
 
 state 31
 
-    (71) expression -> LPAREN . expression RPAREN
-    (65) expression -> . expression PLUS expression
-    (66) expression -> . expression MINUS expression
-    (67) expression -> . expression MULTIPLY expression
-    (68) expression -> . expression DIVIDE expression
-    (69) expression -> . expression LESS expression
-    (70) expression -> . expression GREATER expression
-    (71) expression -> . LPAREN expression RPAREN
-    (72) expression -> . MINUS expression
-    (73) expression -> . id_ptr_or_array DOUBLEPLUS
-    (74) expression -> . DOUBLEPLUS id_ptr_or_array
-    (75) expression -> . id_ptr_or_array
-    (76) expression -> . function_app
-    (77) expression -> . var_assignment
-    (78) expression -> . INT_VAL
-    (79) expression -> . FLOAT_VAL
+    (70) expression -> LPAREN . expression RPAREN
+    (64) expression -> . expression PLUS expression
+    (65) expression -> . expression MINUS expression
+    (66) expression -> . expression MULTIPLY expression
+    (67) expression -> . expression DIVIDE expression
+    (68) expression -> . expression LESS expression
+    (69) expression -> . expression GREATER expression
+    (70) expression -> . LPAREN expression RPAREN
+    (71) expression -> . MINUS expression
+    (72) expression -> . id_ptr_or_array DOUBLEPLUS
+    (73) expression -> . DOUBLEPLUS id_ptr_or_array
+    (74) expression -> . id_ptr_or_array
+    (75) expression -> . function_app
+    (76) expression -> . var_assignment
+    (77) expression -> . INT_VAL
+    (78) expression -> . FLOAT_VAL
     (11) id_ptr_or_array -> . id
     (12) id_ptr_or_array -> . id array_decs
     (13) id_ptr_or_array -> . ptrs id
@@ -775,7 +770,6 @@ state 32
     (57) function_app -> ID . LPAREN arguments RPAREN
     (6) id -> ID .
 
-  ! shift/reduce conflict for LPAREN resolved as shift
     LPAREN          shift and go to state 66
     SQ_LBRACKET     reduce using rule 6 (id -> ID .)
     EQ              reduce using rule 6 (id -> ID .)
@@ -791,32 +785,26 @@ state 32
     RPAREN          reduce using rule 6 (id -> ID .)
     COMMA           reduce using rule 6 (id -> ID .)
     SQ_RBRACKET     reduce using rule 6 (id -> ID .)
-    INT_VAL         reduce using rule 6 (id -> ID .)
-    FLOAT_VAL       reduce using rule 6 (id -> ID .)
-    PRINTF          reduce using rule 6 (id -> ID .)
-    ID              reduce using rule 6 (id -> ID .)
-
-  ! LPAREN          [ reduce using rule 6 (id -> ID .) ]
 
 
 state 33
 
-    (72) expression -> MINUS . expression
-    (65) expression -> . expression PLUS expression
-    (66) expression -> . expression MINUS expression
-    (67) expression -> . expression MULTIPLY expression
-    (68) expression -> . expression DIVIDE expression
-    (69) expression -> . expression LESS expression
-    (70) expression -> . expression GREATER expression
-    (71) expression -> . LPAREN expression RPAREN
-    (72) expression -> . MINUS expression
-    (73) expression -> . id_ptr_or_array DOUBLEPLUS
-    (74) expression -> . DOUBLEPLUS id_ptr_or_array
-    (75) expression -> . id_ptr_or_array
-    (76) expression -> . function_app
-    (77) expression -> . var_assignment
-    (78) expression -> . INT_VAL
-    (79) expression -> . FLOAT_VAL
+    (71) expression -> MINUS . expression
+    (64) expression -> . expression PLUS expression
+    (65) expression -> . expression MINUS expression
+    (66) expression -> . expression MULTIPLY expression
+    (67) expression -> . expression DIVIDE expression
+    (68) expression -> . expression LESS expression
+    (69) expression -> . expression GREATER expression
+    (70) expression -> . LPAREN expression RPAREN
+    (71) expression -> . MINUS expression
+    (72) expression -> . id_ptr_or_array DOUBLEPLUS
+    (73) expression -> . DOUBLEPLUS id_ptr_or_array
+    (74) expression -> . id_ptr_or_array
+    (75) expression -> . function_app
+    (76) expression -> . var_assignment
+    (77) expression -> . INT_VAL
+    (78) expression -> . FLOAT_VAL
     (11) id_ptr_or_array -> . id
     (12) id_ptr_or_array -> . id array_decs
     (13) id_ptr_or_array -> . ptrs id
@@ -858,7 +846,7 @@ state 34
 
 state 35
 
-    (74) expression -> DOUBLEPLUS . id_ptr_or_array
+    (73) expression -> DOUBLEPLUS . id_ptr_or_array
     (11) id_ptr_or_array -> . id
     (12) id_ptr_or_array -> . id array_decs
     (13) id_ptr_or_array -> . ptrs id
@@ -875,69 +863,57 @@ state 35
 
 state 36
 
-    (78) expression -> INT_VAL .
+    (77) expression -> INT_VAL .
 
-    PLUS            reduce using rule 78 (expression -> INT_VAL .)
-    MINUS           reduce using rule 78 (expression -> INT_VAL .)
-    MULTIPLY        reduce using rule 78 (expression -> INT_VAL .)
-    DIVIDE          reduce using rule 78 (expression -> INT_VAL .)
-    LESS            reduce using rule 78 (expression -> INT_VAL .)
-    GREATER         reduce using rule 78 (expression -> INT_VAL .)
-    SEMI            reduce using rule 78 (expression -> INT_VAL .)
-    RBRACE          reduce using rule 78 (expression -> INT_VAL .)
-    RPAREN          reduce using rule 78 (expression -> INT_VAL .)
-    COMMA           reduce using rule 78 (expression -> INT_VAL .)
-    SQ_RBRACKET     reduce using rule 78 (expression -> INT_VAL .)
-    LPAREN          reduce using rule 78 (expression -> INT_VAL .)
-    DOUBLEPLUS      reduce using rule 78 (expression -> INT_VAL .)
-    INT_VAL         reduce using rule 78 (expression -> INT_VAL .)
-    FLOAT_VAL       reduce using rule 78 (expression -> INT_VAL .)
-    PRINTF          reduce using rule 78 (expression -> INT_VAL .)
-    ID              reduce using rule 78 (expression -> INT_VAL .)
+    PLUS            reduce using rule 77 (expression -> INT_VAL .)
+    MINUS           reduce using rule 77 (expression -> INT_VAL .)
+    MULTIPLY        reduce using rule 77 (expression -> INT_VAL .)
+    DIVIDE          reduce using rule 77 (expression -> INT_VAL .)
+    LESS            reduce using rule 77 (expression -> INT_VAL .)
+    GREATER         reduce using rule 77 (expression -> INT_VAL .)
+    SEMI            reduce using rule 77 (expression -> INT_VAL .)
+    RBRACE          reduce using rule 77 (expression -> INT_VAL .)
+    RPAREN          reduce using rule 77 (expression -> INT_VAL .)
+    COMMA           reduce using rule 77 (expression -> INT_VAL .)
+    SQ_RBRACKET     reduce using rule 77 (expression -> INT_VAL .)
 
 
 state 37
 
-    (79) expression -> FLOAT_VAL .
+    (78) expression -> FLOAT_VAL .
 
-    PLUS            reduce using rule 79 (expression -> FLOAT_VAL .)
-    MINUS           reduce using rule 79 (expression -> FLOAT_VAL .)
-    MULTIPLY        reduce using rule 79 (expression -> FLOAT_VAL .)
-    DIVIDE          reduce using rule 79 (expression -> FLOAT_VAL .)
-    LESS            reduce using rule 79 (expression -> FLOAT_VAL .)
-    GREATER         reduce using rule 79 (expression -> FLOAT_VAL .)
-    SEMI            reduce using rule 79 (expression -> FLOAT_VAL .)
-    RBRACE          reduce using rule 79 (expression -> FLOAT_VAL .)
-    RPAREN          reduce using rule 79 (expression -> FLOAT_VAL .)
-    COMMA           reduce using rule 79 (expression -> FLOAT_VAL .)
-    SQ_RBRACKET     reduce using rule 79 (expression -> FLOAT_VAL .)
-    LPAREN          reduce using rule 79 (expression -> FLOAT_VAL .)
-    DOUBLEPLUS      reduce using rule 79 (expression -> FLOAT_VAL .)
-    INT_VAL         reduce using rule 79 (expression -> FLOAT_VAL .)
-    FLOAT_VAL       reduce using rule 79 (expression -> FLOAT_VAL .)
-    PRINTF          reduce using rule 79 (expression -> FLOAT_VAL .)
-    ID              reduce using rule 79 (expression -> FLOAT_VAL .)
+    PLUS            reduce using rule 78 (expression -> FLOAT_VAL .)
+    MINUS           reduce using rule 78 (expression -> FLOAT_VAL .)
+    MULTIPLY        reduce using rule 78 (expression -> FLOAT_VAL .)
+    DIVIDE          reduce using rule 78 (expression -> FLOAT_VAL .)
+    LESS            reduce using rule 78 (expression -> FLOAT_VAL .)
+    GREATER         reduce using rule 78 (expression -> FLOAT_VAL .)
+    SEMI            reduce using rule 78 (expression -> FLOAT_VAL .)
+    RBRACE          reduce using rule 78 (expression -> FLOAT_VAL .)
+    RPAREN          reduce using rule 78 (expression -> FLOAT_VAL .)
+    COMMA           reduce using rule 78 (expression -> FLOAT_VAL .)
+    SQ_RBRACKET     reduce using rule 78 (expression -> FLOAT_VAL .)
 
 
 state 38
 
     (54) return_expr -> RETURN . expression
     (55) return_expr -> RETURN .
-    (65) expression -> . expression PLUS expression
-    (66) expression -> . expression MINUS expression
-    (67) expression -> . expression MULTIPLY expression
-    (68) expression -> . expression DIVIDE expression
-    (69) expression -> . expression LESS expression
-    (70) expression -> . expression GREATER expression
-    (71) expression -> . LPAREN expression RPAREN
-    (72) expression -> . MINUS expression
-    (73) expression -> . id_ptr_or_array DOUBLEPLUS
-    (74) expression -> . DOUBLEPLUS id_ptr_or_array
-    (75) expression -> . id_ptr_or_array
-    (76) expression -> . function_app
-    (77) expression -> . var_assignment
-    (78) expression -> . INT_VAL
-    (79) expression -> . FLOAT_VAL
+    (64) expression -> . expression PLUS expression
+    (65) expression -> . expression MINUS expression
+    (66) expression -> . expression MULTIPLY expression
+    (67) expression -> . expression DIVIDE expression
+    (68) expression -> . expression LESS expression
+    (69) expression -> . expression GREATER expression
+    (70) expression -> . LPAREN expression RPAREN
+    (71) expression -> . MINUS expression
+    (72) expression -> . id_ptr_or_array DOUBLEPLUS
+    (73) expression -> . DOUBLEPLUS id_ptr_or_array
+    (74) expression -> . id_ptr_or_array
+    (75) expression -> . function_app
+    (76) expression -> . var_assignment
+    (77) expression -> . INT_VAL
+    (78) expression -> . FLOAT_VAL
     (11) id_ptr_or_array -> . id
     (12) id_ptr_or_array -> . id array_decs
     (13) id_ptr_or_array -> . ptrs id
@@ -974,24 +950,24 @@ state 39
     (34) elif_else -> . ELSE IF LPAREN expression RPAREN block elif_else
     (35) elif_else -> . ELSE block
     (36) elif_else -> . empty
-    (64) empty -> .
+    (63) empty -> .
 
     ELSE            shift and go to state 72
-    PRINTF          reduce using rule 64 (empty -> .)
-    ID              reduce using rule 64 (empty -> .)
-    LPAREN          reduce using rule 64 (empty -> .)
-    MINUS           reduce using rule 64 (empty -> .)
-    DOUBLEPLUS      reduce using rule 64 (empty -> .)
-    INT_VAL         reduce using rule 64 (empty -> .)
-    FLOAT_VAL       reduce using rule 64 (empty -> .)
-    RETURN          reduce using rule 64 (empty -> .)
-    FOR             reduce using rule 64 (empty -> .)
-    WHILE           reduce using rule 64 (empty -> .)
-    INT             reduce using rule 64 (empty -> .)
-    FLOAT           reduce using rule 64 (empty -> .)
-    IF              reduce using rule 64 (empty -> .)
-    MULTIPLY        reduce using rule 64 (empty -> .)
-    RBRACE          reduce using rule 64 (empty -> .)
+    PRINTF          reduce using rule 63 (empty -> .)
+    ID              reduce using rule 63 (empty -> .)
+    LPAREN          reduce using rule 63 (empty -> .)
+    MINUS           reduce using rule 63 (empty -> .)
+    DOUBLEPLUS      reduce using rule 63 (empty -> .)
+    INT_VAL         reduce using rule 63 (empty -> .)
+    FLOAT_VAL       reduce using rule 63 (empty -> .)
+    RETURN          reduce using rule 63 (empty -> .)
+    FOR             reduce using rule 63 (empty -> .)
+    WHILE           reduce using rule 63 (empty -> .)
+    INT             reduce using rule 63 (empty -> .)
+    FLOAT           reduce using rule 63 (empty -> .)
+    IF              reduce using rule 63 (empty -> .)
+    MULTIPLY        reduce using rule 63 (empty -> .)
+    RBRACE          reduce using rule 63 (empty -> .)
 
     elif_else                      shift and go to state 71
     empty                          shift and go to state 73
@@ -1030,11 +1006,6 @@ state 42
     COMMA           reduce using rule 11 (id_ptr_or_array -> id .)
     RPAREN          reduce using rule 11 (id_ptr_or_array -> id .)
     SQ_RBRACKET     reduce using rule 11 (id_ptr_or_array -> id .)
-    LPAREN          reduce using rule 11 (id_ptr_or_array -> id .)
-    INT_VAL         reduce using rule 11 (id_ptr_or_array -> id .)
-    FLOAT_VAL       reduce using rule 11 (id_ptr_or_array -> id .)
-    PRINTF          reduce using rule 11 (id_ptr_or_array -> id .)
-    ID              reduce using rule 11 (id_ptr_or_array -> id .)
     SQ_LBRACKET     shift and go to state 77
 
     array_decs                     shift and go to state 76
@@ -1110,27 +1081,27 @@ state 48
     (29) non_semi_statement -> . conditional
     (30) non_semi_statement -> . for
     (31) non_semi_statement -> . while
-    (64) empty -> .
+    (63) empty -> .
     (47) var_declaration -> . type var_and_assign
     (48) var_assignment -> . id_ptr_or_array EQ expression
     (49) var_assignment -> . id_ptr_or_array EQ function_app
     (56) function_app -> . PRINTF LPAREN STRING print_formats RPAREN
     (57) function_app -> . ID LPAREN arguments RPAREN
-    (65) expression -> . expression PLUS expression
-    (66) expression -> . expression MINUS expression
-    (67) expression -> . expression MULTIPLY expression
-    (68) expression -> . expression DIVIDE expression
-    (69) expression -> . expression LESS expression
-    (70) expression -> . expression GREATER expression
-    (71) expression -> . LPAREN expression RPAREN
-    (72) expression -> . MINUS expression
-    (73) expression -> . id_ptr_or_array DOUBLEPLUS
-    (74) expression -> . DOUBLEPLUS id_ptr_or_array
-    (75) expression -> . id_ptr_or_array
-    (76) expression -> . function_app
-    (77) expression -> . var_assignment
-    (78) expression -> . INT_VAL
-    (79) expression -> . FLOAT_VAL
+    (64) expression -> . expression PLUS expression
+    (65) expression -> . expression MINUS expression
+    (66) expression -> . expression MULTIPLY expression
+    (67) expression -> . expression DIVIDE expression
+    (68) expression -> . expression LESS expression
+    (69) expression -> . expression GREATER expression
+    (70) expression -> . LPAREN expression RPAREN
+    (71) expression -> . MINUS expression
+    (72) expression -> . id_ptr_or_array DOUBLEPLUS
+    (73) expression -> . DOUBLEPLUS id_ptr_or_array
+    (74) expression -> . id_ptr_or_array
+    (75) expression -> . function_app
+    (76) expression -> . var_assignment
+    (77) expression -> . INT_VAL
+    (78) expression -> . FLOAT_VAL
     (54) return_expr -> . RETURN expression
     (55) return_expr -> . RETURN
     (32) conditional -> . if elif_else
@@ -1146,7 +1117,7 @@ state 48
     (16) ptrs -> . MULTIPLY ptrs
     (17) ptrs -> . MULTIPLY
 
-    RBRACE          reduce using rule 64 (empty -> .)
+    RBRACE          reduce using rule 63 (empty -> .)
     PRINTF          shift and go to state 30
     ID              shift and go to state 32
     LPAREN          shift and go to state 31
@@ -1189,22 +1160,22 @@ state 49
 
 state 50
 
-    (65) expression -> expression PLUS . expression
-    (65) expression -> . expression PLUS expression
-    (66) expression -> . expression MINUS expression
-    (67) expression -> . expression MULTIPLY expression
-    (68) expression -> . expression DIVIDE expression
-    (69) expression -> . expression LESS expression
-    (70) expression -> . expression GREATER expression
-    (71) expression -> . LPAREN expression RPAREN
-    (72) expression -> . MINUS expression
-    (73) expression -> . id_ptr_or_array DOUBLEPLUS
-    (74) expression -> . DOUBLEPLUS id_ptr_or_array
-    (75) expression -> . id_ptr_or_array
-    (76) expression -> . function_app
-    (77) expression -> . var_assignment
-    (78) expression -> . INT_VAL
-    (79) expression -> . FLOAT_VAL
+    (64) expression -> expression PLUS . expression
+    (64) expression -> . expression PLUS expression
+    (65) expression -> . expression MINUS expression
+    (66) expression -> . expression MULTIPLY expression
+    (67) expression -> . expression DIVIDE expression
+    (68) expression -> . expression LESS expression
+    (69) expression -> . expression GREATER expression
+    (70) expression -> . LPAREN expression RPAREN
+    (71) expression -> . MINUS expression
+    (72) expression -> . id_ptr_or_array DOUBLEPLUS
+    (73) expression -> . DOUBLEPLUS id_ptr_or_array
+    (74) expression -> . id_ptr_or_array
+    (75) expression -> . function_app
+    (76) expression -> . var_assignment
+    (77) expression -> . INT_VAL
+    (78) expression -> . FLOAT_VAL
     (11) id_ptr_or_array -> . id
     (12) id_ptr_or_array -> . id array_decs
     (13) id_ptr_or_array -> . ptrs id
@@ -1234,22 +1205,22 @@ state 50
 
 state 51
 
-    (66) expression -> expression MINUS . expression
-    (65) expression -> . expression PLUS expression
-    (66) expression -> . expression MINUS expression
-    (67) expression -> . expression MULTIPLY expression
-    (68) expression -> . expression DIVIDE expression
-    (69) expression -> . expression LESS expression
-    (70) expression -> . expression GREATER expression
-    (71) expression -> . LPAREN expression RPAREN
-    (72) expression -> . MINUS expression
-    (73) expression -> . id_ptr_or_array DOUBLEPLUS
-    (74) expression -> . DOUBLEPLUS id_ptr_or_array
-    (75) expression -> . id_ptr_or_array
-    (76) expression -> . function_app
-    (77) expression -> . var_assignment
-    (78) expression -> . INT_VAL
-    (79) expression -> . FLOAT_VAL
+    (65) expression -> expression MINUS . expression
+    (64) expression -> . expression PLUS expression
+    (65) expression -> . expression MINUS expression
+    (66) expression -> . expression MULTIPLY expression
+    (67) expression -> . expression DIVIDE expression
+    (68) expression -> . expression LESS expression
+    (69) expression -> . expression GREATER expression
+    (70) expression -> . LPAREN expression RPAREN
+    (71) expression -> . MINUS expression
+    (72) expression -> . id_ptr_or_array DOUBLEPLUS
+    (73) expression -> . DOUBLEPLUS id_ptr_or_array
+    (74) expression -> . id_ptr_or_array
+    (75) expression -> . function_app
+    (76) expression -> . var_assignment
+    (77) expression -> . INT_VAL
+    (78) expression -> . FLOAT_VAL
     (11) id_ptr_or_array -> . id
     (12) id_ptr_or_array -> . id array_decs
     (13) id_ptr_or_array -> . ptrs id
@@ -1279,22 +1250,22 @@ state 51
 
 state 52
 
-    (67) expression -> expression MULTIPLY . expression
-    (65) expression -> . expression PLUS expression
-    (66) expression -> . expression MINUS expression
-    (67) expression -> . expression MULTIPLY expression
-    (68) expression -> . expression DIVIDE expression
-    (69) expression -> . expression LESS expression
-    (70) expression -> . expression GREATER expression
-    (71) expression -> . LPAREN expression RPAREN
-    (72) expression -> . MINUS expression
-    (73) expression -> . id_ptr_or_array DOUBLEPLUS
-    (74) expression -> . DOUBLEPLUS id_ptr_or_array
-    (75) expression -> . id_ptr_or_array
-    (76) expression -> . function_app
-    (77) expression -> . var_assignment
-    (78) expression -> . INT_VAL
-    (79) expression -> . FLOAT_VAL
+    (66) expression -> expression MULTIPLY . expression
+    (64) expression -> . expression PLUS expression
+    (65) expression -> . expression MINUS expression
+    (66) expression -> . expression MULTIPLY expression
+    (67) expression -> . expression DIVIDE expression
+    (68) expression -> . expression LESS expression
+    (69) expression -> . expression GREATER expression
+    (70) expression -> . LPAREN expression RPAREN
+    (71) expression -> . MINUS expression
+    (72) expression -> . id_ptr_or_array DOUBLEPLUS
+    (73) expression -> . DOUBLEPLUS id_ptr_or_array
+    (74) expression -> . id_ptr_or_array
+    (75) expression -> . function_app
+    (76) expression -> . var_assignment
+    (77) expression -> . INT_VAL
+    (78) expression -> . FLOAT_VAL
     (11) id_ptr_or_array -> . id
     (12) id_ptr_or_array -> . id array_decs
     (13) id_ptr_or_array -> . ptrs id
@@ -1324,22 +1295,22 @@ state 52
 
 state 53
 
-    (68) expression -> expression DIVIDE . expression
-    (65) expression -> . expression PLUS expression
-    (66) expression -> . expression MINUS expression
-    (67) expression -> . expression MULTIPLY expression
-    (68) expression -> . expression DIVIDE expression
-    (69) expression -> . expression LESS expression
-    (70) expression -> . expression GREATER expression
-    (71) expression -> . LPAREN expression RPAREN
-    (72) expression -> . MINUS expression
-    (73) expression -> . id_ptr_or_array DOUBLEPLUS
-    (74) expression -> . DOUBLEPLUS id_ptr_or_array
-    (75) expression -> . id_ptr_or_array
-    (76) expression -> . function_app
-    (77) expression -> . var_assignment
-    (78) expression -> . INT_VAL
-    (79) expression -> . FLOAT_VAL
+    (67) expression -> expression DIVIDE . expression
+    (64) expression -> . expression PLUS expression
+    (65) expression -> . expression MINUS expression
+    (66) expression -> . expression MULTIPLY expression
+    (67) expression -> . expression DIVIDE expression
+    (68) expression -> . expression LESS expression
+    (69) expression -> . expression GREATER expression
+    (70) expression -> . LPAREN expression RPAREN
+    (71) expression -> . MINUS expression
+    (72) expression -> . id_ptr_or_array DOUBLEPLUS
+    (73) expression -> . DOUBLEPLUS id_ptr_or_array
+    (74) expression -> . id_ptr_or_array
+    (75) expression -> . function_app
+    (76) expression -> . var_assignment
+    (77) expression -> . INT_VAL
+    (78) expression -> . FLOAT_VAL
     (11) id_ptr_or_array -> . id
     (12) id_ptr_or_array -> . id array_decs
     (13) id_ptr_or_array -> . ptrs id
@@ -1369,22 +1340,22 @@ state 53
 
 state 54
 
-    (69) expression -> expression LESS . expression
-    (65) expression -> . expression PLUS expression
-    (66) expression -> . expression MINUS expression
-    (67) expression -> . expression MULTIPLY expression
-    (68) expression -> . expression DIVIDE expression
-    (69) expression -> . expression LESS expression
-    (70) expression -> . expression GREATER expression
-    (71) expression -> . LPAREN expression RPAREN
-    (72) expression -> . MINUS expression
-    (73) expression -> . id_ptr_or_array DOUBLEPLUS
-    (74) expression -> . DOUBLEPLUS id_ptr_or_array
-    (75) expression -> . id_ptr_or_array
-    (76) expression -> . function_app
-    (77) expression -> . var_assignment
-    (78) expression -> . INT_VAL
-    (79) expression -> . FLOAT_VAL
+    (68) expression -> expression LESS . expression
+    (64) expression -> . expression PLUS expression
+    (65) expression -> . expression MINUS expression
+    (66) expression -> . expression MULTIPLY expression
+    (67) expression -> . expression DIVIDE expression
+    (68) expression -> . expression LESS expression
+    (69) expression -> . expression GREATER expression
+    (70) expression -> . LPAREN expression RPAREN
+    (71) expression -> . MINUS expression
+    (72) expression -> . id_ptr_or_array DOUBLEPLUS
+    (73) expression -> . DOUBLEPLUS id_ptr_or_array
+    (74) expression -> . id_ptr_or_array
+    (75) expression -> . function_app
+    (76) expression -> . var_assignment
+    (77) expression -> . INT_VAL
+    (78) expression -> . FLOAT_VAL
     (11) id_ptr_or_array -> . id
     (12) id_ptr_or_array -> . id array_decs
     (13) id_ptr_or_array -> . ptrs id
@@ -1414,22 +1385,22 @@ state 54
 
 state 55
 
-    (70) expression -> expression GREATER . expression
-    (65) expression -> . expression PLUS expression
-    (66) expression -> . expression MINUS expression
-    (67) expression -> . expression MULTIPLY expression
-    (68) expression -> . expression DIVIDE expression
-    (69) expression -> . expression LESS expression
-    (70) expression -> . expression GREATER expression
-    (71) expression -> . LPAREN expression RPAREN
-    (72) expression -> . MINUS expression
-    (73) expression -> . id_ptr_or_array DOUBLEPLUS
-    (74) expression -> . DOUBLEPLUS id_ptr_or_array
-    (75) expression -> . id_ptr_or_array
-    (76) expression -> . function_app
-    (77) expression -> . var_assignment
-    (78) expression -> . INT_VAL
-    (79) expression -> . FLOAT_VAL
+    (69) expression -> expression GREATER . expression
+    (64) expression -> . expression PLUS expression
+    (65) expression -> . expression MINUS expression
+    (66) expression -> . expression MULTIPLY expression
+    (67) expression -> . expression DIVIDE expression
+    (68) expression -> . expression LESS expression
+    (69) expression -> . expression GREATER expression
+    (70) expression -> . LPAREN expression RPAREN
+    (71) expression -> . MINUS expression
+    (72) expression -> . id_ptr_or_array DOUBLEPLUS
+    (73) expression -> . DOUBLEPLUS id_ptr_or_array
+    (74) expression -> . id_ptr_or_array
+    (75) expression -> . function_app
+    (76) expression -> . var_assignment
+    (77) expression -> . INT_VAL
+    (78) expression -> . FLOAT_VAL
     (11) id_ptr_or_array -> . id
     (12) id_ptr_or_array -> . id array_decs
     (13) id_ptr_or_array -> . ptrs id
@@ -1495,21 +1466,21 @@ state 59
 
     (48) var_assignment -> id_ptr_or_array EQ . expression
     (49) var_assignment -> id_ptr_or_array EQ . function_app
-    (65) expression -> . expression PLUS expression
-    (66) expression -> . expression MINUS expression
-    (67) expression -> . expression MULTIPLY expression
-    (68) expression -> . expression DIVIDE expression
-    (69) expression -> . expression LESS expression
-    (70) expression -> . expression GREATER expression
-    (71) expression -> . LPAREN expression RPAREN
-    (72) expression -> . MINUS expression
-    (73) expression -> . id_ptr_or_array DOUBLEPLUS
-    (74) expression -> . DOUBLEPLUS id_ptr_or_array
-    (75) expression -> . id_ptr_or_array
-    (76) expression -> . function_app
-    (77) expression -> . var_assignment
-    (78) expression -> . INT_VAL
-    (79) expression -> . FLOAT_VAL
+    (64) expression -> . expression PLUS expression
+    (65) expression -> . expression MINUS expression
+    (66) expression -> . expression MULTIPLY expression
+    (67) expression -> . expression DIVIDE expression
+    (68) expression -> . expression LESS expression
+    (69) expression -> . expression GREATER expression
+    (70) expression -> . LPAREN expression RPAREN
+    (71) expression -> . MINUS expression
+    (72) expression -> . id_ptr_or_array DOUBLEPLUS
+    (73) expression -> . DOUBLEPLUS id_ptr_or_array
+    (74) expression -> . id_ptr_or_array
+    (75) expression -> . function_app
+    (76) expression -> . var_assignment
+    (77) expression -> . INT_VAL
+    (78) expression -> . FLOAT_VAL
     (56) function_app -> . PRINTF LPAREN STRING print_formats RPAREN
     (57) function_app -> . ID LPAREN arguments RPAREN
     (11) id_ptr_or_array -> . id
@@ -1539,25 +1510,19 @@ state 59
 
 state 60
 
-    (73) expression -> id_ptr_or_array DOUBLEPLUS .
+    (72) expression -> id_ptr_or_array DOUBLEPLUS .
 
-    PLUS            reduce using rule 73 (expression -> id_ptr_or_array DOUBLEPLUS .)
-    MINUS           reduce using rule 73 (expression -> id_ptr_or_array DOUBLEPLUS .)
-    MULTIPLY        reduce using rule 73 (expression -> id_ptr_or_array DOUBLEPLUS .)
-    DIVIDE          reduce using rule 73 (expression -> id_ptr_or_array DOUBLEPLUS .)
-    LESS            reduce using rule 73 (expression -> id_ptr_or_array DOUBLEPLUS .)
-    GREATER         reduce using rule 73 (expression -> id_ptr_or_array DOUBLEPLUS .)
-    SEMI            reduce using rule 73 (expression -> id_ptr_or_array DOUBLEPLUS .)
-    RBRACE          reduce using rule 73 (expression -> id_ptr_or_array DOUBLEPLUS .)
-    RPAREN          reduce using rule 73 (expression -> id_ptr_or_array DOUBLEPLUS .)
-    COMMA           reduce using rule 73 (expression -> id_ptr_or_array DOUBLEPLUS .)
-    SQ_RBRACKET     reduce using rule 73 (expression -> id_ptr_or_array DOUBLEPLUS .)
-    LPAREN          reduce using rule 73 (expression -> id_ptr_or_array DOUBLEPLUS .)
-    DOUBLEPLUS      reduce using rule 73 (expression -> id_ptr_or_array DOUBLEPLUS .)
-    INT_VAL         reduce using rule 73 (expression -> id_ptr_or_array DOUBLEPLUS .)
-    FLOAT_VAL       reduce using rule 73 (expression -> id_ptr_or_array DOUBLEPLUS .)
-    PRINTF          reduce using rule 73 (expression -> id_ptr_or_array DOUBLEPLUS .)
-    ID              reduce using rule 73 (expression -> id_ptr_or_array DOUBLEPLUS .)
+    PLUS            reduce using rule 72 (expression -> id_ptr_or_array DOUBLEPLUS .)
+    MINUS           reduce using rule 72 (expression -> id_ptr_or_array DOUBLEPLUS .)
+    MULTIPLY        reduce using rule 72 (expression -> id_ptr_or_array DOUBLEPLUS .)
+    DIVIDE          reduce using rule 72 (expression -> id_ptr_or_array DOUBLEPLUS .)
+    LESS            reduce using rule 72 (expression -> id_ptr_or_array DOUBLEPLUS .)
+    GREATER         reduce using rule 72 (expression -> id_ptr_or_array DOUBLEPLUS .)
+    SEMI            reduce using rule 72 (expression -> id_ptr_or_array DOUBLEPLUS .)
+    RBRACE          reduce using rule 72 (expression -> id_ptr_or_array DOUBLEPLUS .)
+    RPAREN          reduce using rule 72 (expression -> id_ptr_or_array DOUBLEPLUS .)
+    COMMA           reduce using rule 72 (expression -> id_ptr_or_array DOUBLEPLUS .)
+    SQ_RBRACKET     reduce using rule 72 (expression -> id_ptr_or_array DOUBLEPLUS .)
 
 
 state 61
@@ -1569,13 +1534,13 @@ state 61
 
 state 62
 
-    (71) expression -> LPAREN expression . RPAREN
-    (65) expression -> expression . PLUS expression
-    (66) expression -> expression . MINUS expression
-    (67) expression -> expression . MULTIPLY expression
-    (68) expression -> expression . DIVIDE expression
-    (69) expression -> expression . LESS expression
-    (70) expression -> expression . GREATER expression
+    (70) expression -> LPAREN expression . RPAREN
+    (64) expression -> expression . PLUS expression
+    (65) expression -> expression . MINUS expression
+    (66) expression -> expression . MULTIPLY expression
+    (67) expression -> expression . DIVIDE expression
+    (68) expression -> expression . LESS expression
+    (69) expression -> expression . GREATER expression
 
     RPAREN          shift and go to state 93
     PLUS            shift and go to state 50
@@ -1588,102 +1553,82 @@ state 62
 
 state 63
 
-    (73) expression -> id_ptr_or_array . DOUBLEPLUS
-    (75) expression -> id_ptr_or_array .
+    (72) expression -> id_ptr_or_array . DOUBLEPLUS
+    (74) expression -> id_ptr_or_array .
     (48) var_assignment -> id_ptr_or_array . EQ expression
     (49) var_assignment -> id_ptr_or_array . EQ function_app
 
-  ! shift/reduce conflict for DOUBLEPLUS resolved as shift
     DOUBLEPLUS      shift and go to state 60
-    RPAREN          reduce using rule 75 (expression -> id_ptr_or_array .)
-    PLUS            reduce using rule 75 (expression -> id_ptr_or_array .)
-    MINUS           reduce using rule 75 (expression -> id_ptr_or_array .)
-    MULTIPLY        reduce using rule 75 (expression -> id_ptr_or_array .)
-    DIVIDE          reduce using rule 75 (expression -> id_ptr_or_array .)
-    LESS            reduce using rule 75 (expression -> id_ptr_or_array .)
-    GREATER         reduce using rule 75 (expression -> id_ptr_or_array .)
-    SEMI            reduce using rule 75 (expression -> id_ptr_or_array .)
-    RBRACE          reduce using rule 75 (expression -> id_ptr_or_array .)
-    COMMA           reduce using rule 75 (expression -> id_ptr_or_array .)
-    SQ_RBRACKET     reduce using rule 75 (expression -> id_ptr_or_array .)
-    LPAREN          reduce using rule 75 (expression -> id_ptr_or_array .)
-    INT_VAL         reduce using rule 75 (expression -> id_ptr_or_array .)
-    FLOAT_VAL       reduce using rule 75 (expression -> id_ptr_or_array .)
-    PRINTF          reduce using rule 75 (expression -> id_ptr_or_array .)
-    ID              reduce using rule 75 (expression -> id_ptr_or_array .)
+    RPAREN          reduce using rule 74 (expression -> id_ptr_or_array .)
+    PLUS            reduce using rule 74 (expression -> id_ptr_or_array .)
+    MINUS           reduce using rule 74 (expression -> id_ptr_or_array .)
+    MULTIPLY        reduce using rule 74 (expression -> id_ptr_or_array .)
+    DIVIDE          reduce using rule 74 (expression -> id_ptr_or_array .)
+    LESS            reduce using rule 74 (expression -> id_ptr_or_array .)
+    GREATER         reduce using rule 74 (expression -> id_ptr_or_array .)
+    SEMI            reduce using rule 74 (expression -> id_ptr_or_array .)
+    RBRACE          reduce using rule 74 (expression -> id_ptr_or_array .)
+    COMMA           reduce using rule 74 (expression -> id_ptr_or_array .)
+    SQ_RBRACKET     reduce using rule 74 (expression -> id_ptr_or_array .)
     EQ              shift and go to state 59
-
-  ! DOUBLEPLUS      [ reduce using rule 75 (expression -> id_ptr_or_array .) ]
 
 
 state 64
 
-    (76) expression -> function_app .
+    (75) expression -> function_app .
 
-    RPAREN          reduce using rule 76 (expression -> function_app .)
-    PLUS            reduce using rule 76 (expression -> function_app .)
-    MINUS           reduce using rule 76 (expression -> function_app .)
-    MULTIPLY        reduce using rule 76 (expression -> function_app .)
-    DIVIDE          reduce using rule 76 (expression -> function_app .)
-    LESS            reduce using rule 76 (expression -> function_app .)
-    GREATER         reduce using rule 76 (expression -> function_app .)
-    SEMI            reduce using rule 76 (expression -> function_app .)
-    RBRACE          reduce using rule 76 (expression -> function_app .)
-    COMMA           reduce using rule 76 (expression -> function_app .)
-    SQ_RBRACKET     reduce using rule 76 (expression -> function_app .)
-    LPAREN          reduce using rule 76 (expression -> function_app .)
-    DOUBLEPLUS      reduce using rule 76 (expression -> function_app .)
-    INT_VAL         reduce using rule 76 (expression -> function_app .)
-    FLOAT_VAL       reduce using rule 76 (expression -> function_app .)
-    PRINTF          reduce using rule 76 (expression -> function_app .)
-    ID              reduce using rule 76 (expression -> function_app .)
+    RPAREN          reduce using rule 75 (expression -> function_app .)
+    PLUS            reduce using rule 75 (expression -> function_app .)
+    MINUS           reduce using rule 75 (expression -> function_app .)
+    MULTIPLY        reduce using rule 75 (expression -> function_app .)
+    DIVIDE          reduce using rule 75 (expression -> function_app .)
+    LESS            reduce using rule 75 (expression -> function_app .)
+    GREATER         reduce using rule 75 (expression -> function_app .)
+    SEMI            reduce using rule 75 (expression -> function_app .)
+    RBRACE          reduce using rule 75 (expression -> function_app .)
+    COMMA           reduce using rule 75 (expression -> function_app .)
+    SQ_RBRACKET     reduce using rule 75 (expression -> function_app .)
 
 
 state 65
 
-    (77) expression -> var_assignment .
+    (76) expression -> var_assignment .
 
-    RPAREN          reduce using rule 77 (expression -> var_assignment .)
-    PLUS            reduce using rule 77 (expression -> var_assignment .)
-    MINUS           reduce using rule 77 (expression -> var_assignment .)
-    MULTIPLY        reduce using rule 77 (expression -> var_assignment .)
-    DIVIDE          reduce using rule 77 (expression -> var_assignment .)
-    LESS            reduce using rule 77 (expression -> var_assignment .)
-    GREATER         reduce using rule 77 (expression -> var_assignment .)
-    SEMI            reduce using rule 77 (expression -> var_assignment .)
-    RBRACE          reduce using rule 77 (expression -> var_assignment .)
-    COMMA           reduce using rule 77 (expression -> var_assignment .)
-    SQ_RBRACKET     reduce using rule 77 (expression -> var_assignment .)
-    LPAREN          reduce using rule 77 (expression -> var_assignment .)
-    DOUBLEPLUS      reduce using rule 77 (expression -> var_assignment .)
-    INT_VAL         reduce using rule 77 (expression -> var_assignment .)
-    FLOAT_VAL       reduce using rule 77 (expression -> var_assignment .)
-    PRINTF          reduce using rule 77 (expression -> var_assignment .)
-    ID              reduce using rule 77 (expression -> var_assignment .)
+    RPAREN          reduce using rule 76 (expression -> var_assignment .)
+    PLUS            reduce using rule 76 (expression -> var_assignment .)
+    MINUS           reduce using rule 76 (expression -> var_assignment .)
+    MULTIPLY        reduce using rule 76 (expression -> var_assignment .)
+    DIVIDE          reduce using rule 76 (expression -> var_assignment .)
+    LESS            reduce using rule 76 (expression -> var_assignment .)
+    GREATER         reduce using rule 76 (expression -> var_assignment .)
+    SEMI            reduce using rule 76 (expression -> var_assignment .)
+    RBRACE          reduce using rule 76 (expression -> var_assignment .)
+    COMMA           reduce using rule 76 (expression -> var_assignment .)
+    SQ_RBRACKET     reduce using rule 76 (expression -> var_assignment .)
 
 
 state 66
 
     (57) function_app -> ID LPAREN . arguments RPAREN
-    (61) arguments -> . expression COMMA arguments
-    (62) arguments -> . expression
-    (63) arguments -> . empty
-    (65) expression -> . expression PLUS expression
-    (66) expression -> . expression MINUS expression
-    (67) expression -> . expression MULTIPLY expression
-    (68) expression -> . expression DIVIDE expression
-    (69) expression -> . expression LESS expression
-    (70) expression -> . expression GREATER expression
-    (71) expression -> . LPAREN expression RPAREN
-    (72) expression -> . MINUS expression
-    (73) expression -> . id_ptr_or_array DOUBLEPLUS
-    (74) expression -> . DOUBLEPLUS id_ptr_or_array
-    (75) expression -> . id_ptr_or_array
-    (76) expression -> . function_app
-    (77) expression -> . var_assignment
-    (78) expression -> . INT_VAL
-    (79) expression -> . FLOAT_VAL
-    (64) empty -> .
+    (60) arguments -> . expression COMMA arguments
+    (61) arguments -> . expression
+    (62) arguments -> . empty
+    (64) expression -> . expression PLUS expression
+    (65) expression -> . expression MINUS expression
+    (66) expression -> . expression MULTIPLY expression
+    (67) expression -> . expression DIVIDE expression
+    (68) expression -> . expression LESS expression
+    (69) expression -> . expression GREATER expression
+    (70) expression -> . LPAREN expression RPAREN
+    (71) expression -> . MINUS expression
+    (72) expression -> . id_ptr_or_array DOUBLEPLUS
+    (73) expression -> . DOUBLEPLUS id_ptr_or_array
+    (74) expression -> . id_ptr_or_array
+    (75) expression -> . function_app
+    (76) expression -> . var_assignment
+    (77) expression -> . INT_VAL
+    (78) expression -> . FLOAT_VAL
+    (63) empty -> .
     (11) id_ptr_or_array -> . id
     (12) id_ptr_or_array -> . id array_decs
     (13) id_ptr_or_array -> . ptrs id
@@ -1700,7 +1645,7 @@ state 66
     DOUBLEPLUS      shift and go to state 35
     INT_VAL         shift and go to state 36
     FLOAT_VAL       shift and go to state 37
-    RPAREN          reduce using rule 64 (empty -> .)
+    RPAREN          reduce using rule 63 (empty -> .)
     PRINTF          shift and go to state 30
     ID              shift and go to state 32
     MULTIPLY        shift and go to state 34
@@ -1716,34 +1661,28 @@ state 66
 
 state 67
 
-    (72) expression -> MINUS expression .
-    (65) expression -> expression . PLUS expression
-    (66) expression -> expression . MINUS expression
-    (67) expression -> expression . MULTIPLY expression
-    (68) expression -> expression . DIVIDE expression
-    (69) expression -> expression . LESS expression
-    (70) expression -> expression . GREATER expression
+    (71) expression -> MINUS expression .
+    (64) expression -> expression . PLUS expression
+    (65) expression -> expression . MINUS expression
+    (66) expression -> expression . MULTIPLY expression
+    (67) expression -> expression . DIVIDE expression
+    (68) expression -> expression . LESS expression
+    (69) expression -> expression . GREATER expression
 
-    PLUS            reduce using rule 72 (expression -> MINUS expression .)
-    MINUS           reduce using rule 72 (expression -> MINUS expression .)
-    LESS            reduce using rule 72 (expression -> MINUS expression .)
-    GREATER         reduce using rule 72 (expression -> MINUS expression .)
-    SEMI            reduce using rule 72 (expression -> MINUS expression .)
-    RBRACE          reduce using rule 72 (expression -> MINUS expression .)
-    RPAREN          reduce using rule 72 (expression -> MINUS expression .)
-    COMMA           reduce using rule 72 (expression -> MINUS expression .)
-    SQ_RBRACKET     reduce using rule 72 (expression -> MINUS expression .)
-    LPAREN          reduce using rule 72 (expression -> MINUS expression .)
-    DOUBLEPLUS      reduce using rule 72 (expression -> MINUS expression .)
-    INT_VAL         reduce using rule 72 (expression -> MINUS expression .)
-    FLOAT_VAL       reduce using rule 72 (expression -> MINUS expression .)
-    PRINTF          reduce using rule 72 (expression -> MINUS expression .)
-    ID              reduce using rule 72 (expression -> MINUS expression .)
+    PLUS            reduce using rule 71 (expression -> MINUS expression .)
+    MINUS           reduce using rule 71 (expression -> MINUS expression .)
+    LESS            reduce using rule 71 (expression -> MINUS expression .)
+    GREATER         reduce using rule 71 (expression -> MINUS expression .)
+    SEMI            reduce using rule 71 (expression -> MINUS expression .)
+    RBRACE          reduce using rule 71 (expression -> MINUS expression .)
+    RPAREN          reduce using rule 71 (expression -> MINUS expression .)
+    COMMA           reduce using rule 71 (expression -> MINUS expression .)
+    SQ_RBRACKET     reduce using rule 71 (expression -> MINUS expression .)
     MULTIPLY        shift and go to state 52
     DIVIDE          shift and go to state 53
 
-  ! MULTIPLY        [ reduce using rule 72 (expression -> MINUS expression .) ]
-  ! DIVIDE          [ reduce using rule 72 (expression -> MINUS expression .) ]
+  ! MULTIPLY        [ reduce using rule 71 (expression -> MINUS expression .) ]
+  ! DIVIDE          [ reduce using rule 71 (expression -> MINUS expression .) ]
   ! PLUS            [ shift and go to state 50 ]
   ! MINUS           [ shift and go to state 51 ]
   ! LESS            [ shift and go to state 54 ]
@@ -1759,36 +1698,30 @@ state 68
 
 state 69
 
-    (74) expression -> DOUBLEPLUS id_ptr_or_array .
+    (73) expression -> DOUBLEPLUS id_ptr_or_array .
 
-    PLUS            reduce using rule 74 (expression -> DOUBLEPLUS id_ptr_or_array .)
-    MINUS           reduce using rule 74 (expression -> DOUBLEPLUS id_ptr_or_array .)
-    MULTIPLY        reduce using rule 74 (expression -> DOUBLEPLUS id_ptr_or_array .)
-    DIVIDE          reduce using rule 74 (expression -> DOUBLEPLUS id_ptr_or_array .)
-    LESS            reduce using rule 74 (expression -> DOUBLEPLUS id_ptr_or_array .)
-    GREATER         reduce using rule 74 (expression -> DOUBLEPLUS id_ptr_or_array .)
-    SEMI            reduce using rule 74 (expression -> DOUBLEPLUS id_ptr_or_array .)
-    RBRACE          reduce using rule 74 (expression -> DOUBLEPLUS id_ptr_or_array .)
-    RPAREN          reduce using rule 74 (expression -> DOUBLEPLUS id_ptr_or_array .)
-    COMMA           reduce using rule 74 (expression -> DOUBLEPLUS id_ptr_or_array .)
-    SQ_RBRACKET     reduce using rule 74 (expression -> DOUBLEPLUS id_ptr_or_array .)
-    LPAREN          reduce using rule 74 (expression -> DOUBLEPLUS id_ptr_or_array .)
-    DOUBLEPLUS      reduce using rule 74 (expression -> DOUBLEPLUS id_ptr_or_array .)
-    INT_VAL         reduce using rule 74 (expression -> DOUBLEPLUS id_ptr_or_array .)
-    FLOAT_VAL       reduce using rule 74 (expression -> DOUBLEPLUS id_ptr_or_array .)
-    PRINTF          reduce using rule 74 (expression -> DOUBLEPLUS id_ptr_or_array .)
-    ID              reduce using rule 74 (expression -> DOUBLEPLUS id_ptr_or_array .)
+    PLUS            reduce using rule 73 (expression -> DOUBLEPLUS id_ptr_or_array .)
+    MINUS           reduce using rule 73 (expression -> DOUBLEPLUS id_ptr_or_array .)
+    MULTIPLY        reduce using rule 73 (expression -> DOUBLEPLUS id_ptr_or_array .)
+    DIVIDE          reduce using rule 73 (expression -> DOUBLEPLUS id_ptr_or_array .)
+    LESS            reduce using rule 73 (expression -> DOUBLEPLUS id_ptr_or_array .)
+    GREATER         reduce using rule 73 (expression -> DOUBLEPLUS id_ptr_or_array .)
+    SEMI            reduce using rule 73 (expression -> DOUBLEPLUS id_ptr_or_array .)
+    RBRACE          reduce using rule 73 (expression -> DOUBLEPLUS id_ptr_or_array .)
+    RPAREN          reduce using rule 73 (expression -> DOUBLEPLUS id_ptr_or_array .)
+    COMMA           reduce using rule 73 (expression -> DOUBLEPLUS id_ptr_or_array .)
+    SQ_RBRACKET     reduce using rule 73 (expression -> DOUBLEPLUS id_ptr_or_array .)
 
 
 state 70
 
     (54) return_expr -> RETURN expression .
-    (65) expression -> expression . PLUS expression
-    (66) expression -> expression . MINUS expression
-    (67) expression -> expression . MULTIPLY expression
-    (68) expression -> expression . DIVIDE expression
-    (69) expression -> expression . LESS expression
-    (70) expression -> expression . GREATER expression
+    (64) expression -> expression . PLUS expression
+    (65) expression -> expression . MINUS expression
+    (66) expression -> expression . MULTIPLY expression
+    (67) expression -> expression . DIVIDE expression
+    (68) expression -> expression . LESS expression
+    (69) expression -> expression . GREATER expression
 
     SEMI            reduce using rule 54 (return_expr -> RETURN expression .)
     RBRACE          reduce using rule 54 (return_expr -> RETURN expression .)
@@ -1862,22 +1795,22 @@ state 74
     (40) loop_init_or_empty -> . empty
     (44) loop_init -> . type var_assignment
     (45) loop_init -> . semi_statement
-    (65) expression -> . expression PLUS expression
-    (66) expression -> . expression MINUS expression
-    (67) expression -> . expression MULTIPLY expression
-    (68) expression -> . expression DIVIDE expression
-    (69) expression -> . expression LESS expression
-    (70) expression -> . expression GREATER expression
-    (71) expression -> . LPAREN expression RPAREN
-    (72) expression -> . MINUS expression
-    (73) expression -> . id_ptr_or_array DOUBLEPLUS
-    (74) expression -> . DOUBLEPLUS id_ptr_or_array
-    (75) expression -> . id_ptr_or_array
-    (76) expression -> . function_app
-    (77) expression -> . var_assignment
-    (78) expression -> . INT_VAL
-    (79) expression -> . FLOAT_VAL
-    (64) empty -> .
+    (64) expression -> . expression PLUS expression
+    (65) expression -> . expression MINUS expression
+    (66) expression -> . expression MULTIPLY expression
+    (67) expression -> . expression DIVIDE expression
+    (68) expression -> . expression LESS expression
+    (69) expression -> . expression GREATER expression
+    (70) expression -> . LPAREN expression RPAREN
+    (71) expression -> . MINUS expression
+    (72) expression -> . id_ptr_or_array DOUBLEPLUS
+    (73) expression -> . DOUBLEPLUS id_ptr_or_array
+    (74) expression -> . id_ptr_or_array
+    (75) expression -> . function_app
+    (76) expression -> . var_assignment
+    (77) expression -> . INT_VAL
+    (78) expression -> . FLOAT_VAL
+    (63) empty -> .
     (4) type -> . INT
     (5) type -> . FLOAT
     (24) semi_statement -> . var_declaration
@@ -1904,7 +1837,7 @@ state 74
     DOUBLEPLUS      shift and go to state 35
     INT_VAL         shift and go to state 36
     FLOAT_VAL       shift and go to state 37
-    SEMI            reduce using rule 64 (empty -> .)
+    SEMI            reduce using rule 63 (empty -> .)
     INT             shift and go to state 4
     FLOAT           shift and go to state 5
     PRINTF          shift and go to state 30
@@ -1929,21 +1862,21 @@ state 74
 state 75
 
     (46) while -> WHILE LPAREN . expression RPAREN block
-    (65) expression -> . expression PLUS expression
-    (66) expression -> . expression MINUS expression
-    (67) expression -> . expression MULTIPLY expression
-    (68) expression -> . expression DIVIDE expression
-    (69) expression -> . expression LESS expression
-    (70) expression -> . expression GREATER expression
-    (71) expression -> . LPAREN expression RPAREN
-    (72) expression -> . MINUS expression
-    (73) expression -> . id_ptr_or_array DOUBLEPLUS
-    (74) expression -> . DOUBLEPLUS id_ptr_or_array
-    (75) expression -> . id_ptr_or_array
-    (76) expression -> . function_app
-    (77) expression -> . var_assignment
-    (78) expression -> . INT_VAL
-    (79) expression -> . FLOAT_VAL
+    (64) expression -> . expression PLUS expression
+    (65) expression -> . expression MINUS expression
+    (66) expression -> . expression MULTIPLY expression
+    (67) expression -> . expression DIVIDE expression
+    (68) expression -> . expression LESS expression
+    (69) expression -> . expression GREATER expression
+    (70) expression -> . LPAREN expression RPAREN
+    (71) expression -> . MINUS expression
+    (72) expression -> . id_ptr_or_array DOUBLEPLUS
+    (73) expression -> . DOUBLEPLUS id_ptr_or_array
+    (74) expression -> . id_ptr_or_array
+    (75) expression -> . function_app
+    (76) expression -> . var_assignment
+    (77) expression -> . INT_VAL
+    (78) expression -> . FLOAT_VAL
     (11) id_ptr_or_array -> . id
     (12) id_ptr_or_array -> . id array_decs
     (13) id_ptr_or_array -> . ptrs id
@@ -1988,32 +1921,27 @@ state 76
     COMMA           reduce using rule 12 (id_ptr_or_array -> id array_decs .)
     RPAREN          reduce using rule 12 (id_ptr_or_array -> id array_decs .)
     SQ_RBRACKET     reduce using rule 12 (id_ptr_or_array -> id array_decs .)
-    LPAREN          reduce using rule 12 (id_ptr_or_array -> id array_decs .)
-    INT_VAL         reduce using rule 12 (id_ptr_or_array -> id array_decs .)
-    FLOAT_VAL       reduce using rule 12 (id_ptr_or_array -> id array_decs .)
-    PRINTF          reduce using rule 12 (id_ptr_or_array -> id array_decs .)
-    ID              reduce using rule 12 (id_ptr_or_array -> id array_decs .)
 
 
 state 77
 
     (14) array_decs -> SQ_LBRACKET . expression SQ_RBRACKET array_decs
     (15) array_decs -> SQ_LBRACKET . expression SQ_RBRACKET
-    (65) expression -> . expression PLUS expression
-    (66) expression -> . expression MINUS expression
-    (67) expression -> . expression MULTIPLY expression
-    (68) expression -> . expression DIVIDE expression
-    (69) expression -> . expression LESS expression
-    (70) expression -> . expression GREATER expression
-    (71) expression -> . LPAREN expression RPAREN
-    (72) expression -> . MINUS expression
-    (73) expression -> . id_ptr_or_array DOUBLEPLUS
-    (74) expression -> . DOUBLEPLUS id_ptr_or_array
-    (75) expression -> . id_ptr_or_array
-    (76) expression -> . function_app
-    (77) expression -> . var_assignment
-    (78) expression -> . INT_VAL
-    (79) expression -> . FLOAT_VAL
+    (64) expression -> . expression PLUS expression
+    (65) expression -> . expression MINUS expression
+    (66) expression -> . expression MULTIPLY expression
+    (67) expression -> . expression DIVIDE expression
+    (68) expression -> . expression LESS expression
+    (69) expression -> . expression GREATER expression
+    (70) expression -> . LPAREN expression RPAREN
+    (71) expression -> . MINUS expression
+    (72) expression -> . id_ptr_or_array DOUBLEPLUS
+    (73) expression -> . DOUBLEPLUS id_ptr_or_array
+    (74) expression -> . id_ptr_or_array
+    (75) expression -> . function_app
+    (76) expression -> . var_assignment
+    (77) expression -> . INT_VAL
+    (78) expression -> . FLOAT_VAL
     (11) id_ptr_or_array -> . id
     (12) id_ptr_or_array -> . id array_decs
     (13) id_ptr_or_array -> . ptrs id
@@ -2058,31 +1986,26 @@ state 78
     COMMA           reduce using rule 13 (id_ptr_or_array -> ptrs id .)
     RPAREN          reduce using rule 13 (id_ptr_or_array -> ptrs id .)
     SQ_RBRACKET     reduce using rule 13 (id_ptr_or_array -> ptrs id .)
-    LPAREN          reduce using rule 13 (id_ptr_or_array -> ptrs id .)
-    INT_VAL         reduce using rule 13 (id_ptr_or_array -> ptrs id .)
-    FLOAT_VAL       reduce using rule 13 (id_ptr_or_array -> ptrs id .)
-    PRINTF          reduce using rule 13 (id_ptr_or_array -> ptrs id .)
-    ID              reduce using rule 13 (id_ptr_or_array -> ptrs id .)
 
 
 state 79
 
     (33) if -> IF LPAREN . expression RPAREN block
-    (65) expression -> . expression PLUS expression
-    (66) expression -> . expression MINUS expression
-    (67) expression -> . expression MULTIPLY expression
-    (68) expression -> . expression DIVIDE expression
-    (69) expression -> . expression LESS expression
-    (70) expression -> . expression GREATER expression
-    (71) expression -> . LPAREN expression RPAREN
-    (72) expression -> . MINUS expression
-    (73) expression -> . id_ptr_or_array DOUBLEPLUS
-    (74) expression -> . DOUBLEPLUS id_ptr_or_array
-    (75) expression -> . id_ptr_or_array
-    (76) expression -> . function_app
-    (77) expression -> . var_assignment
-    (78) expression -> . INT_VAL
-    (79) expression -> . FLOAT_VAL
+    (64) expression -> . expression PLUS expression
+    (65) expression -> . expression MINUS expression
+    (66) expression -> . expression MULTIPLY expression
+    (67) expression -> . expression DIVIDE expression
+    (68) expression -> . expression LESS expression
+    (69) expression -> . expression GREATER expression
+    (70) expression -> . LPAREN expression RPAREN
+    (71) expression -> . MINUS expression
+    (72) expression -> . id_ptr_or_array DOUBLEPLUS
+    (73) expression -> . DOUBLEPLUS id_ptr_or_array
+    (74) expression -> . id_ptr_or_array
+    (75) expression -> . function_app
+    (76) expression -> . var_assignment
+    (77) expression -> . INT_VAL
+    (78) expression -> . FLOAT_VAL
     (11) id_ptr_or_array -> . id
     (12) id_ptr_or_array -> . id array_decs
     (13) id_ptr_or_array -> . ptrs id
@@ -2135,34 +2058,28 @@ state 81
 
 state 82
 
-    (65) expression -> expression PLUS expression .
-    (65) expression -> expression . PLUS expression
-    (66) expression -> expression . MINUS expression
-    (67) expression -> expression . MULTIPLY expression
-    (68) expression -> expression . DIVIDE expression
-    (69) expression -> expression . LESS expression
-    (70) expression -> expression . GREATER expression
+    (64) expression -> expression PLUS expression .
+    (64) expression -> expression . PLUS expression
+    (65) expression -> expression . MINUS expression
+    (66) expression -> expression . MULTIPLY expression
+    (67) expression -> expression . DIVIDE expression
+    (68) expression -> expression . LESS expression
+    (69) expression -> expression . GREATER expression
 
-    PLUS            reduce using rule 65 (expression -> expression PLUS expression .)
-    MINUS           reduce using rule 65 (expression -> expression PLUS expression .)
-    LESS            reduce using rule 65 (expression -> expression PLUS expression .)
-    GREATER         reduce using rule 65 (expression -> expression PLUS expression .)
-    SEMI            reduce using rule 65 (expression -> expression PLUS expression .)
-    RBRACE          reduce using rule 65 (expression -> expression PLUS expression .)
-    RPAREN          reduce using rule 65 (expression -> expression PLUS expression .)
-    COMMA           reduce using rule 65 (expression -> expression PLUS expression .)
-    SQ_RBRACKET     reduce using rule 65 (expression -> expression PLUS expression .)
-    LPAREN          reduce using rule 65 (expression -> expression PLUS expression .)
-    DOUBLEPLUS      reduce using rule 65 (expression -> expression PLUS expression .)
-    INT_VAL         reduce using rule 65 (expression -> expression PLUS expression .)
-    FLOAT_VAL       reduce using rule 65 (expression -> expression PLUS expression .)
-    PRINTF          reduce using rule 65 (expression -> expression PLUS expression .)
-    ID              reduce using rule 65 (expression -> expression PLUS expression .)
+    PLUS            reduce using rule 64 (expression -> expression PLUS expression .)
+    MINUS           reduce using rule 64 (expression -> expression PLUS expression .)
+    LESS            reduce using rule 64 (expression -> expression PLUS expression .)
+    GREATER         reduce using rule 64 (expression -> expression PLUS expression .)
+    SEMI            reduce using rule 64 (expression -> expression PLUS expression .)
+    RBRACE          reduce using rule 64 (expression -> expression PLUS expression .)
+    RPAREN          reduce using rule 64 (expression -> expression PLUS expression .)
+    COMMA           reduce using rule 64 (expression -> expression PLUS expression .)
+    SQ_RBRACKET     reduce using rule 64 (expression -> expression PLUS expression .)
     MULTIPLY        shift and go to state 52
     DIVIDE          shift and go to state 53
 
-  ! MULTIPLY        [ reduce using rule 65 (expression -> expression PLUS expression .) ]
-  ! DIVIDE          [ reduce using rule 65 (expression -> expression PLUS expression .) ]
+  ! MULTIPLY        [ reduce using rule 64 (expression -> expression PLUS expression .) ]
+  ! DIVIDE          [ reduce using rule 64 (expression -> expression PLUS expression .) ]
   ! PLUS            [ shift and go to state 50 ]
   ! MINUS           [ shift and go to state 51 ]
   ! LESS            [ shift and go to state 54 ]
@@ -2171,34 +2088,28 @@ state 82
 
 state 83
 
-    (66) expression -> expression MINUS expression .
-    (65) expression -> expression . PLUS expression
-    (66) expression -> expression . MINUS expression
-    (67) expression -> expression . MULTIPLY expression
-    (68) expression -> expression . DIVIDE expression
-    (69) expression -> expression . LESS expression
-    (70) expression -> expression . GREATER expression
+    (65) expression -> expression MINUS expression .
+    (64) expression -> expression . PLUS expression
+    (65) expression -> expression . MINUS expression
+    (66) expression -> expression . MULTIPLY expression
+    (67) expression -> expression . DIVIDE expression
+    (68) expression -> expression . LESS expression
+    (69) expression -> expression . GREATER expression
 
-    PLUS            reduce using rule 66 (expression -> expression MINUS expression .)
-    MINUS           reduce using rule 66 (expression -> expression MINUS expression .)
-    LESS            reduce using rule 66 (expression -> expression MINUS expression .)
-    GREATER         reduce using rule 66 (expression -> expression MINUS expression .)
-    SEMI            reduce using rule 66 (expression -> expression MINUS expression .)
-    RBRACE          reduce using rule 66 (expression -> expression MINUS expression .)
-    RPAREN          reduce using rule 66 (expression -> expression MINUS expression .)
-    COMMA           reduce using rule 66 (expression -> expression MINUS expression .)
-    SQ_RBRACKET     reduce using rule 66 (expression -> expression MINUS expression .)
-    LPAREN          reduce using rule 66 (expression -> expression MINUS expression .)
-    DOUBLEPLUS      reduce using rule 66 (expression -> expression MINUS expression .)
-    INT_VAL         reduce using rule 66 (expression -> expression MINUS expression .)
-    FLOAT_VAL       reduce using rule 66 (expression -> expression MINUS expression .)
-    PRINTF          reduce using rule 66 (expression -> expression MINUS expression .)
-    ID              reduce using rule 66 (expression -> expression MINUS expression .)
+    PLUS            reduce using rule 65 (expression -> expression MINUS expression .)
+    MINUS           reduce using rule 65 (expression -> expression MINUS expression .)
+    LESS            reduce using rule 65 (expression -> expression MINUS expression .)
+    GREATER         reduce using rule 65 (expression -> expression MINUS expression .)
+    SEMI            reduce using rule 65 (expression -> expression MINUS expression .)
+    RBRACE          reduce using rule 65 (expression -> expression MINUS expression .)
+    RPAREN          reduce using rule 65 (expression -> expression MINUS expression .)
+    COMMA           reduce using rule 65 (expression -> expression MINUS expression .)
+    SQ_RBRACKET     reduce using rule 65 (expression -> expression MINUS expression .)
     MULTIPLY        shift and go to state 52
     DIVIDE          shift and go to state 53
 
-  ! MULTIPLY        [ reduce using rule 66 (expression -> expression MINUS expression .) ]
-  ! DIVIDE          [ reduce using rule 66 (expression -> expression MINUS expression .) ]
+  ! MULTIPLY        [ reduce using rule 65 (expression -> expression MINUS expression .) ]
+  ! DIVIDE          [ reduce using rule 65 (expression -> expression MINUS expression .) ]
   ! PLUS            [ shift and go to state 50 ]
   ! MINUS           [ shift and go to state 51 ]
   ! LESS            [ shift and go to state 54 ]
@@ -2207,31 +2118,25 @@ state 83
 
 state 84
 
-    (67) expression -> expression MULTIPLY expression .
-    (65) expression -> expression . PLUS expression
-    (66) expression -> expression . MINUS expression
-    (67) expression -> expression . MULTIPLY expression
-    (68) expression -> expression . DIVIDE expression
-    (69) expression -> expression . LESS expression
-    (70) expression -> expression . GREATER expression
+    (66) expression -> expression MULTIPLY expression .
+    (64) expression -> expression . PLUS expression
+    (65) expression -> expression . MINUS expression
+    (66) expression -> expression . MULTIPLY expression
+    (67) expression -> expression . DIVIDE expression
+    (68) expression -> expression . LESS expression
+    (69) expression -> expression . GREATER expression
 
-    PLUS            reduce using rule 67 (expression -> expression MULTIPLY expression .)
-    MINUS           reduce using rule 67 (expression -> expression MULTIPLY expression .)
-    MULTIPLY        reduce using rule 67 (expression -> expression MULTIPLY expression .)
-    DIVIDE          reduce using rule 67 (expression -> expression MULTIPLY expression .)
-    LESS            reduce using rule 67 (expression -> expression MULTIPLY expression .)
-    GREATER         reduce using rule 67 (expression -> expression MULTIPLY expression .)
-    SEMI            reduce using rule 67 (expression -> expression MULTIPLY expression .)
-    RBRACE          reduce using rule 67 (expression -> expression MULTIPLY expression .)
-    RPAREN          reduce using rule 67 (expression -> expression MULTIPLY expression .)
-    COMMA           reduce using rule 67 (expression -> expression MULTIPLY expression .)
-    SQ_RBRACKET     reduce using rule 67 (expression -> expression MULTIPLY expression .)
-    LPAREN          reduce using rule 67 (expression -> expression MULTIPLY expression .)
-    DOUBLEPLUS      reduce using rule 67 (expression -> expression MULTIPLY expression .)
-    INT_VAL         reduce using rule 67 (expression -> expression MULTIPLY expression .)
-    FLOAT_VAL       reduce using rule 67 (expression -> expression MULTIPLY expression .)
-    PRINTF          reduce using rule 67 (expression -> expression MULTIPLY expression .)
-    ID              reduce using rule 67 (expression -> expression MULTIPLY expression .)
+    PLUS            reduce using rule 66 (expression -> expression MULTIPLY expression .)
+    MINUS           reduce using rule 66 (expression -> expression MULTIPLY expression .)
+    MULTIPLY        reduce using rule 66 (expression -> expression MULTIPLY expression .)
+    DIVIDE          reduce using rule 66 (expression -> expression MULTIPLY expression .)
+    LESS            reduce using rule 66 (expression -> expression MULTIPLY expression .)
+    GREATER         reduce using rule 66 (expression -> expression MULTIPLY expression .)
+    SEMI            reduce using rule 66 (expression -> expression MULTIPLY expression .)
+    RBRACE          reduce using rule 66 (expression -> expression MULTIPLY expression .)
+    RPAREN          reduce using rule 66 (expression -> expression MULTIPLY expression .)
+    COMMA           reduce using rule 66 (expression -> expression MULTIPLY expression .)
+    SQ_RBRACKET     reduce using rule 66 (expression -> expression MULTIPLY expression .)
 
   ! PLUS            [ shift and go to state 50 ]
   ! MINUS           [ shift and go to state 51 ]
@@ -2243,31 +2148,25 @@ state 84
 
 state 85
 
-    (68) expression -> expression DIVIDE expression .
-    (65) expression -> expression . PLUS expression
-    (66) expression -> expression . MINUS expression
-    (67) expression -> expression . MULTIPLY expression
-    (68) expression -> expression . DIVIDE expression
-    (69) expression -> expression . LESS expression
-    (70) expression -> expression . GREATER expression
+    (67) expression -> expression DIVIDE expression .
+    (64) expression -> expression . PLUS expression
+    (65) expression -> expression . MINUS expression
+    (66) expression -> expression . MULTIPLY expression
+    (67) expression -> expression . DIVIDE expression
+    (68) expression -> expression . LESS expression
+    (69) expression -> expression . GREATER expression
 
-    PLUS            reduce using rule 68 (expression -> expression DIVIDE expression .)
-    MINUS           reduce using rule 68 (expression -> expression DIVIDE expression .)
-    MULTIPLY        reduce using rule 68 (expression -> expression DIVIDE expression .)
-    DIVIDE          reduce using rule 68 (expression -> expression DIVIDE expression .)
-    LESS            reduce using rule 68 (expression -> expression DIVIDE expression .)
-    GREATER         reduce using rule 68 (expression -> expression DIVIDE expression .)
-    SEMI            reduce using rule 68 (expression -> expression DIVIDE expression .)
-    RBRACE          reduce using rule 68 (expression -> expression DIVIDE expression .)
-    RPAREN          reduce using rule 68 (expression -> expression DIVIDE expression .)
-    COMMA           reduce using rule 68 (expression -> expression DIVIDE expression .)
-    SQ_RBRACKET     reduce using rule 68 (expression -> expression DIVIDE expression .)
-    LPAREN          reduce using rule 68 (expression -> expression DIVIDE expression .)
-    DOUBLEPLUS      reduce using rule 68 (expression -> expression DIVIDE expression .)
-    INT_VAL         reduce using rule 68 (expression -> expression DIVIDE expression .)
-    FLOAT_VAL       reduce using rule 68 (expression -> expression DIVIDE expression .)
-    PRINTF          reduce using rule 68 (expression -> expression DIVIDE expression .)
-    ID              reduce using rule 68 (expression -> expression DIVIDE expression .)
+    PLUS            reduce using rule 67 (expression -> expression DIVIDE expression .)
+    MINUS           reduce using rule 67 (expression -> expression DIVIDE expression .)
+    MULTIPLY        reduce using rule 67 (expression -> expression DIVIDE expression .)
+    DIVIDE          reduce using rule 67 (expression -> expression DIVIDE expression .)
+    LESS            reduce using rule 67 (expression -> expression DIVIDE expression .)
+    GREATER         reduce using rule 67 (expression -> expression DIVIDE expression .)
+    SEMI            reduce using rule 67 (expression -> expression DIVIDE expression .)
+    RBRACE          reduce using rule 67 (expression -> expression DIVIDE expression .)
+    RPAREN          reduce using rule 67 (expression -> expression DIVIDE expression .)
+    COMMA           reduce using rule 67 (expression -> expression DIVIDE expression .)
+    SQ_RBRACKET     reduce using rule 67 (expression -> expression DIVIDE expression .)
 
   ! PLUS            [ shift and go to state 50 ]
   ! MINUS           [ shift and go to state 51 ]
@@ -2279,72 +2178,60 @@ state 85
 
 state 86
 
-    (69) expression -> expression LESS expression .
-    (65) expression -> expression . PLUS expression
-    (66) expression -> expression . MINUS expression
-    (67) expression -> expression . MULTIPLY expression
-    (68) expression -> expression . DIVIDE expression
-    (69) expression -> expression . LESS expression
-    (70) expression -> expression . GREATER expression
+    (68) expression -> expression LESS expression .
+    (64) expression -> expression . PLUS expression
+    (65) expression -> expression . MINUS expression
+    (66) expression -> expression . MULTIPLY expression
+    (67) expression -> expression . DIVIDE expression
+    (68) expression -> expression . LESS expression
+    (69) expression -> expression . GREATER expression
 
-    LESS            reduce using rule 69 (expression -> expression LESS expression .)
-    GREATER         reduce using rule 69 (expression -> expression LESS expression .)
-    SEMI            reduce using rule 69 (expression -> expression LESS expression .)
-    RBRACE          reduce using rule 69 (expression -> expression LESS expression .)
-    RPAREN          reduce using rule 69 (expression -> expression LESS expression .)
-    COMMA           reduce using rule 69 (expression -> expression LESS expression .)
-    SQ_RBRACKET     reduce using rule 69 (expression -> expression LESS expression .)
-    LPAREN          reduce using rule 69 (expression -> expression LESS expression .)
-    DOUBLEPLUS      reduce using rule 69 (expression -> expression LESS expression .)
-    INT_VAL         reduce using rule 69 (expression -> expression LESS expression .)
-    FLOAT_VAL       reduce using rule 69 (expression -> expression LESS expression .)
-    PRINTF          reduce using rule 69 (expression -> expression LESS expression .)
-    ID              reduce using rule 69 (expression -> expression LESS expression .)
+    LESS            reduce using rule 68 (expression -> expression LESS expression .)
+    GREATER         reduce using rule 68 (expression -> expression LESS expression .)
+    SEMI            reduce using rule 68 (expression -> expression LESS expression .)
+    RBRACE          reduce using rule 68 (expression -> expression LESS expression .)
+    RPAREN          reduce using rule 68 (expression -> expression LESS expression .)
+    COMMA           reduce using rule 68 (expression -> expression LESS expression .)
+    SQ_RBRACKET     reduce using rule 68 (expression -> expression LESS expression .)
     PLUS            shift and go to state 50
     MINUS           shift and go to state 51
     MULTIPLY        shift and go to state 52
     DIVIDE          shift and go to state 53
 
-  ! PLUS            [ reduce using rule 69 (expression -> expression LESS expression .) ]
-  ! MINUS           [ reduce using rule 69 (expression -> expression LESS expression .) ]
-  ! MULTIPLY        [ reduce using rule 69 (expression -> expression LESS expression .) ]
-  ! DIVIDE          [ reduce using rule 69 (expression -> expression LESS expression .) ]
+  ! PLUS            [ reduce using rule 68 (expression -> expression LESS expression .) ]
+  ! MINUS           [ reduce using rule 68 (expression -> expression LESS expression .) ]
+  ! MULTIPLY        [ reduce using rule 68 (expression -> expression LESS expression .) ]
+  ! DIVIDE          [ reduce using rule 68 (expression -> expression LESS expression .) ]
   ! LESS            [ shift and go to state 54 ]
   ! GREATER         [ shift and go to state 55 ]
 
 
 state 87
 
-    (70) expression -> expression GREATER expression .
-    (65) expression -> expression . PLUS expression
-    (66) expression -> expression . MINUS expression
-    (67) expression -> expression . MULTIPLY expression
-    (68) expression -> expression . DIVIDE expression
-    (69) expression -> expression . LESS expression
-    (70) expression -> expression . GREATER expression
+    (69) expression -> expression GREATER expression .
+    (64) expression -> expression . PLUS expression
+    (65) expression -> expression . MINUS expression
+    (66) expression -> expression . MULTIPLY expression
+    (67) expression -> expression . DIVIDE expression
+    (68) expression -> expression . LESS expression
+    (69) expression -> expression . GREATER expression
 
-    LESS            reduce using rule 70 (expression -> expression GREATER expression .)
-    GREATER         reduce using rule 70 (expression -> expression GREATER expression .)
-    SEMI            reduce using rule 70 (expression -> expression GREATER expression .)
-    RBRACE          reduce using rule 70 (expression -> expression GREATER expression .)
-    RPAREN          reduce using rule 70 (expression -> expression GREATER expression .)
-    COMMA           reduce using rule 70 (expression -> expression GREATER expression .)
-    SQ_RBRACKET     reduce using rule 70 (expression -> expression GREATER expression .)
-    LPAREN          reduce using rule 70 (expression -> expression GREATER expression .)
-    DOUBLEPLUS      reduce using rule 70 (expression -> expression GREATER expression .)
-    INT_VAL         reduce using rule 70 (expression -> expression GREATER expression .)
-    FLOAT_VAL       reduce using rule 70 (expression -> expression GREATER expression .)
-    PRINTF          reduce using rule 70 (expression -> expression GREATER expression .)
-    ID              reduce using rule 70 (expression -> expression GREATER expression .)
+    LESS            reduce using rule 69 (expression -> expression GREATER expression .)
+    GREATER         reduce using rule 69 (expression -> expression GREATER expression .)
+    SEMI            reduce using rule 69 (expression -> expression GREATER expression .)
+    RBRACE          reduce using rule 69 (expression -> expression GREATER expression .)
+    RPAREN          reduce using rule 69 (expression -> expression GREATER expression .)
+    COMMA           reduce using rule 69 (expression -> expression GREATER expression .)
+    SQ_RBRACKET     reduce using rule 69 (expression -> expression GREATER expression .)
     PLUS            shift and go to state 50
     MINUS           shift and go to state 51
     MULTIPLY        shift and go to state 52
     DIVIDE          shift and go to state 53
 
-  ! PLUS            [ reduce using rule 70 (expression -> expression GREATER expression .) ]
-  ! MINUS           [ reduce using rule 70 (expression -> expression GREATER expression .) ]
-  ! MULTIPLY        [ reduce using rule 70 (expression -> expression GREATER expression .) ]
-  ! DIVIDE          [ reduce using rule 70 (expression -> expression GREATER expression .) ]
+  ! PLUS            [ reduce using rule 69 (expression -> expression GREATER expression .) ]
+  ! MINUS           [ reduce using rule 69 (expression -> expression GREATER expression .) ]
+  ! MULTIPLY        [ reduce using rule 69 (expression -> expression GREATER expression .) ]
+  ! DIVIDE          [ reduce using rule 69 (expression -> expression GREATER expression .) ]
   ! LESS            [ shift and go to state 54 ]
   ! GREATER         [ shift and go to state 55 ]
 
@@ -2402,12 +2289,12 @@ state 89
 state 90
 
     (48) var_assignment -> id_ptr_or_array EQ expression .
-    (65) expression -> expression . PLUS expression
-    (66) expression -> expression . MINUS expression
-    (67) expression -> expression . MULTIPLY expression
-    (68) expression -> expression . DIVIDE expression
-    (69) expression -> expression . LESS expression
-    (70) expression -> expression . GREATER expression
+    (64) expression -> expression . PLUS expression
+    (65) expression -> expression . MINUS expression
+    (66) expression -> expression . MULTIPLY expression
+    (67) expression -> expression . DIVIDE expression
+    (68) expression -> expression . LESS expression
+    (69) expression -> expression . GREATER expression
 
   ! shift/reduce conflict for PLUS resolved as shift
   ! shift/reduce conflict for MINUS resolved as shift
@@ -2420,12 +2307,6 @@ state 90
     COMMA           reduce using rule 48 (var_assignment -> id_ptr_or_array EQ expression .)
     RPAREN          reduce using rule 48 (var_assignment -> id_ptr_or_array EQ expression .)
     SQ_RBRACKET     reduce using rule 48 (var_assignment -> id_ptr_or_array EQ expression .)
-    LPAREN          reduce using rule 48 (var_assignment -> id_ptr_or_array EQ expression .)
-    DOUBLEPLUS      reduce using rule 48 (var_assignment -> id_ptr_or_array EQ expression .)
-    INT_VAL         reduce using rule 48 (var_assignment -> id_ptr_or_array EQ expression .)
-    FLOAT_VAL       reduce using rule 48 (var_assignment -> id_ptr_or_array EQ expression .)
-    PRINTF          reduce using rule 48 (var_assignment -> id_ptr_or_array EQ expression .)
-    ID              reduce using rule 48 (var_assignment -> id_ptr_or_array EQ expression .)
     PLUS            shift and go to state 50
     MINUS           shift and go to state 51
     MULTIPLY        shift and go to state 52
@@ -2444,7 +2325,7 @@ state 90
 state 91
 
     (49) var_assignment -> id_ptr_or_array EQ function_app .
-    (76) expression -> function_app .
+    (75) expression -> function_app .
 
   ! reduce/reduce conflict for PLUS resolved using rule 49 (var_assignment -> id_ptr_or_array EQ function_app .)
   ! reduce/reduce conflict for MINUS resolved using rule 49 (var_assignment -> id_ptr_or_array EQ function_app .)
@@ -2457,12 +2338,6 @@ state 91
   ! reduce/reduce conflict for RPAREN resolved using rule 49 (var_assignment -> id_ptr_or_array EQ function_app .)
   ! reduce/reduce conflict for COMMA resolved using rule 49 (var_assignment -> id_ptr_or_array EQ function_app .)
   ! reduce/reduce conflict for SQ_RBRACKET resolved using rule 49 (var_assignment -> id_ptr_or_array EQ function_app .)
-  ! reduce/reduce conflict for LPAREN resolved using rule 49 (var_assignment -> id_ptr_or_array EQ function_app .)
-  ! reduce/reduce conflict for DOUBLEPLUS resolved using rule 49 (var_assignment -> id_ptr_or_array EQ function_app .)
-  ! reduce/reduce conflict for INT_VAL resolved using rule 49 (var_assignment -> id_ptr_or_array EQ function_app .)
-  ! reduce/reduce conflict for FLOAT_VAL resolved using rule 49 (var_assignment -> id_ptr_or_array EQ function_app .)
-  ! reduce/reduce conflict for PRINTF resolved using rule 49 (var_assignment -> id_ptr_or_array EQ function_app .)
-  ! reduce/reduce conflict for ID resolved using rule 49 (var_assignment -> id_ptr_or_array EQ function_app .)
     SEMI            reduce using rule 49 (var_assignment -> id_ptr_or_array EQ function_app .)
     RBRACE          reduce using rule 49 (var_assignment -> id_ptr_or_array EQ function_app .)
     PLUS            reduce using rule 49 (var_assignment -> id_ptr_or_array EQ function_app .)
@@ -2474,128 +2349,70 @@ state 91
     COMMA           reduce using rule 49 (var_assignment -> id_ptr_or_array EQ function_app .)
     RPAREN          reduce using rule 49 (var_assignment -> id_ptr_or_array EQ function_app .)
     SQ_RBRACKET     reduce using rule 49 (var_assignment -> id_ptr_or_array EQ function_app .)
-    LPAREN          reduce using rule 49 (var_assignment -> id_ptr_or_array EQ function_app .)
-    DOUBLEPLUS      reduce using rule 49 (var_assignment -> id_ptr_or_array EQ function_app .)
-    INT_VAL         reduce using rule 49 (var_assignment -> id_ptr_or_array EQ function_app .)
-    FLOAT_VAL       reduce using rule 49 (var_assignment -> id_ptr_or_array EQ function_app .)
-    PRINTF          reduce using rule 49 (var_assignment -> id_ptr_or_array EQ function_app .)
-    ID              reduce using rule 49 (var_assignment -> id_ptr_or_array EQ function_app .)
 
-  ! PLUS            [ reduce using rule 76 (expression -> function_app .) ]
-  ! MINUS           [ reduce using rule 76 (expression -> function_app .) ]
-  ! MULTIPLY        [ reduce using rule 76 (expression -> function_app .) ]
-  ! DIVIDE          [ reduce using rule 76 (expression -> function_app .) ]
-  ! LESS            [ reduce using rule 76 (expression -> function_app .) ]
-  ! GREATER         [ reduce using rule 76 (expression -> function_app .) ]
-  ! SEMI            [ reduce using rule 76 (expression -> function_app .) ]
-  ! RBRACE          [ reduce using rule 76 (expression -> function_app .) ]
-  ! RPAREN          [ reduce using rule 76 (expression -> function_app .) ]
-  ! COMMA           [ reduce using rule 76 (expression -> function_app .) ]
-  ! SQ_RBRACKET     [ reduce using rule 76 (expression -> function_app .) ]
-  ! LPAREN          [ reduce using rule 76 (expression -> function_app .) ]
-  ! DOUBLEPLUS      [ reduce using rule 76 (expression -> function_app .) ]
-  ! INT_VAL         [ reduce using rule 76 (expression -> function_app .) ]
-  ! FLOAT_VAL       [ reduce using rule 76 (expression -> function_app .) ]
-  ! PRINTF          [ reduce using rule 76 (expression -> function_app .) ]
-  ! ID              [ reduce using rule 76 (expression -> function_app .) ]
+  ! PLUS            [ reduce using rule 75 (expression -> function_app .) ]
+  ! MINUS           [ reduce using rule 75 (expression -> function_app .) ]
+  ! MULTIPLY        [ reduce using rule 75 (expression -> function_app .) ]
+  ! DIVIDE          [ reduce using rule 75 (expression -> function_app .) ]
+  ! LESS            [ reduce using rule 75 (expression -> function_app .) ]
+  ! GREATER         [ reduce using rule 75 (expression -> function_app .) ]
+  ! SEMI            [ reduce using rule 75 (expression -> function_app .) ]
+  ! RBRACE          [ reduce using rule 75 (expression -> function_app .) ]
+  ! RPAREN          [ reduce using rule 75 (expression -> function_app .) ]
+  ! COMMA           [ reduce using rule 75 (expression -> function_app .) ]
+  ! SQ_RBRACKET     [ reduce using rule 75 (expression -> function_app .) ]
 
 
 state 92
 
     (56) function_app -> PRINTF LPAREN STRING . print_formats RPAREN
     (58) print_formats -> . COMMA expression print_formats
-    (59) print_formats -> . expression
-    (60) print_formats -> . empty
-    (65) expression -> . expression PLUS expression
-    (66) expression -> . expression MINUS expression
-    (67) expression -> . expression MULTIPLY expression
-    (68) expression -> . expression DIVIDE expression
-    (69) expression -> . expression LESS expression
-    (70) expression -> . expression GREATER expression
-    (71) expression -> . LPAREN expression RPAREN
-    (72) expression -> . MINUS expression
-    (73) expression -> . id_ptr_or_array DOUBLEPLUS
-    (74) expression -> . DOUBLEPLUS id_ptr_or_array
-    (75) expression -> . id_ptr_or_array
-    (76) expression -> . function_app
-    (77) expression -> . var_assignment
-    (78) expression -> . INT_VAL
-    (79) expression -> . FLOAT_VAL
-    (64) empty -> .
-    (11) id_ptr_or_array -> . id
-    (12) id_ptr_or_array -> . id array_decs
-    (13) id_ptr_or_array -> . ptrs id
-    (56) function_app -> . PRINTF LPAREN STRING print_formats RPAREN
-    (57) function_app -> . ID LPAREN arguments RPAREN
-    (48) var_assignment -> . id_ptr_or_array EQ expression
-    (49) var_assignment -> . id_ptr_or_array EQ function_app
-    (6) id -> . ID
-    (16) ptrs -> . MULTIPLY ptrs
-    (17) ptrs -> . MULTIPLY
+    (59) print_formats -> . empty
+    (63) empty -> .
 
     COMMA           shift and go to state 114
-    LPAREN          shift and go to state 31
-    MINUS           shift and go to state 33
-    DOUBLEPLUS      shift and go to state 35
-    INT_VAL         shift and go to state 36
-    FLOAT_VAL       shift and go to state 37
-    RPAREN          reduce using rule 64 (empty -> .)
-    PRINTF          shift and go to state 30
-    ID              shift and go to state 32
-    MULTIPLY        shift and go to state 34
+    RPAREN          reduce using rule 63 (empty -> .)
 
     print_formats                  shift and go to state 113
-    expression                     shift and go to state 115
-    empty                          shift and go to state 116
-    id_ptr_or_array                shift and go to state 63
-    function_app                   shift and go to state 64
-    var_assignment                 shift and go to state 65
-    id                             shift and go to state 42
-    ptrs                           shift and go to state 43
+    empty                          shift and go to state 115
 
 state 93
 
-    (71) expression -> LPAREN expression RPAREN .
+    (70) expression -> LPAREN expression RPAREN .
 
-    PLUS            reduce using rule 71 (expression -> LPAREN expression RPAREN .)
-    MINUS           reduce using rule 71 (expression -> LPAREN expression RPAREN .)
-    MULTIPLY        reduce using rule 71 (expression -> LPAREN expression RPAREN .)
-    DIVIDE          reduce using rule 71 (expression -> LPAREN expression RPAREN .)
-    LESS            reduce using rule 71 (expression -> LPAREN expression RPAREN .)
-    GREATER         reduce using rule 71 (expression -> LPAREN expression RPAREN .)
-    SEMI            reduce using rule 71 (expression -> LPAREN expression RPAREN .)
-    RBRACE          reduce using rule 71 (expression -> LPAREN expression RPAREN .)
-    RPAREN          reduce using rule 71 (expression -> LPAREN expression RPAREN .)
-    COMMA           reduce using rule 71 (expression -> LPAREN expression RPAREN .)
-    SQ_RBRACKET     reduce using rule 71 (expression -> LPAREN expression RPAREN .)
-    LPAREN          reduce using rule 71 (expression -> LPAREN expression RPAREN .)
-    DOUBLEPLUS      reduce using rule 71 (expression -> LPAREN expression RPAREN .)
-    INT_VAL         reduce using rule 71 (expression -> LPAREN expression RPAREN .)
-    FLOAT_VAL       reduce using rule 71 (expression -> LPAREN expression RPAREN .)
-    PRINTF          reduce using rule 71 (expression -> LPAREN expression RPAREN .)
-    ID              reduce using rule 71 (expression -> LPAREN expression RPAREN .)
+    PLUS            reduce using rule 70 (expression -> LPAREN expression RPAREN .)
+    MINUS           reduce using rule 70 (expression -> LPAREN expression RPAREN .)
+    MULTIPLY        reduce using rule 70 (expression -> LPAREN expression RPAREN .)
+    DIVIDE          reduce using rule 70 (expression -> LPAREN expression RPAREN .)
+    LESS            reduce using rule 70 (expression -> LPAREN expression RPAREN .)
+    GREATER         reduce using rule 70 (expression -> LPAREN expression RPAREN .)
+    SEMI            reduce using rule 70 (expression -> LPAREN expression RPAREN .)
+    RBRACE          reduce using rule 70 (expression -> LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 70 (expression -> LPAREN expression RPAREN .)
+    COMMA           reduce using rule 70 (expression -> LPAREN expression RPAREN .)
+    SQ_RBRACKET     reduce using rule 70 (expression -> LPAREN expression RPAREN .)
 
 
 state 94
 
     (57) function_app -> ID LPAREN arguments . RPAREN
 
-    RPAREN          shift and go to state 117
+    RPAREN          shift and go to state 116
 
 
 state 95
 
-    (61) arguments -> expression . COMMA arguments
-    (62) arguments -> expression .
-    (65) expression -> expression . PLUS expression
-    (66) expression -> expression . MINUS expression
-    (67) expression -> expression . MULTIPLY expression
-    (68) expression -> expression . DIVIDE expression
-    (69) expression -> expression . LESS expression
-    (70) expression -> expression . GREATER expression
+    (60) arguments -> expression . COMMA arguments
+    (61) arguments -> expression .
+    (64) expression -> expression . PLUS expression
+    (65) expression -> expression . MINUS expression
+    (66) expression -> expression . MULTIPLY expression
+    (67) expression -> expression . DIVIDE expression
+    (68) expression -> expression . LESS expression
+    (69) expression -> expression . GREATER expression
 
-    COMMA           shift and go to state 118
-    RPAREN          reduce using rule 62 (arguments -> expression .)
+    COMMA           shift and go to state 117
+    RPAREN          reduce using rule 61 (arguments -> expression .)
     PLUS            shift and go to state 50
     MINUS           shift and go to state 51
     MULTIPLY        shift and go to state 52
@@ -2606,16 +2423,16 @@ state 95
 
 state 96
 
-    (63) arguments -> empty .
+    (62) arguments -> empty .
 
-    RPAREN          reduce using rule 63 (arguments -> empty .)
+    RPAREN          reduce using rule 62 (arguments -> empty .)
 
 
 state 97
 
     (34) elif_else -> ELSE IF . LPAREN expression RPAREN block elif_else
 
-    LPAREN          shift and go to state 119
+    LPAREN          shift and go to state 118
 
 
 state 98
@@ -2643,7 +2460,7 @@ state 99
 
     (37) for -> FOR LPAREN loop_init_or_empty . SEMI semi_statement_or_empty SEMI semi_statement_or_empty RPAREN block
 
-    SEMI            shift and go to state 120
+    SEMI            shift and go to state 119
 
 
 state 100
@@ -2656,12 +2473,12 @@ state 100
 state 101
 
     (39) loop_init_or_empty -> expression .
-    (65) expression -> expression . PLUS expression
-    (66) expression -> expression . MINUS expression
-    (67) expression -> expression . MULTIPLY expression
-    (68) expression -> expression . DIVIDE expression
-    (69) expression -> expression . LESS expression
-    (70) expression -> expression . GREATER expression
+    (64) expression -> expression . PLUS expression
+    (65) expression -> expression . MINUS expression
+    (66) expression -> expression . MULTIPLY expression
+    (67) expression -> expression . DIVIDE expression
+    (68) expression -> expression . LESS expression
+    (69) expression -> expression . GREATER expression
     (27) semi_statement -> expression .
 
   ! reduce/reduce conflict for SEMI resolved using rule 27 (semi_statement -> expression .)
@@ -2703,27 +2520,27 @@ state 103
     ID              shift and go to state 8
     MULTIPLY        shift and go to state 34
 
-    var_assignment                 shift and go to state 121
+    var_assignment                 shift and go to state 120
     var_and_assign                 shift and go to state 56
-    id_ptr_or_array                shift and go to state 122
+    id_ptr_or_array                shift and go to state 121
     id                             shift and go to state 42
     ptrs                           shift and go to state 43
 
 state 104
 
-    (77) expression -> var_assignment .
+    (76) expression -> var_assignment .
     (25) semi_statement -> var_assignment .
 
   ! reduce/reduce conflict for SEMI resolved using rule 25 (semi_statement -> var_assignment .)
-    PLUS            reduce using rule 77 (expression -> var_assignment .)
-    MINUS           reduce using rule 77 (expression -> var_assignment .)
-    MULTIPLY        reduce using rule 77 (expression -> var_assignment .)
-    DIVIDE          reduce using rule 77 (expression -> var_assignment .)
-    LESS            reduce using rule 77 (expression -> var_assignment .)
-    GREATER         reduce using rule 77 (expression -> var_assignment .)
+    PLUS            reduce using rule 76 (expression -> var_assignment .)
+    MINUS           reduce using rule 76 (expression -> var_assignment .)
+    MULTIPLY        reduce using rule 76 (expression -> var_assignment .)
+    DIVIDE          reduce using rule 76 (expression -> var_assignment .)
+    LESS            reduce using rule 76 (expression -> var_assignment .)
+    GREATER         reduce using rule 76 (expression -> var_assignment .)
     SEMI            reduce using rule 25 (semi_statement -> var_assignment .)
 
-  ! SEMI            [ reduce using rule 77 (expression -> var_assignment .) ]
+  ! SEMI            [ reduce using rule 76 (expression -> var_assignment .) ]
 
 
 state 105
@@ -2735,32 +2552,32 @@ state 105
 
 state 106
 
-    (76) expression -> function_app .
+    (75) expression -> function_app .
     (26) semi_statement -> function_app .
 
   ! reduce/reduce conflict for SEMI resolved using rule 26 (semi_statement -> function_app .)
-    PLUS            reduce using rule 76 (expression -> function_app .)
-    MINUS           reduce using rule 76 (expression -> function_app .)
-    MULTIPLY        reduce using rule 76 (expression -> function_app .)
-    DIVIDE          reduce using rule 76 (expression -> function_app .)
-    LESS            reduce using rule 76 (expression -> function_app .)
-    GREATER         reduce using rule 76 (expression -> function_app .)
+    PLUS            reduce using rule 75 (expression -> function_app .)
+    MINUS           reduce using rule 75 (expression -> function_app .)
+    MULTIPLY        reduce using rule 75 (expression -> function_app .)
+    DIVIDE          reduce using rule 75 (expression -> function_app .)
+    LESS            reduce using rule 75 (expression -> function_app .)
+    GREATER         reduce using rule 75 (expression -> function_app .)
     SEMI            reduce using rule 26 (semi_statement -> function_app .)
 
-  ! SEMI            [ reduce using rule 76 (expression -> function_app .) ]
+  ! SEMI            [ reduce using rule 75 (expression -> function_app .) ]
 
 
 state 107
 
     (46) while -> WHILE LPAREN expression . RPAREN block
-    (65) expression -> expression . PLUS expression
-    (66) expression -> expression . MINUS expression
-    (67) expression -> expression . MULTIPLY expression
-    (68) expression -> expression . DIVIDE expression
-    (69) expression -> expression . LESS expression
-    (70) expression -> expression . GREATER expression
+    (64) expression -> expression . PLUS expression
+    (65) expression -> expression . MINUS expression
+    (66) expression -> expression . MULTIPLY expression
+    (67) expression -> expression . DIVIDE expression
+    (68) expression -> expression . LESS expression
+    (69) expression -> expression . GREATER expression
 
-    RPAREN          shift and go to state 123
+    RPAREN          shift and go to state 122
     PLUS            shift and go to state 50
     MINUS           shift and go to state 51
     MULTIPLY        shift and go to state 52
@@ -2773,14 +2590,14 @@ state 108
 
     (14) array_decs -> SQ_LBRACKET expression . SQ_RBRACKET array_decs
     (15) array_decs -> SQ_LBRACKET expression . SQ_RBRACKET
-    (65) expression -> expression . PLUS expression
-    (66) expression -> expression . MINUS expression
-    (67) expression -> expression . MULTIPLY expression
-    (68) expression -> expression . DIVIDE expression
-    (69) expression -> expression . LESS expression
-    (70) expression -> expression . GREATER expression
+    (64) expression -> expression . PLUS expression
+    (65) expression -> expression . MINUS expression
+    (66) expression -> expression . MULTIPLY expression
+    (67) expression -> expression . DIVIDE expression
+    (68) expression -> expression . LESS expression
+    (69) expression -> expression . GREATER expression
 
-    SQ_RBRACKET     shift and go to state 124
+    SQ_RBRACKET     shift and go to state 123
     PLUS            shift and go to state 50
     MINUS           shift and go to state 51
     MULTIPLY        shift and go to state 52
@@ -2792,14 +2609,14 @@ state 108
 state 109
 
     (33) if -> IF LPAREN expression . RPAREN block
-    (65) expression -> expression . PLUS expression
-    (66) expression -> expression . MINUS expression
-    (67) expression -> expression . MULTIPLY expression
-    (68) expression -> expression . DIVIDE expression
-    (69) expression -> expression . LESS expression
-    (70) expression -> expression . GREATER expression
+    (64) expression -> expression . PLUS expression
+    (65) expression -> expression . MINUS expression
+    (66) expression -> expression . MULTIPLY expression
+    (67) expression -> expression . DIVIDE expression
+    (68) expression -> expression . LESS expression
+    (69) expression -> expression . GREATER expression
 
-    RPAREN          shift and go to state 125
+    RPAREN          shift and go to state 124
     PLUS            shift and go to state 50
     MINUS           shift and go to state 51
     MULTIPLY        shift and go to state 52
@@ -2837,27 +2654,27 @@ state 113
 
     (56) function_app -> PRINTF LPAREN STRING print_formats . RPAREN
 
-    RPAREN          shift and go to state 126
+    RPAREN          shift and go to state 125
 
 
 state 114
 
     (58) print_formats -> COMMA . expression print_formats
-    (65) expression -> . expression PLUS expression
-    (66) expression -> . expression MINUS expression
-    (67) expression -> . expression MULTIPLY expression
-    (68) expression -> . expression DIVIDE expression
-    (69) expression -> . expression LESS expression
-    (70) expression -> . expression GREATER expression
-    (71) expression -> . LPAREN expression RPAREN
-    (72) expression -> . MINUS expression
-    (73) expression -> . id_ptr_or_array DOUBLEPLUS
-    (74) expression -> . DOUBLEPLUS id_ptr_or_array
-    (75) expression -> . id_ptr_or_array
-    (76) expression -> . function_app
-    (77) expression -> . var_assignment
-    (78) expression -> . INT_VAL
-    (79) expression -> . FLOAT_VAL
+    (64) expression -> . expression PLUS expression
+    (65) expression -> . expression MINUS expression
+    (66) expression -> . expression MULTIPLY expression
+    (67) expression -> . expression DIVIDE expression
+    (68) expression -> . expression LESS expression
+    (69) expression -> . expression GREATER expression
+    (70) expression -> . LPAREN expression RPAREN
+    (71) expression -> . MINUS expression
+    (72) expression -> . id_ptr_or_array DOUBLEPLUS
+    (73) expression -> . DOUBLEPLUS id_ptr_or_array
+    (74) expression -> . id_ptr_or_array
+    (75) expression -> . function_app
+    (76) expression -> . var_assignment
+    (77) expression -> . INT_VAL
+    (78) expression -> . FLOAT_VAL
     (11) id_ptr_or_array -> . id
     (12) id_ptr_or_array -> . id array_decs
     (13) id_ptr_or_array -> . ptrs id
@@ -2878,7 +2695,7 @@ state 114
     ID              shift and go to state 32
     MULTIPLY        shift and go to state 34
 
-    expression                     shift and go to state 127
+    expression                     shift and go to state 126
     id_ptr_or_array                shift and go to state 63
     function_app                   shift and go to state 64
     var_assignment                 shift and go to state 65
@@ -2887,31 +2704,12 @@ state 114
 
 state 115
 
-    (59) print_formats -> expression .
-    (65) expression -> expression . PLUS expression
-    (66) expression -> expression . MINUS expression
-    (67) expression -> expression . MULTIPLY expression
-    (68) expression -> expression . DIVIDE expression
-    (69) expression -> expression . LESS expression
-    (70) expression -> expression . GREATER expression
+    (59) print_formats -> empty .
 
-    RPAREN          reduce using rule 59 (print_formats -> expression .)
-    PLUS            shift and go to state 50
-    MINUS           shift and go to state 51
-    MULTIPLY        shift and go to state 52
-    DIVIDE          shift and go to state 53
-    LESS            shift and go to state 54
-    GREATER         shift and go to state 55
+    RPAREN          reduce using rule 59 (print_formats -> empty .)
 
 
 state 116
-
-    (60) print_formats -> empty .
-
-    RPAREN          reduce using rule 60 (print_formats -> empty .)
-
-
-state 117
 
     (57) function_app -> ID LPAREN arguments RPAREN .
 
@@ -2926,36 +2724,30 @@ state 117
     RPAREN          reduce using rule 57 (function_app -> ID LPAREN arguments RPAREN .)
     COMMA           reduce using rule 57 (function_app -> ID LPAREN arguments RPAREN .)
     SQ_RBRACKET     reduce using rule 57 (function_app -> ID LPAREN arguments RPAREN .)
-    LPAREN          reduce using rule 57 (function_app -> ID LPAREN arguments RPAREN .)
-    DOUBLEPLUS      reduce using rule 57 (function_app -> ID LPAREN arguments RPAREN .)
-    INT_VAL         reduce using rule 57 (function_app -> ID LPAREN arguments RPAREN .)
-    FLOAT_VAL       reduce using rule 57 (function_app -> ID LPAREN arguments RPAREN .)
-    PRINTF          reduce using rule 57 (function_app -> ID LPAREN arguments RPAREN .)
-    ID              reduce using rule 57 (function_app -> ID LPAREN arguments RPAREN .)
 
 
-state 118
+state 117
 
-    (61) arguments -> expression COMMA . arguments
-    (61) arguments -> . expression COMMA arguments
-    (62) arguments -> . expression
-    (63) arguments -> . empty
-    (65) expression -> . expression PLUS expression
-    (66) expression -> . expression MINUS expression
-    (67) expression -> . expression MULTIPLY expression
-    (68) expression -> . expression DIVIDE expression
-    (69) expression -> . expression LESS expression
-    (70) expression -> . expression GREATER expression
-    (71) expression -> . LPAREN expression RPAREN
-    (72) expression -> . MINUS expression
-    (73) expression -> . id_ptr_or_array DOUBLEPLUS
-    (74) expression -> . DOUBLEPLUS id_ptr_or_array
-    (75) expression -> . id_ptr_or_array
-    (76) expression -> . function_app
-    (77) expression -> . var_assignment
-    (78) expression -> . INT_VAL
-    (79) expression -> . FLOAT_VAL
-    (64) empty -> .
+    (60) arguments -> expression COMMA . arguments
+    (60) arguments -> . expression COMMA arguments
+    (61) arguments -> . expression
+    (62) arguments -> . empty
+    (64) expression -> . expression PLUS expression
+    (65) expression -> . expression MINUS expression
+    (66) expression -> . expression MULTIPLY expression
+    (67) expression -> . expression DIVIDE expression
+    (68) expression -> . expression LESS expression
+    (69) expression -> . expression GREATER expression
+    (70) expression -> . LPAREN expression RPAREN
+    (71) expression -> . MINUS expression
+    (72) expression -> . id_ptr_or_array DOUBLEPLUS
+    (73) expression -> . DOUBLEPLUS id_ptr_or_array
+    (74) expression -> . id_ptr_or_array
+    (75) expression -> . function_app
+    (76) expression -> . var_assignment
+    (77) expression -> . INT_VAL
+    (78) expression -> . FLOAT_VAL
+    (63) empty -> .
     (11) id_ptr_or_array -> . id
     (12) id_ptr_or_array -> . id array_decs
     (13) id_ptr_or_array -> . ptrs id
@@ -2972,13 +2764,13 @@ state 118
     DOUBLEPLUS      shift and go to state 35
     INT_VAL         shift and go to state 36
     FLOAT_VAL       shift and go to state 37
-    RPAREN          reduce using rule 64 (empty -> .)
+    RPAREN          reduce using rule 63 (empty -> .)
     PRINTF          shift and go to state 30
     ID              shift and go to state 32
     MULTIPLY        shift and go to state 34
 
     expression                     shift and go to state 95
-    arguments                      shift and go to state 128
+    arguments                      shift and go to state 127
     empty                          shift and go to state 96
     id_ptr_or_array                shift and go to state 63
     function_app                   shift and go to state 64
@@ -2986,24 +2778,24 @@ state 118
     id                             shift and go to state 42
     ptrs                           shift and go to state 43
 
-state 119
+state 118
 
     (34) elif_else -> ELSE IF LPAREN . expression RPAREN block elif_else
-    (65) expression -> . expression PLUS expression
-    (66) expression -> . expression MINUS expression
-    (67) expression -> . expression MULTIPLY expression
-    (68) expression -> . expression DIVIDE expression
-    (69) expression -> . expression LESS expression
-    (70) expression -> . expression GREATER expression
-    (71) expression -> . LPAREN expression RPAREN
-    (72) expression -> . MINUS expression
-    (73) expression -> . id_ptr_or_array DOUBLEPLUS
-    (74) expression -> . DOUBLEPLUS id_ptr_or_array
-    (75) expression -> . id_ptr_or_array
-    (76) expression -> . function_app
-    (77) expression -> . var_assignment
-    (78) expression -> . INT_VAL
-    (79) expression -> . FLOAT_VAL
+    (64) expression -> . expression PLUS expression
+    (65) expression -> . expression MINUS expression
+    (66) expression -> . expression MULTIPLY expression
+    (67) expression -> . expression DIVIDE expression
+    (68) expression -> . expression LESS expression
+    (69) expression -> . expression GREATER expression
+    (70) expression -> . LPAREN expression RPAREN
+    (71) expression -> . MINUS expression
+    (72) expression -> . id_ptr_or_array DOUBLEPLUS
+    (73) expression -> . DOUBLEPLUS id_ptr_or_array
+    (74) expression -> . id_ptr_or_array
+    (75) expression -> . function_app
+    (76) expression -> . var_assignment
+    (77) expression -> . INT_VAL
+    (78) expression -> . FLOAT_VAL
     (11) id_ptr_or_array -> . id
     (12) id_ptr_or_array -> . id array_decs
     (13) id_ptr_or_array -> . ptrs id
@@ -3024,14 +2816,14 @@ state 119
     ID              shift and go to state 32
     MULTIPLY        shift and go to state 34
 
-    expression                     shift and go to state 129
+    expression                     shift and go to state 128
     id_ptr_or_array                shift and go to state 63
     function_app                   shift and go to state 64
     var_assignment                 shift and go to state 65
     id                             shift and go to state 42
     ptrs                           shift and go to state 43
 
-state 120
+state 119
 
     (37) for -> FOR LPAREN loop_init_or_empty SEMI . semi_statement_or_empty SEMI semi_statement_or_empty RPAREN block
     (41) semi_statement_or_empty -> . semi_statement
@@ -3042,22 +2834,22 @@ state 120
     (26) semi_statement -> . function_app
     (27) semi_statement -> . expression
     (28) semi_statement -> . return_expr
-    (65) expression -> . expression PLUS expression
-    (66) expression -> . expression MINUS expression
-    (67) expression -> . expression MULTIPLY expression
-    (68) expression -> . expression DIVIDE expression
-    (69) expression -> . expression LESS expression
-    (70) expression -> . expression GREATER expression
-    (71) expression -> . LPAREN expression RPAREN
-    (72) expression -> . MINUS expression
-    (73) expression -> . id_ptr_or_array DOUBLEPLUS
-    (74) expression -> . DOUBLEPLUS id_ptr_or_array
-    (75) expression -> . id_ptr_or_array
-    (76) expression -> . function_app
-    (77) expression -> . var_assignment
-    (78) expression -> . INT_VAL
-    (79) expression -> . FLOAT_VAL
-    (64) empty -> .
+    (64) expression -> . expression PLUS expression
+    (65) expression -> . expression MINUS expression
+    (66) expression -> . expression MULTIPLY expression
+    (67) expression -> . expression DIVIDE expression
+    (68) expression -> . expression LESS expression
+    (69) expression -> . expression GREATER expression
+    (70) expression -> . LPAREN expression RPAREN
+    (71) expression -> . MINUS expression
+    (72) expression -> . id_ptr_or_array DOUBLEPLUS
+    (73) expression -> . DOUBLEPLUS id_ptr_or_array
+    (74) expression -> . id_ptr_or_array
+    (75) expression -> . function_app
+    (76) expression -> . var_assignment
+    (77) expression -> . INT_VAL
+    (78) expression -> . FLOAT_VAL
+    (63) empty -> .
     (47) var_declaration -> . type var_and_assign
     (48) var_assignment -> . id_ptr_or_array EQ expression
     (49) var_assignment -> . id_ptr_or_array EQ function_app
@@ -3079,7 +2871,7 @@ state 120
     DOUBLEPLUS      shift and go to state 35
     INT_VAL         shift and go to state 36
     FLOAT_VAL       shift and go to state 37
-    SEMI            reduce using rule 64 (empty -> .)
+    SEMI            reduce using rule 63 (empty -> .)
     PRINTF          shift and go to state 30
     ID              shift and go to state 32
     RETURN          shift and go to state 38
@@ -3087,10 +2879,10 @@ state 120
     FLOAT           shift and go to state 5
     MULTIPLY        shift and go to state 34
 
-    semi_statement_or_empty        shift and go to state 130
-    semi_statement                 shift and go to state 131
-    expression                     shift and go to state 132
-    empty                          shift and go to state 133
+    semi_statement_or_empty        shift and go to state 129
+    semi_statement                 shift and go to state 130
+    expression                     shift and go to state 131
+    empty                          shift and go to state 132
     var_declaration                shift and go to state 20
     var_assignment                 shift and go to state 21
     function_app                   shift and go to state 22
@@ -3100,7 +2892,7 @@ state 120
     id                             shift and go to state 42
     ptrs                           shift and go to state 43
 
-state 121
+state 120
 
     (44) loop_init -> type var_assignment .
     (50) var_and_assign -> var_assignment . COMMA var_and_assign
@@ -3113,7 +2905,7 @@ state 121
   ! SEMI            [ reduce using rule 51 (var_and_assign -> var_assignment .) ]
 
 
-state 122
+state 121
 
     (48) var_assignment -> id_ptr_or_array . EQ expression
     (49) var_assignment -> id_ptr_or_array . EQ function_app
@@ -3125,16 +2917,16 @@ state 122
     SEMI            reduce using rule 53 (var_and_assign -> id_ptr_or_array .)
 
 
-state 123
+state 122
 
     (46) while -> WHILE LPAREN expression RPAREN . block
     (18) block -> . LBRACE statements RBRACE
 
     LBRACE          shift and go to state 12
 
-    block                          shift and go to state 134
+    block                          shift and go to state 133
 
-state 124
+state 123
 
     (14) array_decs -> SQ_LBRACKET expression SQ_RBRACKET . array_decs
     (15) array_decs -> SQ_LBRACKET expression SQ_RBRACKET .
@@ -3154,25 +2946,20 @@ state 124
     COMMA           reduce using rule 15 (array_decs -> SQ_LBRACKET expression SQ_RBRACKET .)
     RPAREN          reduce using rule 15 (array_decs -> SQ_LBRACKET expression SQ_RBRACKET .)
     SQ_RBRACKET     reduce using rule 15 (array_decs -> SQ_LBRACKET expression SQ_RBRACKET .)
-    LPAREN          reduce using rule 15 (array_decs -> SQ_LBRACKET expression SQ_RBRACKET .)
-    INT_VAL         reduce using rule 15 (array_decs -> SQ_LBRACKET expression SQ_RBRACKET .)
-    FLOAT_VAL       reduce using rule 15 (array_decs -> SQ_LBRACKET expression SQ_RBRACKET .)
-    PRINTF          reduce using rule 15 (array_decs -> SQ_LBRACKET expression SQ_RBRACKET .)
-    ID              reduce using rule 15 (array_decs -> SQ_LBRACKET expression SQ_RBRACKET .)
     SQ_LBRACKET     shift and go to state 77
 
-    array_decs                     shift and go to state 135
+    array_decs                     shift and go to state 134
 
-state 125
+state 124
 
     (33) if -> IF LPAREN expression RPAREN . block
     (18) block -> . LBRACE statements RBRACE
 
     LBRACE          shift and go to state 12
 
-    block                          shift and go to state 136
+    block                          shift and go to state 135
 
-state 126
+state 125
 
     (56) function_app -> PRINTF LPAREN STRING print_formats RPAREN .
 
@@ -3187,95 +2974,51 @@ state 126
     RPAREN          reduce using rule 56 (function_app -> PRINTF LPAREN STRING print_formats RPAREN .)
     COMMA           reduce using rule 56 (function_app -> PRINTF LPAREN STRING print_formats RPAREN .)
     SQ_RBRACKET     reduce using rule 56 (function_app -> PRINTF LPAREN STRING print_formats RPAREN .)
-    LPAREN          reduce using rule 56 (function_app -> PRINTF LPAREN STRING print_formats RPAREN .)
-    DOUBLEPLUS      reduce using rule 56 (function_app -> PRINTF LPAREN STRING print_formats RPAREN .)
-    INT_VAL         reduce using rule 56 (function_app -> PRINTF LPAREN STRING print_formats RPAREN .)
-    FLOAT_VAL       reduce using rule 56 (function_app -> PRINTF LPAREN STRING print_formats RPAREN .)
-    PRINTF          reduce using rule 56 (function_app -> PRINTF LPAREN STRING print_formats RPAREN .)
-    ID              reduce using rule 56 (function_app -> PRINTF LPAREN STRING print_formats RPAREN .)
 
 
-state 127
+state 126
 
     (58) print_formats -> COMMA expression . print_formats
-    (65) expression -> expression . PLUS expression
-    (66) expression -> expression . MINUS expression
-    (67) expression -> expression . MULTIPLY expression
-    (68) expression -> expression . DIVIDE expression
-    (69) expression -> expression . LESS expression
-    (70) expression -> expression . GREATER expression
+    (64) expression -> expression . PLUS expression
+    (65) expression -> expression . MINUS expression
+    (66) expression -> expression . MULTIPLY expression
+    (67) expression -> expression . DIVIDE expression
+    (68) expression -> expression . LESS expression
+    (69) expression -> expression . GREATER expression
     (58) print_formats -> . COMMA expression print_formats
-    (59) print_formats -> . expression
-    (60) print_formats -> . empty
-    (65) expression -> . expression PLUS expression
-    (66) expression -> . expression MINUS expression
-    (67) expression -> . expression MULTIPLY expression
-    (68) expression -> . expression DIVIDE expression
-    (69) expression -> . expression LESS expression
-    (70) expression -> . expression GREATER expression
-    (71) expression -> . LPAREN expression RPAREN
-    (72) expression -> . MINUS expression
-    (73) expression -> . id_ptr_or_array DOUBLEPLUS
-    (74) expression -> . DOUBLEPLUS id_ptr_or_array
-    (75) expression -> . id_ptr_or_array
-    (76) expression -> . function_app
-    (77) expression -> . var_assignment
-    (78) expression -> . INT_VAL
-    (79) expression -> . FLOAT_VAL
-    (64) empty -> .
-    (11) id_ptr_or_array -> . id
-    (12) id_ptr_or_array -> . id array_decs
-    (13) id_ptr_or_array -> . ptrs id
-    (56) function_app -> . PRINTF LPAREN STRING print_formats RPAREN
-    (57) function_app -> . ID LPAREN arguments RPAREN
-    (48) var_assignment -> . id_ptr_or_array EQ expression
-    (49) var_assignment -> . id_ptr_or_array EQ function_app
-    (6) id -> . ID
-    (16) ptrs -> . MULTIPLY ptrs
-    (17) ptrs -> . MULTIPLY
+    (59) print_formats -> . empty
+    (63) empty -> .
 
     PLUS            shift and go to state 50
-    MINUS           shift and go to state 138
-    MULTIPLY        shift and go to state 139
+    MINUS           shift and go to state 51
+    MULTIPLY        shift and go to state 52
     DIVIDE          shift and go to state 53
     LESS            shift and go to state 54
     GREATER         shift and go to state 55
     COMMA           shift and go to state 114
-    LPAREN          shift and go to state 31
-    DOUBLEPLUS      shift and go to state 35
-    INT_VAL         shift and go to state 36
-    FLOAT_VAL       shift and go to state 37
-    RPAREN          reduce using rule 64 (empty -> .)
-    PRINTF          shift and go to state 30
-    ID              shift and go to state 32
+    RPAREN          reduce using rule 63 (empty -> .)
 
-    expression                     shift and go to state 115
-    print_formats                  shift and go to state 137
-    empty                          shift and go to state 116
-    id_ptr_or_array                shift and go to state 63
-    function_app                   shift and go to state 64
-    var_assignment                 shift and go to state 65
-    id                             shift and go to state 42
-    ptrs                           shift and go to state 43
+    print_formats                  shift and go to state 136
+    empty                          shift and go to state 115
+
+state 127
+
+    (60) arguments -> expression COMMA arguments .
+
+    RPAREN          reduce using rule 60 (arguments -> expression COMMA arguments .)
+
 
 state 128
 
-    (61) arguments -> expression COMMA arguments .
-
-    RPAREN          reduce using rule 61 (arguments -> expression COMMA arguments .)
-
-
-state 129
-
     (34) elif_else -> ELSE IF LPAREN expression . RPAREN block elif_else
-    (65) expression -> expression . PLUS expression
-    (66) expression -> expression . MINUS expression
-    (67) expression -> expression . MULTIPLY expression
-    (68) expression -> expression . DIVIDE expression
-    (69) expression -> expression . LESS expression
-    (70) expression -> expression . GREATER expression
+    (64) expression -> expression . PLUS expression
+    (65) expression -> expression . MINUS expression
+    (66) expression -> expression . MULTIPLY expression
+    (67) expression -> expression . DIVIDE expression
+    (68) expression -> expression . LESS expression
+    (69) expression -> expression . GREATER expression
 
-    RPAREN          shift and go to state 140
+    RPAREN          shift and go to state 137
     PLUS            shift and go to state 50
     MINUS           shift and go to state 51
     MULTIPLY        shift and go to state 52
@@ -3284,14 +3027,14 @@ state 129
     GREATER         shift and go to state 55
 
 
-state 130
+state 129
 
     (37) for -> FOR LPAREN loop_init_or_empty SEMI semi_statement_or_empty . SEMI semi_statement_or_empty RPAREN block
 
-    SEMI            shift and go to state 141
+    SEMI            shift and go to state 138
 
 
-state 131
+state 130
 
     (41) semi_statement_or_empty -> semi_statement .
 
@@ -3299,16 +3042,16 @@ state 131
     RPAREN          reduce using rule 41 (semi_statement_or_empty -> semi_statement .)
 
 
-state 132
+state 131
 
     (42) semi_statement_or_empty -> expression .
     (27) semi_statement -> expression .
-    (65) expression -> expression . PLUS expression
-    (66) expression -> expression . MINUS expression
-    (67) expression -> expression . MULTIPLY expression
-    (68) expression -> expression . DIVIDE expression
-    (69) expression -> expression . LESS expression
-    (70) expression -> expression . GREATER expression
+    (64) expression -> expression . PLUS expression
+    (65) expression -> expression . MINUS expression
+    (66) expression -> expression . MULTIPLY expression
+    (67) expression -> expression . DIVIDE expression
+    (68) expression -> expression . LESS expression
+    (69) expression -> expression . GREATER expression
 
   ! reduce/reduce conflict for SEMI resolved using rule 27 (semi_statement -> expression .)
   ! reduce/reduce conflict for RPAREN resolved using rule 27 (semi_statement -> expression .)
@@ -3325,7 +3068,7 @@ state 132
   ! RPAREN          [ reduce using rule 42 (semi_statement_or_empty -> expression .) ]
 
 
-state 133
+state 132
 
     (43) semi_statement_or_empty -> empty .
 
@@ -3333,7 +3076,7 @@ state 133
     RPAREN          reduce using rule 43 (semi_statement_or_empty -> empty .)
 
 
-state 134
+state 133
 
     (46) while -> WHILE LPAREN expression RPAREN block .
 
@@ -3354,7 +3097,7 @@ state 134
     RBRACE          reduce using rule 46 (while -> WHILE LPAREN expression RPAREN block .)
 
 
-state 135
+state 134
 
     (14) array_decs -> SQ_LBRACKET expression SQ_RBRACKET array_decs .
 
@@ -3371,14 +3114,9 @@ state 135
     COMMA           reduce using rule 14 (array_decs -> SQ_LBRACKET expression SQ_RBRACKET array_decs .)
     RPAREN          reduce using rule 14 (array_decs -> SQ_LBRACKET expression SQ_RBRACKET array_decs .)
     SQ_RBRACKET     reduce using rule 14 (array_decs -> SQ_LBRACKET expression SQ_RBRACKET array_decs .)
-    LPAREN          reduce using rule 14 (array_decs -> SQ_LBRACKET expression SQ_RBRACKET array_decs .)
-    INT_VAL         reduce using rule 14 (array_decs -> SQ_LBRACKET expression SQ_RBRACKET array_decs .)
-    FLOAT_VAL       reduce using rule 14 (array_decs -> SQ_LBRACKET expression SQ_RBRACKET array_decs .)
-    PRINTF          reduce using rule 14 (array_decs -> SQ_LBRACKET expression SQ_RBRACKET array_decs .)
-    ID              reduce using rule 14 (array_decs -> SQ_LBRACKET expression SQ_RBRACKET array_decs .)
 
 
-state 136
+state 135
 
     (33) if -> IF LPAREN expression RPAREN block .
 
@@ -3400,118 +3138,23 @@ state 136
     RBRACE          reduce using rule 33 (if -> IF LPAREN expression RPAREN block .)
 
 
-state 137
+state 136
 
     (58) print_formats -> COMMA expression print_formats .
 
     RPAREN          reduce using rule 58 (print_formats -> COMMA expression print_formats .)
 
 
-state 138
-
-    (66) expression -> expression MINUS . expression
-    (72) expression -> MINUS . expression
-    (65) expression -> . expression PLUS expression
-    (66) expression -> . expression MINUS expression
-    (67) expression -> . expression MULTIPLY expression
-    (68) expression -> . expression DIVIDE expression
-    (69) expression -> . expression LESS expression
-    (70) expression -> . expression GREATER expression
-    (71) expression -> . LPAREN expression RPAREN
-    (72) expression -> . MINUS expression
-    (73) expression -> . id_ptr_or_array DOUBLEPLUS
-    (74) expression -> . DOUBLEPLUS id_ptr_or_array
-    (75) expression -> . id_ptr_or_array
-    (76) expression -> . function_app
-    (77) expression -> . var_assignment
-    (78) expression -> . INT_VAL
-    (79) expression -> . FLOAT_VAL
-    (11) id_ptr_or_array -> . id
-    (12) id_ptr_or_array -> . id array_decs
-    (13) id_ptr_or_array -> . ptrs id
-    (56) function_app -> . PRINTF LPAREN STRING print_formats RPAREN
-    (57) function_app -> . ID LPAREN arguments RPAREN
-    (48) var_assignment -> . id_ptr_or_array EQ expression
-    (49) var_assignment -> . id_ptr_or_array EQ function_app
-    (6) id -> . ID
-    (16) ptrs -> . MULTIPLY ptrs
-    (17) ptrs -> . MULTIPLY
-
-    LPAREN          shift and go to state 31
-    MINUS           shift and go to state 33
-    DOUBLEPLUS      shift and go to state 35
-    INT_VAL         shift and go to state 36
-    FLOAT_VAL       shift and go to state 37
-    PRINTF          shift and go to state 30
-    ID              shift and go to state 32
-    MULTIPLY        shift and go to state 34
-
-    expression                     shift and go to state 142
-    id_ptr_or_array                shift and go to state 63
-    function_app                   shift and go to state 64
-    var_assignment                 shift and go to state 65
-    id                             shift and go to state 42
-    ptrs                           shift and go to state 43
-
-state 139
-
-    (67) expression -> expression MULTIPLY . expression
-    (16) ptrs -> MULTIPLY . ptrs
-    (17) ptrs -> MULTIPLY .
-    (65) expression -> . expression PLUS expression
-    (66) expression -> . expression MINUS expression
-    (67) expression -> . expression MULTIPLY expression
-    (68) expression -> . expression DIVIDE expression
-    (69) expression -> . expression LESS expression
-    (70) expression -> . expression GREATER expression
-    (71) expression -> . LPAREN expression RPAREN
-    (72) expression -> . MINUS expression
-    (73) expression -> . id_ptr_or_array DOUBLEPLUS
-    (74) expression -> . DOUBLEPLUS id_ptr_or_array
-    (75) expression -> . id_ptr_or_array
-    (76) expression -> . function_app
-    (77) expression -> . var_assignment
-    (78) expression -> . INT_VAL
-    (79) expression -> . FLOAT_VAL
-    (16) ptrs -> . MULTIPLY ptrs
-    (17) ptrs -> . MULTIPLY
-    (11) id_ptr_or_array -> . id
-    (12) id_ptr_or_array -> . id array_decs
-    (13) id_ptr_or_array -> . ptrs id
-    (56) function_app -> . PRINTF LPAREN STRING print_formats RPAREN
-    (57) function_app -> . ID LPAREN arguments RPAREN
-    (48) var_assignment -> . id_ptr_or_array EQ expression
-    (49) var_assignment -> . id_ptr_or_array EQ function_app
-    (6) id -> . ID
-
-    ID              reduce using rule 17 (ptrs -> MULTIPLY .)
-    LPAREN          shift and go to state 31
-    MINUS           shift and go to state 33
-    DOUBLEPLUS      shift and go to state 35
-    INT_VAL         shift and go to state 36
-    FLOAT_VAL       shift and go to state 37
-    MULTIPLY        shift and go to state 34
-    PRINTF          shift and go to state 30
-
-  ! ID              [ shift and go to state 32 ]
-
-    expression                     shift and go to state 84
-    ptrs                           shift and go to state 143
-    id_ptr_or_array                shift and go to state 63
-    function_app                   shift and go to state 64
-    var_assignment                 shift and go to state 65
-    id                             shift and go to state 42
-
-state 140
+state 137
 
     (34) elif_else -> ELSE IF LPAREN expression RPAREN . block elif_else
     (18) block -> . LBRACE statements RBRACE
 
     LBRACE          shift and go to state 12
 
-    block                          shift and go to state 144
+    block                          shift and go to state 139
 
-state 141
+state 138
 
     (37) for -> FOR LPAREN loop_init_or_empty SEMI semi_statement_or_empty SEMI . semi_statement_or_empty RPAREN block
     (41) semi_statement_or_empty -> . semi_statement
@@ -3522,22 +3165,22 @@ state 141
     (26) semi_statement -> . function_app
     (27) semi_statement -> . expression
     (28) semi_statement -> . return_expr
-    (65) expression -> . expression PLUS expression
-    (66) expression -> . expression MINUS expression
-    (67) expression -> . expression MULTIPLY expression
-    (68) expression -> . expression DIVIDE expression
-    (69) expression -> . expression LESS expression
-    (70) expression -> . expression GREATER expression
-    (71) expression -> . LPAREN expression RPAREN
-    (72) expression -> . MINUS expression
-    (73) expression -> . id_ptr_or_array DOUBLEPLUS
-    (74) expression -> . DOUBLEPLUS id_ptr_or_array
-    (75) expression -> . id_ptr_or_array
-    (76) expression -> . function_app
-    (77) expression -> . var_assignment
-    (78) expression -> . INT_VAL
-    (79) expression -> . FLOAT_VAL
-    (64) empty -> .
+    (64) expression -> . expression PLUS expression
+    (65) expression -> . expression MINUS expression
+    (66) expression -> . expression MULTIPLY expression
+    (67) expression -> . expression DIVIDE expression
+    (68) expression -> . expression LESS expression
+    (69) expression -> . expression GREATER expression
+    (70) expression -> . LPAREN expression RPAREN
+    (71) expression -> . MINUS expression
+    (72) expression -> . id_ptr_or_array DOUBLEPLUS
+    (73) expression -> . DOUBLEPLUS id_ptr_or_array
+    (74) expression -> . id_ptr_or_array
+    (75) expression -> . function_app
+    (76) expression -> . var_assignment
+    (77) expression -> . INT_VAL
+    (78) expression -> . FLOAT_VAL
+    (63) empty -> .
     (47) var_declaration -> . type var_and_assign
     (48) var_assignment -> . id_ptr_or_array EQ expression
     (49) var_assignment -> . id_ptr_or_array EQ function_app
@@ -3559,7 +3202,7 @@ state 141
     DOUBLEPLUS      shift and go to state 35
     INT_VAL         shift and go to state 36
     FLOAT_VAL       shift and go to state 37
-    RPAREN          reduce using rule 64 (empty -> .)
+    RPAREN          reduce using rule 63 (empty -> .)
     PRINTF          shift and go to state 30
     ID              shift and go to state 32
     RETURN          shift and go to state 38
@@ -3567,10 +3210,10 @@ state 141
     FLOAT           shift and go to state 5
     MULTIPLY        shift and go to state 34
 
-    semi_statement_or_empty        shift and go to state 145
-    semi_statement                 shift and go to state 131
-    expression                     shift and go to state 132
-    empty                          shift and go to state 133
+    semi_statement_or_empty        shift and go to state 140
+    semi_statement                 shift and go to state 130
+    expression                     shift and go to state 131
+    empty                          shift and go to state 132
     var_declaration                shift and go to state 20
     var_assignment                 shift and go to state 21
     function_app                   shift and go to state 22
@@ -3580,102 +3223,42 @@ state 141
     id                             shift and go to state 42
     ptrs                           shift and go to state 43
 
-state 142
-
-    (66) expression -> expression MINUS expression .
-    (72) expression -> MINUS expression .
-    (65) expression -> expression . PLUS expression
-    (66) expression -> expression . MINUS expression
-    (67) expression -> expression . MULTIPLY expression
-    (68) expression -> expression . DIVIDE expression
-    (69) expression -> expression . LESS expression
-    (70) expression -> expression . GREATER expression
-
-  ! reduce/reduce conflict for PLUS resolved using rule 66 (expression -> expression MINUS expression .)
-  ! reduce/reduce conflict for MINUS resolved using rule 66 (expression -> expression MINUS expression .)
-  ! reduce/reduce conflict for MULTIPLY resolved using rule 66 (expression -> expression MINUS expression .)
-  ! reduce/reduce conflict for DIVIDE resolved using rule 66 (expression -> expression MINUS expression .)
-  ! reduce/reduce conflict for LESS resolved using rule 66 (expression -> expression MINUS expression .)
-  ! reduce/reduce conflict for GREATER resolved using rule 66 (expression -> expression MINUS expression .)
-  ! reduce/reduce conflict for RPAREN resolved using rule 66 (expression -> expression MINUS expression .)
-    PLUS            reduce using rule 66 (expression -> expression MINUS expression .)
-    MINUS           reduce using rule 66 (expression -> expression MINUS expression .)
-    LESS            reduce using rule 66 (expression -> expression MINUS expression .)
-    GREATER         reduce using rule 66 (expression -> expression MINUS expression .)
-    COMMA           reduce using rule 66 (expression -> expression MINUS expression .)
-    LPAREN          reduce using rule 66 (expression -> expression MINUS expression .)
-    DOUBLEPLUS      reduce using rule 66 (expression -> expression MINUS expression .)
-    INT_VAL         reduce using rule 66 (expression -> expression MINUS expression .)
-    FLOAT_VAL       reduce using rule 66 (expression -> expression MINUS expression .)
-    PRINTF          reduce using rule 66 (expression -> expression MINUS expression .)
-    ID              reduce using rule 66 (expression -> expression MINUS expression .)
-    RPAREN          reduce using rule 66 (expression -> expression MINUS expression .)
-    MULTIPLY        shift and go to state 52
-    DIVIDE          shift and go to state 53
-
-  ! MULTIPLY        [ reduce using rule 66 (expression -> expression MINUS expression .) ]
-  ! DIVIDE          [ reduce using rule 66 (expression -> expression MINUS expression .) ]
-  ! PLUS            [ reduce using rule 72 (expression -> MINUS expression .) ]
-  ! MINUS           [ reduce using rule 72 (expression -> MINUS expression .) ]
-  ! MULTIPLY        [ reduce using rule 72 (expression -> MINUS expression .) ]
-  ! DIVIDE          [ reduce using rule 72 (expression -> MINUS expression .) ]
-  ! LESS            [ reduce using rule 72 (expression -> MINUS expression .) ]
-  ! GREATER         [ reduce using rule 72 (expression -> MINUS expression .) ]
-  ! RPAREN          [ reduce using rule 72 (expression -> MINUS expression .) ]
-  ! PLUS            [ shift and go to state 50 ]
-  ! MINUS           [ shift and go to state 51 ]
-  ! LESS            [ shift and go to state 54 ]
-  ! GREATER         [ shift and go to state 55 ]
-
-
-state 143
-
-    (16) ptrs -> MULTIPLY ptrs .
-    (13) id_ptr_or_array -> ptrs . id
-    (6) id -> . ID
-
-    ID              reduce using rule 16 (ptrs -> MULTIPLY ptrs .)
-
-  ! ID              [ shift and go to state 8 ]
-
-    id                             shift and go to state 78
-
-state 144
+state 139
 
     (34) elif_else -> ELSE IF LPAREN expression RPAREN block . elif_else
     (34) elif_else -> . ELSE IF LPAREN expression RPAREN block elif_else
     (35) elif_else -> . ELSE block
     (36) elif_else -> . empty
-    (64) empty -> .
+    (63) empty -> .
 
     ELSE            shift and go to state 72
-    PRINTF          reduce using rule 64 (empty -> .)
-    ID              reduce using rule 64 (empty -> .)
-    LPAREN          reduce using rule 64 (empty -> .)
-    MINUS           reduce using rule 64 (empty -> .)
-    DOUBLEPLUS      reduce using rule 64 (empty -> .)
-    INT_VAL         reduce using rule 64 (empty -> .)
-    FLOAT_VAL       reduce using rule 64 (empty -> .)
-    RETURN          reduce using rule 64 (empty -> .)
-    FOR             reduce using rule 64 (empty -> .)
-    WHILE           reduce using rule 64 (empty -> .)
-    INT             reduce using rule 64 (empty -> .)
-    FLOAT           reduce using rule 64 (empty -> .)
-    IF              reduce using rule 64 (empty -> .)
-    MULTIPLY        reduce using rule 64 (empty -> .)
-    RBRACE          reduce using rule 64 (empty -> .)
+    PRINTF          reduce using rule 63 (empty -> .)
+    ID              reduce using rule 63 (empty -> .)
+    LPAREN          reduce using rule 63 (empty -> .)
+    MINUS           reduce using rule 63 (empty -> .)
+    DOUBLEPLUS      reduce using rule 63 (empty -> .)
+    INT_VAL         reduce using rule 63 (empty -> .)
+    FLOAT_VAL       reduce using rule 63 (empty -> .)
+    RETURN          reduce using rule 63 (empty -> .)
+    FOR             reduce using rule 63 (empty -> .)
+    WHILE           reduce using rule 63 (empty -> .)
+    INT             reduce using rule 63 (empty -> .)
+    FLOAT           reduce using rule 63 (empty -> .)
+    IF              reduce using rule 63 (empty -> .)
+    MULTIPLY        reduce using rule 63 (empty -> .)
+    RBRACE          reduce using rule 63 (empty -> .)
 
-    elif_else                      shift and go to state 146
+    elif_else                      shift and go to state 141
     empty                          shift and go to state 73
 
-state 145
+state 140
 
     (37) for -> FOR LPAREN loop_init_or_empty SEMI semi_statement_or_empty SEMI semi_statement_or_empty . RPAREN block
 
-    RPAREN          shift and go to state 147
+    RPAREN          shift and go to state 142
 
 
-state 146
+state 141
 
     (34) elif_else -> ELSE IF LPAREN expression RPAREN block elif_else .
 
@@ -3696,16 +3279,16 @@ state 146
     RBRACE          reduce using rule 34 (elif_else -> ELSE IF LPAREN expression RPAREN block elif_else .)
 
 
-state 147
+state 142
 
     (37) for -> FOR LPAREN loop_init_or_empty SEMI semi_statement_or_empty SEMI semi_statement_or_empty RPAREN . block
     (18) block -> . LBRACE statements RBRACE
 
     LBRACE          shift and go to state 12
 
-    block                          shift and go to state 148
+    block                          shift and go to state 143
 
-state 148
+state 143
 
     (37) for -> FOR LPAREN loop_init_or_empty SEMI semi_statement_or_empty SEMI semi_statement_or_empty RPAREN block .
 
@@ -3728,8 +3311,6 @@ state 148
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for LPAREN in state 32 resolved as shift
-WARNING: shift/reduce conflict for DOUBLEPLUS in state 63 resolved as shift
 WARNING: shift/reduce conflict for PLUS in state 90 resolved as shift
 WARNING: shift/reduce conflict for MINUS in state 90 resolved as shift
 WARNING: shift/reduce conflict for MULTIPLY in state 90 resolved as shift
@@ -3750,11 +3331,9 @@ WARNING: reduce/reduce conflict in state 104 resolved using rule (semi_statement
 WARNING: rejected rule (expression -> var_assignment) in state 104
 WARNING: reduce/reduce conflict in state 106 resolved using rule (semi_statement -> function_app)
 WARNING: rejected rule (expression -> function_app) in state 106
-WARNING: reduce/reduce conflict in state 121 resolved using rule (loop_init -> type var_assignment)
-WARNING: rejected rule (var_and_assign -> var_assignment) in state 121
-WARNING: reduce/reduce conflict in state 132 resolved using rule (semi_statement -> expression)
-WARNING: rejected rule (semi_statement_or_empty -> expression) in state 132
-WARNING: reduce/reduce conflict in state 142 resolved using rule (expression -> expression MINUS expression)
-WARNING: rejected rule (expression -> MINUS expression) in state 142
+WARNING: reduce/reduce conflict in state 120 resolved using rule (loop_init -> type var_assignment)
+WARNING: rejected rule (var_and_assign -> var_assignment) in state 120
+WARNING: reduce/reduce conflict in state 131 resolved using rule (semi_statement -> expression)
+WARNING: rejected rule (semi_statement_or_empty -> expression) in state 131
 WARNING: Rule (loop_init_or_empty -> expression) is never reduced
 WARNING: Rule (semi_statement_or_empty -> expression) is never reduced
