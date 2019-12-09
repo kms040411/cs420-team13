@@ -1,5 +1,81 @@
 import lex_yacc
 
+
+def loop_optimizable(tree):
+	loop = tree.get()
+	if(loop.init_expr == None):
+		return False
+	if(loop.init_expr.type == lex_yacc.AST_TYPE.LOOP_INIT):
+		if(type(loop.init_expr.get()) == tuple):
+			if(loop.init_expr.get()[0].get() == 'float'):
+				return False 
+			var_assign = loop.init_expr.get()[1]
+			if(var_assign.get()[0].type != lex_yacc.AST_TYPE.ID):
+				return False
+			if(var_assign.get()[1].type == lex_yacc.AST_TYPE.FUN_APP):
+				return False
+			if(check_free_variable(var_assign.get()[1])):
+				return False
+			loop_variable = var_assign.get()[0]
+		else:
+			var_assign = loop.init_expr.get().get()
+			if(var_assign.type != lex_yacc.AST_TYPE.ASSIGN):
+				return False
+			if(var_assign.get()[1].type == lex_yacc.AST_TYPE.FUN_APP):
+				return False
+			if(check_free_variable(var_assign.get()[1])):
+				return False
+			loop_variable = var_assign.get()[0]
+
+	if(loop.term_expr == None):
+		return False
+	if(loop.term_expr.type != lex_yacc.AST_TYPE.EXPR):
+		return False
+	if(not(loop.term_expr.get() == '<' || loop.term_expr.get() == '>')):
+		return False
+	comparison_op = loop.term_expr.get()
+	if(not(find_and_get_var(loop.term_expr.left) == loop_variable)):
+		return False
+	if(check_free_variable(loop.term_expr.right)):
+		return False
+
+	if(loop.update_expr == None):
+		return False
+
+	# update_expr should be of the form like a = a + 1, a++
+	if(loop.update_expr.type != lex_yacc.AST_TYPE.SEMI_STATEMENT):
+		return False
+	if(loop.update_expr.left.type == lex_yacc.AST_TYPE.ASSIGN):
+		var_assign = loop.update_expr.left
+		if(var_assign.get()[0].type != lex_yacc.AST_TYPE.ID):
+			return False
+		if(var_assign.get()[0].get() != loop_variable):
+			return False
+		if(var_assign.get()[1].type == lex_yacc.AST_TYPE.FUN_APP):
+			return False
+		if(comparison_op == '<'):
+			if(var_assign.get()[1].get() != '+'):
+				return False
+		elif(comparison_op == '>'):
+			if(var_assign.get()[1].get() != '-'):
+				return False
+		if(var_assign.get()[1].left.get() != loop_variable):
+			return False
+		if(check_free_variable(var_assign.get()[1].right)):
+			return False
+
+	elif(loop.update_expr.left.type == lex_yacc.AST_TYPE.EXPR):
+		expr = loop.update_expr.left
+		if(expr.get() == '++_left' || expr_get() == '++_right'):
+
+		else:
+			return False
+
+
+
+
+def	loop_unrolling(tree):
+
 '''
     optimize(out_file, tree):
     Optimize the given tree and return optimized tree.
@@ -148,30 +224,30 @@ def optimize(out_file, tree, tabs = 0, tab = True, end = True, semi = True):
 		out_file.write(')')
 		optimize(out_file, tree.get().body, tabs)
 	elif(tree.type == lex_yacc.AST_TYPE.FOR):
-	# class loop():
-	# 	def __init__(self, init_expr, term_expr, update_expr, body):
-	# 		self.init_expr = init_expr
-	# 		self.term_expr = term_expr
-	# 		self.update_expr = update_expr
-	# 		self.body = body
-		loop = tree.get()
-		out_file.write('for(')
-		if(loop.init_expr != None):
-			optimize(out_file, loop.init_expr)
+
+		if(loop_optimizable(tree)):
+			loop_unrolling(tree)
+
 		else:
-			out_file.write('; ')
+			loop = tree.get()
+			out_file.write('for(')
+			if(loop.init_expr != None):
+				optimize(out_file, loop.init_expr)
+			else:
+				out_file.write('; ')
 
-		if(loop.term_expr != None):
-			optimize(out_file, loop.term_expr, tabs, False, False)
-			out_file.write(' ')
-		else:
-			out_file.write('; ')
+			if(loop.term_expr != None):
+				optimize(out_file, loop.term_expr, tabs, False, False)
+				out_file.write(' ')
+			else:
+				out_file.write('; ')
 
-		if(loop.update_expr != None):
-			optimize(out_file, loop.update_expr, tabs, False, False, False)
-		out_file.write(')')
+			if(loop.update_expr != None):
+				optimize(out_file, loop.update_expr, tabs, False, False, False)
+			out_file.write(')')
 
-		optimize(out_file, loop.body, tabs)
+			optimize(out_file, loop.body, tabs)
+
 	elif(tree.type == lex_yacc.AST_TYPE.LOOP_INIT):
 		if(type(tree.get()) == lex_yacc.AST):
 			optimize(out_file, tree.get(), tabs, False, False)
