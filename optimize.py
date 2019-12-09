@@ -2,20 +2,11 @@ import lex_yacc
 
 
 
-for(i = 0; i < 10; i = i + 1){
-	print(i);
-}
-
-for(i = 0; i < 10; i += 2){
-	print(i);
-	print(i + 1);
-}
-
 def recurse_over_variable(mode, ast, char_to_find = None, expr_to_replace = None):
 	# mode : 0 -> check if char_to_find exist as a free occurrence
 	# mode : 1 -> check if char_to_find exist as a bound occurrence 
 	# mode : 2 -> replace free occurence of char_to_find to expr_to_replace
-    if ast.type == AST_TYPE.EXPR:
+    if ast.type == lex_yacc.AST_TYPE.EXPR:
         if ast.content in ['+', '-', '*', '/', '<', '>']:
             if ast.content == '-' and ast.right is None: # e = -e
             	if(mode == 0 || mode == 1):
@@ -34,56 +25,51 @@ def recurse_over_variable(mode, ast, char_to_find = None, expr_to_replace = None
 				return lex_yacc.copy_AST_change(ast, None, recurse_over_variable(mode, ast.left, char_to_find, expr_to_replace))
         elif type(ast.content) == str and ast.content.startswith('++'): # e = e++ | e = ++e
             	if(mode == 0 || mode == 1):
-	                return recurse_over_variable(check, ast.left, char_to_find)
+	                return recurse_over_variable(mode, ast.left, char_to_find)
 	            else:
-					lex_yacc.copy_AST_change(ast, None, check_free_variable(check, ast.left, char_to_find, expr_to_replace))
+					return lex_yacc.copy_AST_change(ast, None, recurse_over_variable(mode, ast.left, char_to_find, expr_to_replace))
         elif type(ast.content) == AST: # e = id_ptr_or_array | function_app | var_assignment
-            return calculate_expr(ast.content)
+            if(mode == 0 || mode == 1):
+            	return recurse_over_variable(mode, ast.content, char_to_find)
+            else:
+            	return lex_yacc.copy_AST_change(ast, recurse_over_variable(mode, ast.content, char_to_find, expr_to_replace))
         else: # e = INT_VAL | FLOAT_VAL
-            return ast.content
-    elif ast.type == AST_TYPE.ID: # id_ptr_or_array = id
+            if(mode == 0 || mode == 1):
+            	return False
+            else:
+            	return ast
+    elif ast.type == lex_yacc.AST_TYPE.ID: # id_ptr_or_array = id
         return data_structure.memory.get_variable(ast.content)
-    elif ast.type == AST_TYPE.ARR_VAR: #id_ptr_or_array = id array_decs
+    elif ast.type == lex_yacc.AST_TYPE.ARR_VAR: #id_ptr_or_array = id array_decs
         index = calculate_expr(ast.content[0][0])
         name = ast.content[1]
         return data_structure.memory.get_array(name, index)
-    elif ast.type == AST_TYPE.SEMI_STATEMENT:
+    elif ast.type == lex_yacc.AST_TYPE.SEMI_STATEMENT:
         return calculate_expr(ast.left)
-    elif ast.type == AST_TYPE.FUN_APP:
-        if data_structure.return_table.value_returned:
-            data_structure.return_table.value_returned = False
-            return data_structure.return_table.return_value.pop()
-        else:
-            __unvisit()
-            func = data_structure.function_table.get_ast(ast.content.fname)
-            params = data_structure.function_table.get_params(ast.content.fname)
-            data_structure.return_table.is_function_call = True
-            search_stack.append((func, False, False, False))
-            data_structure.set_current_line(func.start_lineno)
-
-            variable = []
-            variable_ptr = []
-            arg_ind = 0
-            for variable_type, name in params:
-                arg = ast.content.arguments[arg_ind]
-                if str(variable_type)[0] == '*':
-                    variable_ptr.append(data_structure.memory.get_array_ptr(arg.content.content))
-                else:
-                    variable.append(calculate_expr(arg))
-                arg_ind = arg_ind + 1
-            data_structure.memory.new_scope_out()
-            variable_ind = 0
-            variable_ptr_ind = 0
-            for variable_type, name in params:
-                if str(variable_type)[0] == '*':
-                    data_structure.memory.add_array_ptr(name, variable_ptr[variable_ptr_ind])
-                    variable_ptr_ind = variable_ptr_ind + 1
-                else:
-                    lineno = data_structure.get_current_line()
-                    data_structure.memory.add_variable(name, None, lineno)
-                    data_structure.memory.add_variable(name, variable[variable_ind], lineno)
-                    variable_ind = variable_ind + 1
-
+    elif ast.type == lex_yacc.AST_TYPE.VAR_DEC:
+    	pass
+    elif ast.type == lex_yacc.AST_TYPE.ASSIGN:
+    	pass
+    elif ast.type == lex_yacc.AST_TYPE.FUN_APP:
+    	pass
+    elif ast.type == lex_yacc.AST_TYPE.RETURN:
+    	pass
+    elif ast.type == lex_yacc.AST_TYPE.NON_SEMI_STATEMENT:
+    	pass
+    elif ast.type == lex_yacc.AST_TYPE.COND:
+    	pass
+    elif ast.type == lex_yacc.AST_TYPE.IF:
+    	pass
+    elif ast.type == lex_yacc.AST_TYPE.ELIF_ELSE:
+    	pass
+    elif ast.type == lex_yacc.AST_TYPE.FOR:
+    	pass
+    elif ast.type == lex_yacc.AST_TYPE.LOOP_INIT:
+    	pass
+    elif ast.type == lex_yacc.AST_TYPE.BLOCK:
+    	pass
+    elif ast.type == lex_yacc.AST_TYPE.STATEMENTS:
+    	pass
 
 def loop_optimizable(tree):
 	loop = tree.get()
