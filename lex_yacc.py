@@ -69,6 +69,17 @@ class AST():
 
 	def copy_AST(start_lineno, end_lineno, old_AST):
 		return AST(start_lineno, end_lineno, old_AST.content, old_AST.type, old_AST.left, old_AST.right)
+		
+	def copy_AST_change(old_AST, content = None, left = None, right = None):
+		ret_AST = self.copy_AST(old_AST.start_lineno, old_AST.end_lineno)
+		if(content != None):
+			ret_AST.content = content
+		if(left != None):
+			ret_AST.left = left
+		if(right != None):
+			ret_AST.right = right
+		return ret_AST
+
 	def get(self):
 		return self.content
 
