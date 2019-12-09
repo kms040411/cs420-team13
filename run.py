@@ -80,7 +80,7 @@ def __execute():
     tree = search_stack[-1][0]
     present_lineno = data_structure.get_current_line()
 
-    #print('present line number : ' + str(present_lineno))
+    print('present line number : ' + str(present_lineno))
     
     while (True):
         if (tree.start_lineno != present_lineno and not (tree.start_lineno <= present_lineno and present_lineno <= tree.end_lineno)):
@@ -164,6 +164,8 @@ def __execute():
                     format_string = format_string.replace('\\n', '\n')
                     args = tuple(map(calculate_expr, tree.content.arguments[1:]))
                     print(format_string % args, end = '')
+                else:
+                    calculate_expr(tree)
 
             if data_structure.return_table.is_function_call:
                 data_structure.return_table.is_function_call = False
