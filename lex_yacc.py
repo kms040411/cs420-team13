@@ -237,11 +237,15 @@ def p_program(p):
 		print(p[0])
 
 def p_function(p):
-	'''function : type id variable_declaration block'''
+	'''function : type id variable_declaration block
+				| VOID id variable_declaration block'''
 	if __debug__ == False:
 		print('FUNCTION')
 	
-	p[0] = AST(p[1].start_lineno, p[4].end_lineno, c_function(p[2].get(), p[1].get(), p[3].get(), p[4]), AST_TYPE.FUNCTION)
+	if(type(p[1]) == AST):
+		p[0] = AST(p[1].start_lineno, p[4].end_lineno, c_function(p[2].get(), p[1].get(), p[3].get(), p[4]), AST_TYPE.FUNCTION)
+	else:
+		p[0] = AST(p[1].start_lineno, p[4].end_lineno, c_function(p[2].get(), p[1], p[3].get(), p[4]), AST_TYPE.FUNCTION)
 
 	if __debug__ == False:
 		print(p[0])
@@ -471,7 +475,6 @@ def p_loop_init_or_empty(p):
 
 def p_semi_statement_or_empty(p):
 	'''semi_statement_or_empty : semi_statement
-							   | expression
 						       | empty'''
 	if __debug__ == False:
 		print('EXPR_OR_EMPTY')
@@ -654,6 +657,7 @@ def p_expression(p):
 			  	  | expression GREATER expression
 		  		  | LPAREN expression RPAREN
 		  		  | MINUS expression
+		  		  | PTR_AMP expression
 		  		  | id_ptr_or_array DOUBLEPLUS
 		  		  | DOUBLEPLUS id_ptr_or_array
 		  		  | id_ptr_or_array
