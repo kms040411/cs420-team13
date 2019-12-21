@@ -171,35 +171,41 @@ class Scope_stack_entry():
 
 class VariableTable():
     def __init__(self):
-        self.tables = [(dict(), None, None)]
-        self.type_tables = [(dict(), None, None)]
-        self.present = 0
+        self.tables = [[dict()]]
+        #self.type_tables = [(dict(), None, None)]
+        #self.present = 0
 
-    def new_scope_in(self):
-        self.tables.append([dict(), self.present, self.present])
-        self.type_tables.append([dict(), self.present, self.present])
-        self.present = len(self.tables) - 1
+    def function_call(self): #previously new_scope_in
+        self.tables.append([dict()])
+        #self.type_tables.append([dict(), self.present, self.present])
+        #self.present = len(self.tables) - 1
 
-    def new_scope_out(self):
-        self.tables.append([dict(), 0, self.present])
-        self.type_tables.append([dict(), 0, self.present])
-        self.present = len(self.tables) - 1
+    def function_return(self): #previously new_scope_out
+        self.tables.pop()
+        #self.type_tables.append([dict(), 0, self.present])
+        #self.present = len(self.tables) - 1
+    
+    def scope_in(self):
+        self.tables[-1].append(dict())
+    
+    def scope_out(self):
+        self.tables[-1].pop()
 
-    def delete_scope(self):
-        (_, _, next_scope) = self.tables.pop()
-        self.type_tables.pop()
-        self.present = next_scope
+    #def delete_scope(self):
+        #(_, _, next_scope) = self.tables.pop()
+        #self.type_tables.pop()
+        #self.present = next_scope
 
     def add_variable(self, name, value, lineno):
         if value == None:
-            self.tables[self.present][0][name] = []
+            self.tables[-1][-1][name] = []
         self.get_history(name).append((value, lineno))
 
     def add_array(self, name, dims, lineno):
-        self.tables[self.present][0][name] = [None] * dims
+        self.tables[-1][-1][name] = [None] * dims
 
     def add_array_ptr(self, name, ptr):
-        self.tables[self.present][0][name] = ptr
+        self.tables[-1][-1][name] = ptr
 
     def assign_array(self, name, index, value):
         self.get_history(name)[index] = value
@@ -214,15 +220,23 @@ class VariableTable():
         return self.get_history(name)
 
     def get_history(self, name):
-        present_scope = self.present
-        while present_scope != None:
-            try:
-                return self.tables[present_scope][0][name]
-            except KeyError:
-                present_scope = self.tables[present_scope][1]
+        # present_scope = self.present
+        # while present_scope != None:
+        #     try:
+        #         return self.tables[present_scope][0][name]
+        #     except KeyError:
+        #         present_scope = self.tables[present_scope][1]
         
-        raise Exception
-        return None
+        # raise Exception
+        # return None
+        current_function_scope = self.tables[-1]
+        for scope in reversed(current_function_scope):
+            if name in scope:
+                return scope[name]
+
+        raise Exception('undefined variable: ' + name)
+
+
 
 class LoopTable():
     def __init__(self):

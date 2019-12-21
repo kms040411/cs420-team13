@@ -1,6 +1,6 @@
-int test2(void) {
+int test2(int y, int z) {
   int i;
-  for(i = 0; i < 10; i++) {
+  for(i = 0; i < y+z; i++) {
     if(i > 3) {
       return 1;
     }
@@ -9,5 +9,5 @@ int test2(void) {
 }
 
 int main(void) {
-  test2(); 
+  printf("%d\n", test2(4, 6)); 
 }

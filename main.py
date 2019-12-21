@@ -3,6 +3,7 @@ import get_input
 import optimize
 import run
 import data_structures
+import sys
 
 def dsf(tree):
     if tree == None:
@@ -20,8 +21,11 @@ if __name__ == "__main__":
     '''
     #data_structure = data_structures.Global_Data_Structure()
 
-    text = get_input.get_input('input.c')
+    text = get_input.get_input(sys.argv[1])
     tree = lex_yacc.parse(text)
+    run.run(tree)
+    sys.exit(0) #for testings
+    
     #print(tree.start_lineno, tree.end_lineno, tree.content[1].content.body.left.left.end_lineno)
     #dsf(tree.content[1])
     optimize.optimize_init(tree)
