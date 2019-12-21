@@ -1,12 +1,10 @@
 int callee(void) {
-  printf("I am callee");
-  return 1;
+  printf("I am callee\n");
 }
 int caller(void) {
-  printf("Hi");
+  printf("Hi\n");
   callee();
-  printf("Bye");
-  return 2;
+  printf("Bye\n");
 }
 int main(void) {
   caller();
