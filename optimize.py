@@ -1,75 +1,167 @@
 import lex_yacc
 
 
-
 def recurse_over_variable(mode, ast, char_to_find = None, expr_to_replace = None):
 	# mode : 0 -> check if char_to_find exist as a free occurrence
 	# mode : 1 -> check if char_to_find exist as a bound occurrence 
 	# mode : 2 -> replace free occurence of char_to_find to expr_to_replace
-    if ast.type == lex_yacc.AST_TYPE.EXPR:
-        if ast.content in ['+', '-', '*', '/', '<', '>']:
-            if ast.content == '-' and ast.right is None: # e = -e
-            	if(mode == 0 || mode == 1):
-	                return recurse_over_variable(mode, ast.left, char_to_find)
-	            else:
+	if ast.type == lex_yacc.AST_TYPE.EXPR:
+		if ast.content in ['+', '-', '*', '/', '<', '>']:
+			if ast.content == '-' and ast.right is None: # e = -e
+				if(mode == 0 or mode == 1):
+					return recurse_over_variable(mode, ast.left, char_to_find)
+				else:
 					return lex_yacc.copy_AST_change(ast, None, recurse_over_variable(mode, ast.left, char_to_find, expr_to_replace))
-            else: # e = e + e | e - e | e * e | e = e / e | e < e | e = e > e
-            	if(mode == 0 || mode == 1):
-            		return check_variable(mode, ast.left, char_to_find) | recurse_over_variable(mode, ast.right, char_to_find)
-            	else:
-            		return lex_yacc.copy_AST_change(ast, None, recurse_over_variable(check, ast.left, char_to_find, expr_to_replace), recurse_over_variable(check, ast.right, char_to_find, expr_to_replace))
-        elif ast.content == '()': # e = (e)
-        	if(mode == 0 || mode == 1):
-                return recurse_over_variable(mode, ast.left, char_to_find)
-            else:
+			else: # e = e + e | e - e | e * e | e = e / e | e < e | e = e > e
+				if(mode == 0 or mode == 1):
+					return recurse_over_variable(mode, ast.left, char_to_find) | recurse_over_variable(mode, ast.right, char_to_find)
+				else:
+					return lex_yacc.copy_AST_change(ast, None, recurse_over_variable(check, ast.left, char_to_find, expr_to_replace), recurse_over_variable(check, ast.right, char_to_find, expr_to_replace))
+		elif ast.content == '()': # e = (e)
+			if(mode == 0 or mode == 1):
+				return recurse_over_variable(mode, ast.left, char_to_find)
+			else:
 				return lex_yacc.copy_AST_change(ast, None, recurse_over_variable(mode, ast.left, char_to_find, expr_to_replace))
-        elif type(ast.content) == str and ast.content.startswith('++'): # e = e++ | e = ++e
-            	if(mode == 0 || mode == 1):
-	                return recurse_over_variable(mode, ast.left, char_to_find)
-	            else:
-					return lex_yacc.copy_AST_change(ast, None, recurse_over_variable(mode, ast.left, char_to_find, expr_to_replace))
-        elif type(ast.content) == AST: # e = id_ptr_or_array | function_app | var_assignment
-            if(mode == 0 || mode == 1):
-            	return recurse_over_variable(mode, ast.content, char_to_find)
-            else:
-            	return lex_yacc.copy_AST_change(ast, recurse_over_variable(mode, ast.content, char_to_find, expr_to_replace))
-        else: # e = INT_VAL | FLOAT_VAL
-            if(mode == 0 || mode == 1):
-            	return False
-            else:
-            	return ast
-    elif ast.type == lex_yacc.AST_TYPE.ID: # id_ptr_or_array = id
-        return data_structure.memory.get_variable(ast.content)
-    elif ast.type == lex_yacc.AST_TYPE.ARR_VAR: #id_ptr_or_array = id array_decs
-        index = calculate_expr(ast.content[0][0])
-        name = ast.content[1]
-        return data_structure.memory.get_array(name, index)
-    elif ast.type == lex_yacc.AST_TYPE.SEMI_STATEMENT:
-        return calculate_expr(ast.left)
-    elif ast.type == lex_yacc.AST_TYPE.VAR_DEC:
-    	pass
-    elif ast.type == lex_yacc.AST_TYPE.ASSIGN:
-    	pass
-    elif ast.type == lex_yacc.AST_TYPE.FUN_APP:
-    	pass
-    elif ast.type == lex_yacc.AST_TYPE.RETURN:
-    	pass
-    elif ast.type == lex_yacc.AST_TYPE.NON_SEMI_STATEMENT:
-    	pass
-    elif ast.type == lex_yacc.AST_TYPE.COND:
-    	pass
-    elif ast.type == lex_yacc.AST_TYPE.IF:
-    	pass
-    elif ast.type == lex_yacc.AST_TYPE.ELIF_ELSE:
-    	pass
-    elif ast.type == lex_yacc.AST_TYPE.FOR:
-    	pass
-    elif ast.type == lex_yacc.AST_TYPE.LOOP_INIT:
-    	pass
-    elif ast.type == lex_yacc.AST_TYPE.BLOCK:
-    	pass
-    elif ast.type == lex_yacc.AST_TYPE.STATEMENTS:
-    	pass
+		elif type(ast.content) == str and ast.content.startswith('++'): # e = e++ | e = ++e
+			if(mode == 0 or mode == 1):
+				return recurse_over_variable(mode, ast.left, char_to_find)
+			else:
+				return lex_yacc.copy_AST_change(ast, None, recurse_over_variable(mode, ast.left, char_to_find, expr_to_replace))
+		elif type(ast.content) == lex_yacc.AST: # e = id_ptr_or_array | function_app | var_assignment
+			if(mode == 0 or mode == 1):
+				return recurse_over_variable(mode, ast.content, char_to_find)
+			else:
+				return lex_yacc.copy_AST_change(ast, recurse_over_variable(mode, ast.content, char_to_find, expr_to_replace))
+		else: # e = INT_VAL | FLOAT_VAL
+			if(mode == 0 or mode == 1):
+				return False
+			else:
+				return ast
+	elif ast.type == lex_yacc.AST_TYPE.ID: # id_ptr_or_array = id
+		if(mode == 0):
+			if(char_to_find == None):
+				return True
+			else:
+				if(ast.get() == char_to_find):
+					return True
+				else:
+					return False
+		elif(mode == 1):
+			return False
+		else:
+			if(ast.get() == char_to_find):
+				return expr_to_replace
+			else:
+				return ast
+	elif ast.type == lex_yacc.AST_TYPE.ARR_VAR: #id_ptr_or_array = id array_decs
+		index = calculate_expr(ast.content[0][0])
+		name = ast.content[1]
+		return data_structure.memory.get_array(name, index)
+	elif ast.type == lex_yacc.AST_TYPE.SEMI_STATEMENT:
+		if(mode == 0 or mode == 1):
+			return recurse_over_variable(mode, ast.left, char_to_find)
+		else:
+			return lex_yacc.copy_AST_change(ast, None, recurse_over_variable(mode, ast.left, char_to_find, expr_to_replace))
+	elif ast.type == lex_yacc.AST_TYPE.VAR_DEC:
+		ret = False
+		vars_and_assigns = ast.get()
+		new_vars_and_assigns = []
+		for elem in vars_and_assigns:
+			if(type(elem) == tuple):
+				if(mode == 0):
+					ret = ret | recurse_over_variable(mode, elem[1], char_to_find)
+				elif(mode == 1):
+					ret = ret | (elem[0][1] == char_to_find)
+				else(mode == 2):
+					new_vars_and_assigns.append((elem[0], recurse_over_variable(mode, elem[1], char_to_find, expr_to_replace)))
+			else:
+				if(mode == 0):
+					ret = ret | recurse_over_variable(mode, elem, char_to_find)
+				elif(mode == 1):
+					ret = ret | (elem[0][1] == char_to_find)
+				elif(mode == 2):
+					new_vars_and_assigns.append(elem)
+		if(mode == 0 or mode == 1):
+			return ret
+		else:
+			return lex_yacc.copy_AST_change(ast, new_vars_and_assigns)
+	elif ast.type == lex_yacc.AST_TYPE.ASSIGN:
+		elem = ast.get()
+		if(type(elem) == tuple):
+			if(mode == 0):
+				return recurse_over_variable(mode, elem[1], char_to_find)
+			elif(mode == 1):
+				return (elem[0][1] == char_to_find)
+			elif(mode == 2):
+				return lex_yacc.copy_AST_change(ast, (elem[0], recurse_over_variable(mode, elem[1], char_to_find, expr_to_replace)))		
+		else:
+			if(mode == 0):
+				return recurse_over_variable(mode, elem, char_to_find)
+			elif(mode == 1):
+				return (elem[0][1] == char_to_find)
+			elif(mode == 2):
+				return ast
+	elif ast.type == lex_yacc.AST_TYPE.FUN_APP:
+		fun = ast.get()
+		if(mode == 0):
+			ret = False
+			for arg in fun.arguments:
+				if(arg.type == lex_yacc.AST):
+					ret = ret | recurse_over_variable(mode, arg, char_to_find)
+			return ret
+		elif(mode == 1):
+			if(fun.fname == char_to_find):
+				return True
+			else:
+				return False
+		else:
+			new_args = []
+			for arg in fun.arguments:
+				if(arg.type == lex_yacc.AST):
+					new_args.append(recurse_over_variable(mode, arg, char_to_find, expr_to_replace))
+				else:
+					new_args.append(arg)
+			return lex_yacc.copy_AST_change(ast, lex_yacc.fun_app(fun.fname, new_args))
+	elif ast.type == lex_yacc.AST_TYPE.RETURN:
+		if(mode == 0 or mode == 1):
+			if(ast.left == None):
+				return False
+			else:
+				return recurse_over_variable(mode, ast.left, char_to_find)
+		else:
+			if(ast.left == None):
+				return ast
+			else:
+				return lex_yacc.copy_AST_change(ast, None, recurse_over_variable(mode, ast.left, char_to_find, expr_to_replace))
+	elif ast.type == lex_yacc.AST_TYPE.NON_SEMI_STATEMENT:
+		if(mode == 0 or mode == 1):
+			return recurse_over_variable(mode, ast.left, char_to_find)
+		else:
+			return lex_yacc.copy_AST_change(ast, None, recurse_over_variable(mode, ast.left, char_to_find, expr_to_replace))
+	elif ast.type == lex_yacc.AST_TYPE.COND:
+		if(mode == 0 or mode == 1):
+			if(ast.right == None):
+				return recurse_over_variable(mode, ast.left, char_to_find)
+			else:
+				return recurse_over_variable(mode, ast.left, char_to_find) or recurse_over_variable(mode, ast.left, char_to_find)
+		else:
+			if(ast.right == None):
+				return lex_yacc.copy_AST_change(ast, None, recurse_over_variable(mode, ast.left, char_to_find, expr_to_replace))
+			else:
+				return lex_yacc.copy_AST_change(ast, None, recurse_over_variable(mode, ast.left, char_to_find, expr_to_replace),
+															recurse_over_variable(mode, ast.right, char_to_find, expr_to_replace))
+	elif ast.type == lex_yacc.AST_TYPE.IF:
+		pass
+	elif ast.type == lex_yacc.AST_TYPE.ELIF_ELSE:
+		pass
+	elif ast.type == lex_yacc.AST_TYPE.FOR:
+		pass
+	elif ast.type == lex_yacc.AST_TYPE.LOOP_INIT:
+		pass
+	elif ast.type == lex_yacc.AST_TYPE.BLOCK:
+		pass
+	elif ast.type == lex_yacc.AST_TYPE.STATEMENTS:
+		pass
 
 def loop_optimizable(tree):
 	loop = tree.get()
@@ -78,74 +170,124 @@ def loop_optimizable(tree):
 	if(loop.init_expr.type == lex_yacc.AST_TYPE.LOOP_INIT):
 		if(type(loop.init_expr.get()) == tuple):
 			if(loop.init_expr.get()[0].get() == 'float'):
+				if __debug__ == False:
+					print(0)
 				return False 
 			var_assign = loop.init_expr.get()[1]
 			if(var_assign.get()[0].type != lex_yacc.AST_TYPE.ID):
+				if __debug__ == False:
+					print(1)
 				return False
 			if(var_assign.get()[1].type == lex_yacc.AST_TYPE.FUN_APP):
+				if __debug__ == False:
+					print(2)
 				return False
-			if(check_free_variable(var_assign.get()[1])):
+			if(recurse_over_variable(0, var_assign.get()[1])):
+				if __debug__ == False:
+					print(3)
 				return False
-			loop_variable = var_assign.get()[0]
+			loop_variable = var_assign.get()[0].get()
 		else:
-			var_assign = loop.init_expr.get().get()
+			var_assign = loop.init_expr.get().left
 			if(var_assign.type != lex_yacc.AST_TYPE.ASSIGN):
+				if __debug__ == False:
+					print(4)
 				return False
 			if(var_assign.get()[1].type == lex_yacc.AST_TYPE.FUN_APP):
+				if __debug__ == False:
+					print(5)
 				return False
-			if(check_free_variable(var_assign.get()[1])):
+			if(recurse_over_variable(0, var_assign.get()[1])):
+				if __debug__ == False:
+					print(6)
 				return False
-			loop_variable = var_assign.get()[0]
+			loop_variable = var_assign.get()[0].get()
 
 	if(loop.term_expr == None):
+		if __debug__ == False:
+			print(7)
 		return False
-	if(loop.term_expr.type != lex_yacc.AST_TYPE.EXPR):
+	loop_expr = loop.term_expr.left
+	if(loop_expr.type != lex_yacc.AST_TYPE.EXPR):
+		if __debug__ == False:
+			print(8)
 		return False
-	if(not(loop.term_expr.get() == '<' || loop.term_expr.get() == '>')):
+	if(not(loop_expr.get() == '<' or loop_expr.get() == '>')):
+		if __debug__ == False:
+			print(9)
 		return False
-	comparison_op = loop.term_expr.get()
-	if(not(find_and_get_var(loop.term_expr.left) == loop_variable)):
+	comparison_op = loop_expr.get()
+	if(not(loop_expr.left.get().type == lex_yacc.AST_TYPE.ID and loop_expr.left.get().get() == loop_variable)):
+		if __debug__ == False:
+			print(10)
 		return False
-	if(check_free_variable(loop.term_expr.right)):
+	if(recurse_over_variable(0, loop_expr.right)):
+		if __debug__ == False:
+			print(10)
 		return False
 
 	if(loop.update_expr == None):
+		if __debug__ == False:
+			print(11)	
 		return False
 
 	# update_expr should be of the form like a = a + 1, a++
 	if(loop.update_expr.type != lex_yacc.AST_TYPE.SEMI_STATEMENT):
+		if __debug__ == False:
+			print(12)
 		return False
 	if(loop.update_expr.left.type == lex_yacc.AST_TYPE.ASSIGN):
 		var_assign = loop.update_expr.left
 		if(var_assign.get()[0].type != lex_yacc.AST_TYPE.ID):
+			if __debug__ == False:
+				print(13)
 			return False
 		if(var_assign.get()[0].get() != loop_variable):
+			if __debug__ == False:
+				print(14)
 			return False
 		if(var_assign.get()[1].type == lex_yacc.AST_TYPE.FUN_APP):
+			if __debug__ == False:
+				print(15)
 			return False
 		if(comparison_op == '<'):
 			if(var_assign.get()[1].get() != '+'):
+				if __debug__ == False:
+					print(16)
 				return False
 		elif(comparison_op == '>'):
 			if(var_assign.get()[1].get() != '-'):
+				if __debug__ == False:
+					print(17)
 				return False
 		if(var_assign.get()[1].left.get() != loop_variable):
+			if __debug__ == False:
+				print(18)
 			return False
 		if(check_free_variable(var_assign.get()[1].right)):
+			if __debug__ == False:
+				print(19)
 			return False
 
 	elif(loop.update_expr.left.type == lex_yacc.AST_TYPE.EXPR):
 		expr = loop.update_expr.left
-		if(expr.get() == '++_left' || expr_get() == '++_right'):
+		if(expr.get() == '++_left' or expr.get() == '++_right'):
 			if(expr.left.type != lex_yacc.AST_TYPE.ID):
+				if __debug__ == False:
+					print(20)
 				return False
 			if(expr.left.get() != loop_variable):
+				if __debug__ == False:
+					print(21)
 				return False
 		else:
+			if __debug__ == False:
+				print(22)
 			return False
+	return True
 
 def	loop_unrolling(tree):
-
+	return True
 '''
     optimize(out_file, tree):
     Optimize the given tree and return optimized tree.
@@ -296,9 +438,11 @@ def optimize(out_file, tree, tabs = 0, tab = True, end = True, semi = True):
 	elif(tree.type == lex_yacc.AST_TYPE.FOR):
 
 		if(loop_optimizable(tree)):
+			print('loop unrolling')
 			loop_unrolling(tree)
 
 		else:
+			print('no loop unrolling')
 			loop = tree.get()
 			out_file.write('for(')
 			if(loop.init_expr != None):
