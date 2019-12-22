@@ -326,6 +326,8 @@ def calculate_expr(ast):
             return calculate_expr(ast.left)
         elif type(ast.content) == AST: # e = id_ptr_or_array | function_app | var_assignment
             return calculate_expr(ast.content)
+        elif ast.content == '&':
+            return ast.left.content.content
         else: # e = INT_VAL | FLOAT_VAL
             return ast.content
     elif ast.type == AST_TYPE.ID: # id_ptr_or_array = id
