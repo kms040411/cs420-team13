@@ -153,6 +153,7 @@ def __execute():
                 for variable_type, name in tree.content:
                     if type(variable_type) == arr_type:
                         dims = calculate_expr(variable_type.dims[0])
+                        data_structure.memory.add_variable_type(name, variable_type.type)
                         data_structure.memory.add_array(name, dims, present_lineno)
                     else:
                         data_structure.memory.add_variable_type(name, variable_type)

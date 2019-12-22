@@ -230,6 +230,11 @@ class VariableTable():
         self.tables[-1][-1][name] = ptr
 
     def assign_array(self, name, index, value):
+        variable_type = self.get_variable_type(name)
+        if variable_type == 'int':
+            value = int(value)
+        elif variable_type == 'float':
+            value = float(value)
         self.get_history(name)[index] = value
         
     def get_variable(self, name):
