@@ -172,33 +172,55 @@ class Scope_stack_entry():
 class VariableTable():
     def __init__(self):
         self.tables = [[dict()]]
+        self.type_tables = [[dict()]]
         #self.type_tables = [(dict(), None, None)]
         #self.present = 0
 
     def function_call(self): #previously new_scope_in
         self.tables.append([dict()])
+        self.type_tables.append([dict()])
         #self.type_tables.append([dict(), self.present, self.present])
         #self.present = len(self.tables) - 1
 
     def function_return(self): #previously new_scope_out
         self.tables.pop()
+        self.type_tables.pop()
         #self.type_tables.append([dict(), 0, self.present])
         #self.present = len(self.tables) - 1
     
     def scope_in(self):
         self.tables[-1].append(dict())
+        self.type_tables[-1].append(dict())
     
     def scope_out(self):
         self.tables[-1].pop()
+        self.type_tables[-1].pop()
 
     #def delete_scope(self):
         #(_, _, next_scope) = self.tables.pop()
         #self.type_tables.pop()
         #self.present = next_scope
 
+    def add_variable_type(self, name, variable_type):
+        self.type_tables[-1][-1][name] = variable_type
+
+    def get_variable_type(self, name):
+        current_function_scope = self.type_tables[-1]
+        for scope in reversed(current_function_scope):
+            if name in scope:
+                return scope[name]
+
+        raise Exception('undefined variable: ' + name)
+
     def add_variable(self, name, value, lineno):
         if value == None:
             self.tables[-1][-1][name] = []
+        else:
+            variable_type = self.get_variable_type(name)
+            if variable_type == 'int':
+                value = int(value)
+            elif variable_type == 'float':
+                value = float(value)
         self.get_history(name).append((value, lineno))
 
     def add_array(self, name, dims, lineno):

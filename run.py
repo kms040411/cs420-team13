@@ -112,6 +112,7 @@ def __execute():
                             dims = calculate_expr(variable_type.dims[0])
                             data_structure.memory.add_array(name, dims, present_lineno)
                         else:
+                            data_structure.memory.add_variable_type(name, variable_type)
                             data_structure.memory.add_variable(name, None, present_lineno)
                 elif tree.type == AST_TYPE.ASSIGN:
                     name = tree.content[0].content
@@ -325,6 +326,7 @@ def calculate_expr(ast):
                     variable_ptr_ind = variable_ptr_ind + 1
                 else:
                     lineno = data_structure.get_current_line()
+                    data_structure.memory.add_variable_type(name, variable_type)
                     data_structure.memory.add_variable(name, None, lineno)
                     data_structure.memory.add_variable(name, variable[variable_ind], lineno)
                     variable_ind = variable_ind + 1

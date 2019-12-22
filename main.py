@@ -1,6 +1,6 @@
 import lex_yacc
 import get_input
-import optimize
+#import optimize
 import run
 import data_structures
 import sys
