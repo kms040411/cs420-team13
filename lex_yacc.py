@@ -669,6 +669,7 @@ def p_expression(p):
 		  		  | LPAREN expression RPAREN
 		  		  | MINUS expression
 		  		  | PTR_AMP expression
+		  		  | MULTIPLY expression
 		  		  | id_ptr_or_array DOUBLEPLUS
 		  		  | DOUBLEPLUS id_ptr_or_array
 		  		  | id_ptr_or_array
