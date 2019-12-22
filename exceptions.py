@@ -1,4 +1,4 @@
 class ScopeTypeError(Exception):
     pass
-class FunctionCalled(Exception):
+class FunctionReturned(Exception):
     pass
