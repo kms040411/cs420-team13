@@ -5,12 +5,51 @@
 '''
 from lex_yacc import AST_TYPE, AST, arr_type
 import data_structures
-from exceptions import FunctionCalled
+from exceptions import FunctionReturned
 import sys
 
 data_structure = data_structures.Global_Data_Structure()
-function_stack = [[]] #each entry: search_stack
+function_stack = [[]] # each entry: search_stack
 search_stack = function_stack[-1]
+
+def run_procedure(): #run procedure, returns its return value
+    # search_stack.append((func, False, False, False))
+    func = search_stack[-1][0]
+    try:
+        if func.content.name != "main":
+            __next() # execute remaining lines first
+        while(True):
+            print(">>> ", end="")
+            user_input = input()
+            input_list = user_input.split()
+            if (input_list[0] == "next"):
+                __next.executed_lines = 0
+                __next.num_lines = 1
+                if (len(input_list) > 1):
+                    __next.num_lines = int(input_list[1])
+                __next()
+
+            elif (input_list[0] == "print"):
+                if (len(input_list) <= 1):
+                    continue
+                else:
+                    var = input_list[1]
+                    __print(var)
+
+            elif (input_list[0] == "trace"):
+                if (len(input_list) <= 1):
+                    continue
+                else:
+                    var = input_list[1]
+                    __trace(var)
+            
+            elif (input_list[0] == "quit"):
+                sys.exit(0)
+    
+    except FunctionReturned:
+        assert data_structure.return_table.value_returned
+        data_structure.return_table.value_returned = False
+        return data_structure.return_table.return_value.pop()
 
 def run(optimized_tree):
     '''
@@ -18,10 +57,11 @@ def run(optimized_tree):
     '''
     global search_stack
     start_line = -1
+    main_func = None
     for func in optimized_tree.content:
-        #put functions in function table
+        # put functions in function table
         if func.type == AST_TYPE.FUNCTION:
-            if not func.content.params:  #parameter empty
+            if not func.content.params:  # parameter empty
                 if not data_structure.function_table.insert(func.content.name, func, func.content.return_type, []): #func.content.body
                     print('Error: redefinition of', func.content.name)
             else:
@@ -30,47 +70,51 @@ def run(optimized_tree):
 
         if func.content.name == "main":
             start_line = func.start_lineno
+            data_structure.set_current_line(start_line)
             search_stack.append((func, False, False, False))
-            #data_structure.memory.new_scope_out()
+            main_func = func
+            # data_structure.memory.new_scope_out()
     if start_line == -1:
         print("There is no main function")
+        sys.exit(0)
 
-    data_structure.set_current_line(start_line)
+    # data_structure.set_current_line(start_line)
+    run_procedure()
 
-    while(True):
-        print(">>> ", end="")
-        user_input = input()
-        input_list = user_input.split(" ")
-        if (input_list[0] == "next"):
-            __next.executed_lines = 0
-            __next.num_lines = 1
-            if (len(input_list) > 1):
-                __next.num_lines = int(input_list[1])
-            __next()
+    # while(True):
+    #     print(">>> ", end="")
+    #     user_input = input()
+    #     input_list = user_input.split(" ")
+    #     if (input_list[0] == "next"):
+    #         __next.executed_lines = 0
+    #         __next.num_lines = 1
+    #         if (len(input_list) > 1):
+    #             __next.num_lines = int(input_list[1])
+    #         __next()
 
-        elif (input_list[0] == "print"):
-            if (len(input_list) <= 1):
-                continue
-            else:
-                var = input_list[1]
-                __print(var)
+    #     elif (input_list[0] == "print"):
+    #         if (len(input_list) <= 1):
+    #             continue
+    #         else:
+    #             var = input_list[1]
+    #             __print(var)
 
-        elif (input_list[0] == "trace"):
-            if (len(input_list) <= 1):
-                continue
-            else:
-                var = input_list[1]
-                __trace(var)
+    #     elif (input_list[0] == "trace"):
+    #         if (len(input_list) <= 1):
+    #             continue
+    #         else:
+    #             var = input_list[1]
+    #             __trace(var)
         
-        elif (input_list[0] == "quit"):
-            break
+    #     elif (input_list[0] == "quit"):
+    #         break
 
 # @private
 def __next():
     current_linenum = data_structure.get_current_line()
     while __next.executed_lines < __next.num_lines:
-        __execute()
         __next.executed_lines += 1
+        __execute()
         #current_linenum = data_structure.get_current_line()
         #data_structure.set_current_line(__execute(current_linenum))
     return
@@ -96,99 +140,96 @@ def __execute():
 
         #print(tree.start_lineno, tree.end_lineno, tree.type)
         #print(tree.content, tree.left, tree.right)
-        #print(search_stack)
+        #print(tree)
 
         if not search_stack[-1][3]:
-            try: #fails if any expression contains function call
 
-                if tree.type != AST_TYPE.LOOP_INIT:
-                    __visit()
-                
-                if tree.type == AST_TYPE.FUNCTION:
-                    search_stack.append((tree.content.body, False, False, False))
-                elif tree.type == AST_TYPE.VAR_DEC:
-                    for variable_type, name in tree.content:
-                        if type(variable_type) == arr_type:
-                            dims = calculate_expr(variable_type.dims[0])
-                            data_structure.memory.add_array(name, dims, present_lineno)
-                        else:
-                            data_structure.memory.add_variable(name, None, present_lineno)
-                elif tree.type == AST_TYPE.ASSIGN:
-                    name = tree.content[0].content
-                    value = calculate_expr(tree.content[1])
-                    #print(name, value)
-                    if type(name) == tuple:
-                        index = 0 if type(name[0]) == int else calculate_expr(name[0][0]) #pointer
-                        name = name[1]
-                        data_structure.memory.assign_array(name, index, value)
+            if tree.type != AST_TYPE.LOOP_INIT:
+                __visit()
+            
+            if tree.type == AST_TYPE.FUNCTION:
+                search_stack.append((tree.content.body, False, False, False))
+            elif tree.type == AST_TYPE.VAR_DEC:
+                for variable_type, name in tree.content:
+                    if type(variable_type) == arr_type:
+                        dims = calculate_expr(variable_type.dims[0])
+                        data_structure.memory.add_array(name, dims, present_lineno)
                     else:
-                        data_structure.memory.add_variable(name, value, present_lineno)
-                elif tree.type == AST_TYPE.FOR:
-                    data_structure.memory.scope_in()
-                    loop_info = (tree.content.term_expr, tree.content.update_expr, tree.content.body, False, False)
-                    data_structure.loop_table.add_loop_info(loop_info)
-                    search_stack.append((tree.content.init_expr, False, False, False))
-                elif tree.type == AST_TYPE.LOOP_INIT:
-                    if data_structure.loop_table.loop_first():
-                        search_stack.append((tree.content, False, False, False))
-                        data_structure.loop_table.loop_start()
+                        data_structure.memory.add_variable(name, None, present_lineno)
+            elif tree.type == AST_TYPE.ASSIGN:
+                name = tree.content[0].content
+                value = calculate_expr(tree.content[1])
+                #print(name, value)
+                if type(name) == tuple:
+                    index = 0 if type(name[0]) == int else calculate_expr(name[0][0]) #pointer
+                    name = name[1]
+                    data_structure.memory.assign_array(name, index, value)
+                else:
+                    data_structure.memory.add_variable(name, value, present_lineno)
+            elif tree.type == AST_TYPE.FOR:
+                data_structure.memory.scope_in()
+                loop_info = (tree.content.term_expr, tree.content.update_expr, tree.content.body, False, False)
+                data_structure.loop_table.add_loop_info(loop_info)
+                search_stack.append((tree.content.init_expr, False, False, False))
+            elif tree.type == AST_TYPE.LOOP_INIT:
+                if data_structure.loop_table.loop_first():
+                    search_stack.append((tree.content, False, False, False))
+                    data_structure.loop_table.loop_start()
+                else:
+                    if data_structure.loop_table.loop_second():
+                        calculate_expr(data_structure.loop_table.loop_update())
+                    if calculate_expr(data_structure.loop_table.loop_term()):
+                        search_stack.append((data_structure.loop_table.loop_body(), False, False, False))
                     else:
-                        if data_structure.loop_table.loop_second():
-                            calculate_expr(data_structure.loop_table.loop_update())
-                        if calculate_expr(data_structure.loop_table.loop_term()):
-                            search_stack.append((data_structure.loop_table.loop_body(), False, False, False))
-                        else:
-                            __visit()
-                        data_structure.loop_table.loop_start_update()
-                elif tree.type == AST_TYPE.IF:
-                    data_structure.memory.scope_in()
+                        __visit()
+                    data_structure.loop_table.loop_start_update()
+            elif tree.type == AST_TYPE.IF:
+                data_structure.memory.scope_in()
+                if not calculate_expr(tree.content):
+                    __stop_search()
+                else:
+                    __stop_elif_else()
+            elif tree.type == AST_TYPE.ELIF_ELSE:
+                data_structure.memory.scope_in()
+                #elif case
+                if not (tree.content == True):
+                    #condition False
                     if not calculate_expr(tree.content):
-                        __stop_search()
+                        __next_elif()
+                    #condition True
                     else:
-                        __stop_elif_else()
-                elif tree.type == AST_TYPE.ELIF_ELSE:
-                    data_structure.memory.scope_in()
-                    #elif case
-                    if not (tree.content == True):
-                        #condition False
-                        if not calculate_expr(tree.content):
-                            __next_elif()
-                        #condition True
-                        else:
-                            __stop_behind_elif_else()
-                    #else case: just go left without any action
+                        __stop_behind_elif_else()
+                #else case: just go left without any action
 
-                elif tree.type == AST_TYPE.EXPR:
+            elif tree.type == AST_TYPE.EXPR:
+                calculate_expr(tree)
+                __stop_search()
+
+            elif tree.type == AST_TYPE.RETURN:
+                __stop_search()
+                return_value = None if tree.left is None else calculate_expr(tree.left)
+                data_structure.return_table.value_returned = True
+                data_structure.return_table.return_value.append(return_value)
+                #print('value returned: %d' % return_value)
+                data_structure.memory.function_return()
+                function_stack.pop() #destroy frame
+                search_stack = function_stack[-1]
+                raise FunctionReturned
+
+            elif tree.type == AST_TYPE.FUN_APP:
+                if tree.content.fname == 'printf':
+                    format_string = tree.content.arguments[0][1:-1]
+                    format_string = format_string.replace('\\n', '\n')
+                    args = tuple(map(calculate_expr, tree.content.arguments[1:]))
+                    print(format_string % args, end = '')
+                else:
                     calculate_expr(tree)
-                    __stop_search()
 
-                elif tree.type == AST_TYPE.RETURN:
-                    __stop_search()
-                    return_value = None if tree.left is None else calculate_expr(tree.left)
-                    data_structure.return_table.value_returned = True
-                    data_structure.return_table.return_value.append(return_value)
-                    #print('value returned: %d' % return_value)
-                    data_structure.memory.function_return()
-                    function_stack.pop() #destroy frame
-                    search_stack = function_stack[-1]
-
-                elif tree.type == AST_TYPE.FUN_APP:
-                    if tree.content.fname == 'printf':
-                        format_string = tree.content.arguments[0][1:-1]
-                        format_string = format_string.replace('\\n', '\n')
-                        args = tuple(map(calculate_expr, tree.content.arguments[1:]))
-                        print(format_string % args, end = '')
-                    else:
-                        calculate_expr(tree)
-
-                # if data_structure.return_table.is_function_call:
-                #     __unvisit()
-                #     data_structure.return_table.is_function_call = False
-                #     #print(data_structure.memory.present)
-                #     return
-            except FunctionCalled:
-                #__unvisit_caller()
-                pass
+            # if data_structure.return_table.is_function_call:
+            #     __unvisit()
+            #     data_structure.return_table.is_function_call = False
+            #     #print(data_structure.memory.present)
+            #     return
 
         else:
             if not search_stack[-1][1]:
@@ -210,10 +251,10 @@ def __execute():
                 elif tree.type == AST_TYPE.FUNCTION:
                     if tree.content.name == "main":
                         print('End of program')
-                        sys.exit(0)
+                        return
                     else:
                         __stop_search()
-                        if not data_structure.return_table.value_returned:#end of function body with no return statement
+                        if not data_structure.return_table.value_returned: # end of function body with no return statement
                             return_value = None
                             data_structure.return_table.value_returned = True
                             data_structure.return_table.return_value.append(return_value)
@@ -221,7 +262,8 @@ def __execute():
                             function_stack.pop() #destroy frame
                             search_stack = function_stack[-1]
                             tree = search_stack[-1][0]
-                            continue
+                            # continue
+                            raise FunctionReturned
                 
                 search_stack.pop()
         
@@ -293,42 +335,39 @@ def calculate_expr(ast):
     elif ast.type == AST_TYPE.SEMI_STATEMENT:
         return calculate_expr(ast.left)
     elif ast.type == AST_TYPE.FUN_APP:
-        if data_structure.return_table.value_returned:
-            data_structure.return_table.value_returned = False
-            return data_structure.return_table.return_value.pop()
-        else:
-            __unvisit()
-            func = data_structure.function_table.get_ast(ast.content.fname)
-            params = data_structure.function_table.get_params(ast.content.fname)
-            # data_structure.return_table.is_function_call = True
-            search_stack = []
-            search_stack.append((func, False, False, False))
-            function_stack.append(search_stack) # setup new frame
-            data_structure.set_current_line(func.start_lineno)
+        # __unvisit()
+        func = data_structure.function_table.get_ast(ast.content.fname)
+        params = data_structure.function_table.get_params(ast.content.fname)
+        # data_structure.return_table.is_function_call = True
+        search_stack = []
+        search_stack.append((func, False, False, False))
+        function_stack.append(search_stack) # setup new frame
+        data_structure.set_current_line(func.start_lineno)
 
-            variable = []
-            variable_ptr = []
-            arg_ind = 0
-            for variable_type, name in params:
-                arg = ast.content.arguments[arg_ind]
-                if str(variable_type)[0] == '*':
-                    variable_ptr.append(data_structure.memory.get_array_ptr(arg.content.content))
-                else:
-                    variable.append(calculate_expr(arg))
-                arg_ind = arg_ind + 1
-            data_structure.memory.function_call()
-            variable_ind = 0
-            variable_ptr_ind = 0
-            for variable_type, name in params:
-                if str(variable_type)[0] == '*':
-                    data_structure.memory.add_array_ptr(name, variable_ptr[variable_ptr_ind])
-                    variable_ptr_ind = variable_ptr_ind + 1
-                else:
-                    lineno = data_structure.get_current_line()
-                    data_structure.memory.add_variable(name, None, lineno)
-                    data_structure.memory.add_variable(name, variable[variable_ind], lineno)
-                    variable_ind = variable_ind + 1
-            raise FunctionCalled
+        variable = []
+        variable_ptr = []
+        arg_ind = 0
+        for variable_type, name in params:
+            arg = ast.content.arguments[arg_ind]
+            if str(variable_type)[0] == '*':
+                variable_ptr.append(data_structure.memory.get_array_ptr(arg.content.content))
+            else:
+                variable.append(calculate_expr(arg))
+            arg_ind = arg_ind + 1
+        data_structure.memory.function_call()
+        variable_ind = 0
+        variable_ptr_ind = 0
+        for variable_type, name in params:
+            if str(variable_type)[0] == '*':
+                data_structure.memory.add_array_ptr(name, variable_ptr[variable_ptr_ind])
+                variable_ptr_ind = variable_ptr_ind + 1
+            else:
+                lineno = data_structure.get_current_line()
+                data_structure.memory.add_variable(name, None, lineno)
+                data_structure.memory.add_variable(name, variable[variable_ind], lineno)
+                variable_ind = variable_ind + 1
+        # __next.executed_lines += 1
+        return run_procedure()
 
 def __visit():
     search_stack = function_stack[-1]
