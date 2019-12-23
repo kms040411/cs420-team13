@@ -1,6 +1,6 @@
 import lex_yacc
 import get_input
-#import optimize
+import optimize
 import run
 import data_structures
 import sys
@@ -24,17 +24,18 @@ if __name__ == "__main__":
 
     text = get_input.get_input(sys.argv[1])
     text = uce.unreachable_code_elimination(text)
-    print(text) #test
+    # print(text) #test
     tree = lex_yacc.parse(text)
+    optimize.optimize_init(tree)
     run.run(tree)
     sys.exit(0) #for testings
     
     #print(tree.start_lineno, tree.end_lineno, tree.content[1].content.body.left.left.end_lineno)
     #dsf(tree.content[1])
-    optimize.optimize_init(tree)
+    
 
-    text = get_input.get_input('optimized.c')
-    optimized = lex_yacc.parse(text)
-    run.run(optimized)
+    # text = get_input.get_input('optimized.c')
+    # optimized = lex_yacc.parse(text)
+    # run.run(optimized)
     
     # print("End of interpreter")
