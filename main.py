@@ -21,7 +21,9 @@ if __name__ == "__main__":
         @TODO: parse argv to get the filename
     '''
     #data_structure = data_structures.Global_Data_Structure()
-
+    if len(sys.argv) < 2:
+        print("usage: " + sys.argv[0] + " [input file name]")
+        sys.exit(0)
     text = get_input.get_input(sys.argv[1])
     text = uce.unreachable_code_elimination(text)
     # print(text) #test
