@@ -395,11 +395,11 @@ def p_statements(p):
 		print(p[0])
 
 def p_semi_statement(p):
-	'''semi_statement : expression
-					  | var_declaration
+	'''semi_statement : var_declaration
 					  | var_assignment
 					  | function_app
-					  | return_expr'''
+					  | return_expr
+					  | expression'''
 	if __debug__ == False:
 		print('SEMI_STATEMENT')
 
@@ -560,8 +560,7 @@ def p_var_declaration(p):
 		print(p[0])
 
 def p_var_assignment(p):
-	'''var_assignment : id_ptr_or_array EQ expression
-					  | id_ptr_or_array EQ function_app'''
+	'''var_assignment : id_ptr_or_array EQ expression'''
 	if __debug__ == False:
 		print('VAR_ASSIGN')
 
