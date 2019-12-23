@@ -28,7 +28,8 @@ if __name__ == "__main__":
     text = uce.unreachable_code_elimination(text)
     # print(text) #test
     tree = lex_yacc.parse(text)
-    optimize.optimize_init(tree)
+    if(len(sys.argv) == 3 and sys.argv[2] == 'op'):
+        optimize.optimize_init(tree)
     run.run(tree)
     sys.exit(0) #for testings
     
