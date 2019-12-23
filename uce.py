@@ -1,8 +1,8 @@
 '''
-    dead_code_elmination(text):
+    unreachable_code_elmination(text):
     Optimize the given text and return optimized text.
 '''
-def dead_code_elimination(text):
+def unreachable_code_elimination(text):
     code_list = text.split("\n")
     line_table = mark(code_list)
     return sweep(line_table, code_list)

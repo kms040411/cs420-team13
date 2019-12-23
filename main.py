@@ -4,6 +4,7 @@ import get_input
 import run
 import data_structures
 import sys
+import uce
 
 def dsf(tree):
     if tree == None:
@@ -22,6 +23,8 @@ if __name__ == "__main__":
     #data_structure = data_structures.Global_Data_Structure()
 
     text = get_input.get_input(sys.argv[1])
+    text = uce.unreachable_code_elimination(text)
+    print(text) #test
     tree = lex_yacc.parse(text)
     run.run(tree)
     sys.exit(0) #for testings

@@ -20,4 +20,6 @@ int main(void) {
 		printf("%f\n", average);
 		}
 	}
+	return 0;
+	print("end");
 }
