@@ -410,7 +410,7 @@ def	loop_unrolling(out_file, tree, tabs, tab, end, semi):
 
 	elif(loop.update_expr.left.type == lex_yacc.AST_TYPE.EXPR):
 		update_val = 1
-	if(term_val >= init_val and comparison_op == '<'):
+	if(term_val >= init_val and (term_val - init_val) >= 3 * update_val and comparison_op == '<'):
 			new_loop_init = loop.init_expr
 			new_loop_term = lex_yacc.AST(0, 0, 'SEMI_STATEMENT', lex_yacc.AST_TYPE.SEMI_STATEMENT, 
 													lex_yacc.AST(0, 0, '<', lex_yacc.AST_TYPE.EXPR,
@@ -442,7 +442,7 @@ def	loop_unrolling(out_file, tree, tabs, tab, end, semi):
 			for i in range(loop_left):
 				body_left = recurse_over_variable(2, loop.body.left, loop_variable, lex_yacc.AST(0, 0, loop_start + i * update_val, lex_yacc.AST_TYPE.EXPR))
 				optimize(out_file, body_left, tabs, tab, end, semi, False)		
-	elif(term_val <= init_val and comparison_op == '>'):
+	elif(term_val <= init_val and (init_val - term_val) >= 3 * (-update_val) and comparison_op == '>'):
 			new_loop_init = loop.init_expr
 			new_loop_term = lex_yacc.AST(0, 0, 'SEMI_STATEMENT', lex_yacc.AST_TYPE.SEMI_STATEMENT, 
 													lex_yacc.AST(0, 0, '>', lex_yacc.AST_TYPE.EXPR,
