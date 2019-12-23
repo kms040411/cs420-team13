@@ -127,6 +127,8 @@ class AST():
 				return '(' + self.left.get_str_expr() + ')'
 			elif(self.get() == '-'):
 				return '-' + self.left.get_str_expr()
+			elif(self.get() == '&'):
+				return '&' + self.left.get_str_expr()
 			elif(self.get() == '++_left'):
 				return '++' + self.left.get_str_expr()
 			elif(self.get() == '++_right'):

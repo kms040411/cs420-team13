@@ -214,9 +214,10 @@ def __execute():
                 data_structure.return_table.return_value.append(return_value)
                 #print('value returned: %d' % return_value)
                 data_structure.memory.function_return()
-                function_stack.pop() #destroy frame
-                search_stack = function_stack[-1]
-                raise FunctionReturned
+                if len(function_stack) > 1:
+                    function_stack.pop() #destroy frame
+                    search_stack = function_stack[-1]
+                    raise FunctionReturned
 
             elif tree.type == AST_TYPE.FUN_APP:
                 if tree.content.fname == 'printf':
@@ -332,6 +333,9 @@ def calculate_expr(ast):
             return ast.content
     elif ast.type == AST_TYPE.ID: # id_ptr_or_array = id
         return data_structure.memory.get_variable(ast.content)
+    elif ast.type == AST_TYPE.PTR_VAR:
+        address = data_structure.memory.get_variable(ast.content[1])
+        return data_structure.memory.get_variable(address)
     elif ast.type == AST_TYPE.ARR_VAR: #id_ptr_or_array = id array_decs
         index = calculate_expr(ast.content[0][0])
         name = ast.content[1]
@@ -429,9 +433,13 @@ def __print(var : str):
     #print(value)
 
     try:
-        print(data_structure.memory.get_variable(var))
+        value = data_structure.memory.get_variable(var)
+        if value == None:
+            print('N/A')
+        else:
+            print(value)
     except:
-        print("cannot find variable")
+        print("Invisible variable")
     return
 
 # @private
@@ -443,7 +451,7 @@ def __trace(var : str):
     #    return
     try:
         history_list = data_structure.memory.get_history(var)#symbol_table.get_history(var)
-        print(history_list)
+        #print(history_list)
         for i in range(len(history_list)):
             value = history_list[i][0]
             linenum = str(history_list[i][1])
@@ -452,6 +460,6 @@ def __trace(var : str):
             else:
                 print(var + " = " + str(value) + " at line " + linenum)
     except:
-        print('cannot find variable')
+        print('Invisible variable')
     return
         
