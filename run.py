@@ -235,7 +235,7 @@ def __execute():
 
         else:
             if not search_stack[-1][1]:
-                search_stack[-1] = (tree, True, False, True)
+                search_stack[-1] = (tree, True, search_stack[-1][2], True)
                 if tree.left != None:
                     search_stack.append((tree.left, False, False, False))
             elif not search_stack[-1][2]:
@@ -406,7 +406,8 @@ def __stop_behind_elif_else():
     search_stack = function_stack[-1]
     tree = search_stack[-1][0]
     #for dead code elimination
-    tree.right = None
+    # tree.right = None
+    search_stack[-1] = (tree, False, True, True)
 
 def __next_elif():
     search_stack = function_stack[-1]
