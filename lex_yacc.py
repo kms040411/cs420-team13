@@ -71,7 +71,7 @@ class AST():
 		return AST(start_lineno, end_lineno, old_AST.content, old_AST.type, old_AST.left, old_AST.right)
 		
 	def copy_AST_change(old_AST, content = None, left = None, right = None):
-		ret_AST = self.copy_AST(old_AST.start_lineno, old_AST.end_lineno)
+		ret_AST = AST.copy_AST(old_AST.start_lineno, old_AST.end_lineno, old_AST)
 		if(content != None):
 			ret_AST.content = content
 		if(left != None):
@@ -395,10 +395,10 @@ def p_statements(p):
 		print(p[0])
 
 def p_semi_statement(p):
-	'''semi_statement : var_declaration
+	'''semi_statement : expression
+					  | var_declaration
 					  | var_assignment
 					  | function_app
-					  | expression
 					  | return_expr'''
 	if __debug__ == False:
 		print('SEMI_STATEMENT')
