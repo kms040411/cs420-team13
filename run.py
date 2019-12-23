@@ -332,6 +332,9 @@ def calculate_expr(ast):
             return ast.content
     elif ast.type == AST_TYPE.ID: # id_ptr_or_array = id
         return data_structure.memory.get_variable(ast.content)
+    elif ast.type == AST_TYPE.PTR_VAR:
+        address = data_structure.memory.get_variable(ast.content[1])
+        return data_structure.memory.get_variable(address)
     elif ast.type == AST_TYPE.ARR_VAR: #id_ptr_or_array = id array_decs
         index = calculate_expr(ast.content[0][0])
         name = ast.content[1]
