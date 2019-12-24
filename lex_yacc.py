@@ -716,12 +716,6 @@ def main():
 	if(__name__ == '__main__'):
 		with open('input.c', 'r') as file:
 			data = file.read()
-		# lexer.input(data)
-		# while True:
-		# 	tok = lexer.token()
-		# 	if not tok:
-		# 		break
-		# 	print(tok)
 		parser = yacc.yacc()
 		parser.parse(data)
 

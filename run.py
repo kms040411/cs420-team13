@@ -13,7 +13,6 @@ function_stack = [[]] # each entry: search_stack
 search_stack = function_stack[-1]
 
 def run_procedure(): #run procedure, returns its return value
-    # search_stack.append((func, False, False, False))
     func = search_stack[-1][0]
     try:
         if func.content.name != "main":
@@ -73,41 +72,11 @@ def run(optimized_tree):
             data_structure.set_current_line(start_line)
             search_stack.append((func, False, False, False))
             main_func = func
-            # data_structure.memory.new_scope_out()
     if start_line == -1:
         print("There is no main function")
         sys.exit(0)
 
-    # data_structure.set_current_line(start_line)
     run_procedure()
-
-    # while(True):
-    #     print(">>> ", end="")
-    #     user_input = input()
-    #     input_list = user_input.split(" ")
-    #     if (input_list[0] == "next"):
-    #         __next.executed_lines = 0
-    #         __next.num_lines = 1
-    #         if (len(input_list) > 1):
-    #             __next.num_lines = int(input_list[1])
-    #         __next()
-
-    #     elif (input_list[0] == "print"):
-    #         if (len(input_list) <= 1):
-    #             continue
-    #         else:
-    #             var = input_list[1]
-    #             __print(var)
-
-    #     elif (input_list[0] == "trace"):
-    #         if (len(input_list) <= 1):
-    #             continue
-    #         else:
-    #             var = input_list[1]
-    #             __trace(var)
-        
-    #     elif (input_list[0] == "quit"):
-    #         break
 
 # @private
 def __next():
@@ -115,8 +84,6 @@ def __next():
     while __next.executed_lines < __next.num_lines:
         __next.executed_lines += 1
         __execute()
-        #current_linenum = data_structure.get_current_line()
-        #data_structure.set_current_line(__execute(current_linenum))
     return
 
 ''' 
@@ -138,10 +105,6 @@ def __execute():
             present_lineno = tree.start_lineno
             break
 
-        #print(tree.start_lineno, tree.end_lineno, tree.type)
-        #print(tree.content, tree.left, tree.right)
-        #print(tree)
-
         if not search_stack[-1][3]:
 
             if tree.type != AST_TYPE.LOOP_INIT:
@@ -161,7 +124,6 @@ def __execute():
             elif tree.type == AST_TYPE.ASSIGN:
                 name = tree.content[0].content
                 value = calculate_expr(tree.content[1])
-                #print(name, value)
                 if type(name) == tuple:
                     index = 0 if type(name[0]) == int else calculate_expr(name[0][0]) #pointer
                     name = name[1]
@@ -212,7 +174,6 @@ def __execute():
                 return_value = None if tree.left is None else calculate_expr(tree.left)
                 data_structure.return_table.value_returned = True
                 data_structure.return_table.return_value.append(return_value)
-                #print('value returned: %d' % return_value)
                 data_structure.memory.function_return()
                 if len(function_stack) > 1:
                     function_stack.pop() #destroy frame
@@ -228,12 +189,6 @@ def __execute():
                 else:
                     calculate_expr(tree)
 
-            # if data_structure.return_table.is_function_call:
-            #     __unvisit()
-            #     data_structure.return_table.is_function_call = False
-            #     #print(data_structure.memory.present)
-            #     return
-
         else:
             if not search_stack[-1][1]:
                 search_stack[-1] = (tree, True, search_stack[-1][2], True)
@@ -245,11 +200,9 @@ def __execute():
                     search_stack.append((tree.right, False, False, False))
             else:
                 if tree.type == AST_TYPE.FOR:
-                    #data_structure.memory.delete_scope()
                     data_structure.memory.scope_out()
                     data_structure.loop_table.table.pop()
                 elif tree.type == AST_TYPE.IF:
-                    #data_structure.memory.delete_scope()
                     data_structure.memory.scope_out()
                 elif tree.type == AST_TYPE.FUNCTION:
                     if tree.content.name == "main":
@@ -298,8 +251,6 @@ def calculate_expr(ast):
             if ast.content == '-' and ast.right is None: # e = -e
                 return -left
             right = calculate_expr(ast.right)
-            #print(ast.left)
-            #print(ast.right)
             if ast.content == '+': # e = e + e
                 return left + right
             elif ast.content == '-': # e = e - e
@@ -343,10 +294,8 @@ def calculate_expr(ast):
     elif ast.type == AST_TYPE.SEMI_STATEMENT:
         return calculate_expr(ast.left)
     elif ast.type == AST_TYPE.FUN_APP:
-        # __unvisit()
         func = data_structure.function_table.get_ast(ast.content.fname)
         params = data_structure.function_table.get_params(ast.content.fname)
-        # data_structure.return_table.is_function_call = True
         search_stack = []
         search_stack.append((func, False, False, False))
         function_stack.append(search_stack) # setup new frame
@@ -375,7 +324,6 @@ def calculate_expr(ast):
                 data_structure.memory.add_variable(name, None, lineno)
                 data_structure.memory.add_variable(name, variable[variable_ind], lineno)
                 variable_ind = variable_ind + 1
-        # __next.executed_lines += 1
         return run_procedure()
 
 def __visit():
@@ -410,7 +358,6 @@ def __stop_behind_elif_else():
     search_stack = function_stack[-1]
     tree = search_stack[-1][0]
     #for dead code elimination
-    # tree.right = None
     search_stack[-1] = (tree, False, True, True)
 
 def __next_elif():
@@ -421,17 +368,6 @@ def __next_elif():
 
 # @private
 def __print(var : str):
-    #scope_stack = data_structure.scope_stack
-    #symbol_table = scope_stack.get_symbol_table()
-    #if symbol_table is None:
-    #    print("Cannot find value")
-    #    return
-    #value = symbol_table.get_value(var)
-    #if value is None:
-    #    print("Cannot find value")
-    #    return
-    #print(value)
-
     try:
         value = data_structure.memory.get_variable(var)
         if value == None:
@@ -444,14 +380,8 @@ def __print(var : str):
 
 # @private
 def __trace(var : str):
-    #scope_stack = data_structure.scope_stack
-    #symbol_table = scope_stack.get_symbol_table()
-    #if symbol_table is None:
-    #    print("Cannot find value")
-    #    return
     try:
-        history_list = data_structure.memory.get_history(var)#symbol_table.get_history(var)
-        #print(history_list)
+        history_list = data_structure.memory.get_history(var)
         for i in range(len(history_list)):
             value = history_list[i][0]
             linenum = str(history_list[i][1])
