@@ -21,39 +21,48 @@ def run_procedure(): #run procedure, returns its return value
             print(">>> ", end="")
             user_input = input()
             input_list = user_input.split()
-            if (input_list[0] == "next"):
-                __next.executed_lines = 0
-                __next.num_lines = 1
-                if (len(input_list) > 1):
-                    __next.num_lines = int(input_list[1])
-                __next()
 
-            elif (input_list[0] == "print"):
-                if (len(input_list) <= 1):
-                    continue
-                else:
-                    var = input_list[1]
-                    __print(var)
+            if not input_list:
+                print("Incorrect command usage: try 'next [lines]'")
+            else:
+                if (input_list[0] == "next"):
+                    __next.executed_lines = 0
+                    __next.num_lines = 1
+                    if (len(input_list) > 1):
+                        __next.num_lines = int(input_list[1])
+                    __next()
 
-            elif (input_list[0] == "trace"):
-                if (len(input_list) <= 1):
-                    continue
+                elif (input_list[0] == "print"):
+                    if (len(input_list) <= 1):
+                        continue
+                    else:
+                        var = input_list[1]
+                        __print(var)
+
+                elif (input_list[0] == "trace"):
+                    if (len(input_list) <= 1):
+                        continue
+                    else:
+                        var = input_list[1]
+                        __trace(var)
+                
+                elif (input_list[0] == "quit"):
+                    sys.exit(0)
+
                 else:
-                    var = input_list[1]
-                    __trace(var)
-            
-            elif (input_list[0] == "quit"):
-                sys.exit(0)
+                    print("Incorrect command usage: try 'next [lines]'")
     
     except FunctionReturned:
         assert data_structure.return_table.value_returned
         data_structure.return_table.value_returned = False
         return data_structure.return_table.return_value.pop()
 
-def run(optimized_tree):
+
+def run(optimized_tree, print_linenum):
     '''
         @TODO: implement run()
     '''
+    data_structure.print_linenum = print_linenum
     global search_stack
     start_line = -1
     main_func = None
@@ -96,7 +105,8 @@ def __execute():
     tree = search_stack[-1][0]
     present_lineno = data_structure.get_current_line()
 
-    print('present line number : ' + str(present_lineno))
+    if data_structure.print_linenum:
+        print('present line number : ' + str(present_lineno))
     
     while (True):
         if tree is None:

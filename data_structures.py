@@ -7,6 +7,7 @@ class Global_Data_Structure():
         self.loop_table = LoopTable()
         self.return_table = ReturnTable()
         self.current_line = 0
+        self.print_linenum = True
         return
     
     def set_current_line(self, linenum):

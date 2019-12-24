@@ -16,7 +16,10 @@ if __name__ == "__main__":
     text = get_input.get_input(sys.argv[1])
     text = uce.unreachable_code_elimination(text)
     tree = lex_yacc.parse(text)
-    if(len(sys.argv) == 3 and sys.argv[2] == 'op'):
+    if (len(sys.argv) >= 3 and sys.argv[2] == 'op') or (len(sys.argv) >= 4 and sys.argv[3] == 'op'):
         optimize.optimize_init(tree)
-    run.run(tree)
+    print_linenum = True
+    if (len(sys.argv) >= 3 and sys.argv[2] == 'off_line') or (len(sys.argv) >= 4 and sys.argv[3] == 'off_line'):
+        print_linenum = False
+    run.run(tree, print_linenum)
     sys.exit(0)
