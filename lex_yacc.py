@@ -3,6 +3,89 @@ import ply.yacc as yacc
 import sys
 from enum import Enum, auto
 
+'''
+<program> ::= <function> <program>
+	   | <function>
+<function> ::= <type> <id> <variable_declaration> <block>
+	   | void <id> <variable_declaration> <block>
+<type> ::= <int>
+           | <float>
+<id> ::= ID
+<variable_declaration> ::= (<declarations>)
+<declarations> ::= <type> <id_ptr_or_array>, <declarations>
+	        | <type> <id_ptr_or_array>
+	        | void
+<id_ptr_or_array> ::= <id>
+	           | <id> <array_decs>
+	           | <ptrs> <id>
+<array_decs> ::= [<expression>] <array_decs>
+	      | [<expression>]
+
+<ptrs> ::= * <ptrs>
+          | *
+<block> ::= {<statements>}
+<statements> ::= <semi_statement>
+	      | <non_semi_statement>
+	      | <semi_statement>; <statements>
+	      | <non_semi_statement> <statements>
+	      | <empty>
+<semi_statement> ::= <var_declaration>
+	             | <var_assignment>
+	             | <function_app>
+	             | <return_expr>
+	             | <expression>
+<non_semi_statement> ::= <conditional>
+		       | <for>
+		       | <while>
+<conditional> ::= <if> <elif_else>
+<if> : if(<expression>) <block>
+<elif_else> ::= else if (<expression>) <block> <elif_else>
+	  | else <block>
+	  | <empty>
+<for> ::= for(<loop_init_or_empty>;<semi_statement_or_empty>;<semi_statement_or_empty>) <block>
+<loop_init_or_empty> ::= <loop_init>
+		    | <expression>
+		    | <empty>
+<semi_statement_or_empty> ::= <semi_statement>
+			 | <empty>
+<loop_init> ::= <type> <var_assignment>
+	   | <semi_statement>
+<while> ::= while (<expression>) <block>
+<var_declaration> ::= <type> <var_and_assign>
+<var_assignment> ::= <id_ptr_or_array> = <expression>
+<var_and_assign> ::= <var_assignment>, <var_and_assign>
+	           | <var_assignment>
+	           | <id_ptr_or_array>, <var_and_assign>
+	           | <id_ptr_or_array>
+<return_expr> ::= return <expression>
+	       | return
+<function_app> ::= printf(STRING <print_formats>)
+	         | ID(<arguments>)
+<print_formats> ::= , <expression> <print_formats>
+	         | <empty>
+<arguments> ::= <expression>, <arguments>
+	      | <expression>
+	      | <empty>
+<empty> ::= ε
+<expression> ::= <expression> + <expression>
+	      | <expression> - <expression>
+	      | <expression> * <expression>
+	      | <expression> / <expression>
+	      | <expression> < <expression>
+	      | <expression> > <expression>
+	      | (<expression>)
+	      | -<expression>
+	      | &<expression>
+	      | *<expression>
+	      | <id_ptr_or_array>++
+	      | ++<id_ptr_or_array>
+	      | <id_ptr_or_array>
+	      | <function_app>
+	      | <var_assignment>
+	      | INT_VAL
+	      | FLOAT_VAL
+'''
+
 class AST_TYPE(Enum):
 	TYPE = auto()
 	PROGRAM = auto()
